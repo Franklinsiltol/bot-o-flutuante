@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Botão Flutuante</title>
+    <title>Beemote - Criador de Botão Flutuante</title>
     <style>
         :root {
-            --primary-color: #4285f4;
-            --secondary-color: #f1f3f4;
-            --text-color: #202124;
-            --light-text: #5f6368;
-            --white: #ffffff;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --beemote-yellow: #FFD700;
+            --beemote-black: #1A1A1A;
+            --beemote-white: #FFFFFF;
+            --beemote-gray: #F5F5F5;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -22,31 +21,41 @@
         }
 
         body {
-            background-color: #f8f9fa;
-            color: var(--text-color);
+            background-color: var(--beemote-gray);
+            color: var(--beemote-black);
             line-height: 1.6;
             padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: var(--white);
-            border-radius: 8px;
+            padding: 30px;
+            background-color: var(--beemote-white);
+            border-radius: 12px;
             box-shadow: var(--shadow);
         }
 
-        h1 {
+        .header {
             text-align: center;
             margin-bottom: 30px;
-            color: var(--primary-color);
         }
 
-        .app-description {
-            text-align: center;
-            margin-bottom: 40px;
-            color: var(--light-text);
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--beemote-yellow);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            color: var(--beemote-black);
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 1.1rem;
         }
 
         .app-container {
@@ -58,21 +67,23 @@
         .config-panel {
             flex: 1;
             min-width: 300px;
-            padding: 20px;
-            background-color: var(--white);
+            padding: 25px;
+            background-color: var(--beemote-white);
             border-radius: 8px;
             box-shadow: var(--shadow);
+            border: 1px solid #EEE;
         }
 
         .preview-panel {
             flex: 1;
             min-width: 300px;
-            padding: 20px;
-            background-color: var(--white);
+            padding: 25px;
+            background-color: var(--beemote-white);
             border-radius: 8px;
             box-shadow: var(--shadow);
             position: relative;
             min-height: 500px;
+            border: 1px solid #EEE;
         }
 
         .form-group {
@@ -83,17 +94,18 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--beemote-black);
         }
 
         input[type="text"],
         input[type="url"],
         select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
             font-size: 16px;
+            background-color: var(--beemote-gray);
         }
 
         .color-options {
@@ -111,7 +123,7 @@
         }
 
         .color-option.selected {
-            border-color: var(--text-color);
+            border-color: var(--beemote-black);
         }
 
         .shape-options {
@@ -121,17 +133,18 @@
 
         .shape-option {
             padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            background-color: var(--beemote-gray);
         }
 
         .shape-option.selected {
-            border-color: var(--primary-color);
-            background-color: rgba(66, 133, 244, 0.1);
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
         }
 
         .position-options {
@@ -142,15 +155,16 @@
 
         .position-option {
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
             text-align: center;
             cursor: pointer;
+            background-color: var(--beemote-gray);
         }
 
         .position-option.selected {
-            border-color: var(--primary-color);
-            background-color: rgba(66, 133, 244, 0.1);
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
         }
 
         .icon-options {
@@ -161,32 +175,34 @@
 
         .icon-option {
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
             text-align: center;
             cursor: pointer;
             font-size: 20px;
+            background-color: var(--beemote-gray);
         }
 
         .icon-option.selected {
-            border-color: var(--primary-color);
-            background-color: rgba(66, 133, 244, 0.1);
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
         }
 
         .output-section {
             margin-top: 40px;
-            padding: 20px;
-            background-color: var(--secondary-color);
+            padding: 25px;
+            background-color: var(--beemote-gray);
             border-radius: 8px;
+            border: 1px solid #EEE;
         }
 
         .output-code {
             width: 100%;
             min-height: 200px;
             padding: 15px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            background-color: var(--beemote-white);
+            border: 1px solid #DDD;
+            border-radius: 6px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             resize: vertical;
@@ -196,28 +212,29 @@
         .copy-btn {
             display: block;
             width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background-color: var(--primary-color);
-            color: white;
+            padding: 14px;
+            margin-top: 15px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         .copy-btn:hover {
-            background-color: #3367d6;
+            background-color: #FFC600;
         }
 
-        /* Estilos para o botão flutuante de preview */
+        /* Estilos do botão flutuante (pré-visualização) */
         .floating-btn {
             position: absolute;
             width: 60px;
             height: 60px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
             border: none;
             border-radius: 50%;
             display: flex;
@@ -234,7 +251,7 @@
             border-radius: 8px;
         }
 
-        /* Estilos para o modal de preview */
+        /* Modal de pré-visualização */
         .floating-modal {
             position: absolute;
             top: 50%;
@@ -253,20 +270,14 @@
         }
 
         @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -40%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
         .modal-header {
             padding: 15px 20px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -275,7 +286,7 @@
         .modal-close {
             background: none;
             border: none;
-            color: white;
+            color: var(--beemote-black);
             font-size: 24px;
             cursor: pointer;
         }
@@ -297,92 +308,45 @@
             display: none;
         }
 
-        /* Posições do botão */
-        .position-bottom-right {
-            bottom: 20px;
-            right: 20px;
-        }
-
-        .position-bottom-left {
-            bottom: 20px;
-            left: 20px;
-        }
-
-        .position-top-right {
-            top: 20px;
-            right: 20px;
-        }
-
-        .position-top-left {
-            top: 20px;
-            left: 20px;
-        }
-
-        .position-center-right {
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-        }
-
-        .position-center-left {
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-        }
-
         /* Cores pré-definidas */
-        .color-blue { background-color: #4285f4; }
-        .color-red { background-color: #ea4335; }
-        .color-green { background-color: #34a853; }
-        .color-yellow { background-color: #fbbc05; }
-        .color-purple { background-color: #9c27b0; }
-        .color-pink { background-color: #e91e63; }
-        .color-teal { background-color: #009688; }
-        .color-orange { background-color: #ff9800; }
-        .color-gray { background-color: #9e9e9e; }
-        .color-black { background-color: #212121; }
+        .color-yellow { background-color: var(--beemote-yellow); }
+        .color-black { background-color: var(--beemote-black); }
+        .color-white { background-color: var(--beemote-white); border: 1px solid #DDD; }
+        .color-red { background-color: #FF5252; }
+        .color-green { background-color: #4CAF50; }
+        .color-blue { background-color: #4285F4; }
 
         /* Responsividade */
         @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-            }
-            
-            .position-options {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .icon-options {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            .app-container { flex-direction: column; }
+            .position-options { grid-template-columns: repeat(2, 1fr); }
+            .icon-options { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Criador de Botão Flutuante</h1>
-        <p class="app-description">Transforme qualquer URL em um botão flutuante personalizável para seu site</p>
+        <div class="header">
+            <div class="logo">BEE<span>MOTE</span></div>
+            <p class="subtitle">Crie um botão flutuante personalizado para seu site</p>
+        </div>
         
         <div class="app-container">
             <div class="config-panel">
                 <div class="form-group">
                     <label for="url-input">URL para abrir no modal:</label>
-                    <input type="url" id="url-input" placeholder="https://exemplo.com" class="full-width">
+                    <input type="url" id="url-input" placeholder="https://seusite.com" class="full-width">
                 </div>
                 
                 <div class="form-group">
                     <label>Cor do botão:</label>
                     <div class="color-options">
-                        <div class="color-option color-blue selected" data-color="#4285f4"></div>
-                        <div class="color-option color-red" data-color="#ea4335"></div>
-                        <div class="color-option color-green" data-color="#34a853"></div>
-                        <div class="color-option color-yellow" data-color="#fbbc05"></div>
-                        <div class="color-option color-purple" data-color="#9c27b0"></div>
-                        <div class="color-option color-pink" data-color="#e91e63"></div>
-                        <div class="color-option color-teal" data-color="#009688"></div>
-                        <div class="color-option color-orange" data-color="#ff9800"></div>
-                        <div class="color-option color-gray" data-color="#9e9e9e"></div>
-                        <div class="color-option color-black" data-color="#212121"></div>
+                        <div class="color-option color-yellow selected" data-color="#FFD700"></div>
+                        <div class="color-option color-black" data-color="#1A1A1A"></div>
+                        <div class="color-option color-white" data-color="#FFFFFF"></div>
+                        <div class="color-option color-red" data-color="#FF5252"></div>
+                        <div class="color-option color-green" data-color="#4CAF50"></div>
+                        <div class="color-option color-blue" data-color="#4285F4"></div>
                     </div>
                 </div>
                 
@@ -415,35 +379,30 @@
                     <div class="icon-options">
                         <div class="icon-option selected" data-icon="💬">💬</div>
                         <div class="icon-option" data-icon="❓">❓</div>
-                        <div class="icon-option" data-icon="✉️">✉️</div>
                         <div class="icon-option" data-icon="🛒">🛒</div>
                         <div class="icon-option" data-icon="📞">📞</div>
-                        <div class="icon-option" data-icon="🔍">🔍</div>
                         <div class="icon-option" data-icon="📝">📝</div>
                         <div class="icon-option" data-icon="👤">👤</div>
                         <div class="icon-option" data-icon="⚙️">⚙️</div>
-                        <div class="icon-option" data-icon="❤️">❤️</div>
-                        <div class="icon-option" data-icon="📱">📱</div>
-                        <div class="icon-option" data-icon="🔔">🔔</div>
+                        <div class="icon-option" data-icon="🐝">🐝</div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="button-text">Texto do botão (opcional):</label>
-                    <input type="text" id="button-text" placeholder="Fale conosco" class="full-width">
+                    <input type="text" id="button-text" placeholder="Ex: Fale conosco" class="full-width">
                 </div>
                 
                 <div class="form-group">
                     <label for="modal-title">Título do modal (opcional):</label>
-                    <input type="text" id="modal-title" placeholder="Central de Ajuda" class="full-width">
+                    <input type="text" id="modal-title" placeholder="Ex: Central de Ajuda" class="full-width">
                 </div>
             </div>
             
             <div class="preview-panel">
                 <h3>Pré-visualização:</h3>
-                <p>Clique no botão para testar o modal</p>
+                <p>Clique no botão para testar</p>
                 
-                <!-- Aqui será inserido o botão de preview -->
                 <div id="preview-button-container"></div>
                 <div id="preview-modal-overlay" class="modal-overlay"></div>
             </div>
@@ -451,7 +410,7 @@
         
         <div class="output-section">
             <h3>Código gerado:</h3>
-            <p>Copie e cole este código em seu site para adicionar o botão flutuante.</p>
+            <p>Copie e cole este código no final do <code>&lt;body&gt;</code> do seu site.</p>
             <textarea id="output-code" class="output-code" readonly></textarea>
             <button id="copy-btn" class="copy-btn">Copiar Código</button>
         </div>
@@ -472,7 +431,7 @@
             const copyBtn = document.getElementById('copy-btn');
             
             // Estado do aplicativo
-            let currentColor = '#4285f4';
+            let currentColor = '#FFD700';
             let currentShape = 'round';
             let currentPosition = 'bottom-right';
             let currentIcon = '💬';
@@ -544,7 +503,7 @@
             copyBtn.addEventListener('click', function() {
                 outputCode.select();
                 document.execCommand('copy');
-                this.textContent = 'Código Copiado!';
+                this.textContent = 'Código Copiado! ✅';
                 setTimeout(() => {
                     this.textContent = 'Copiar Código';
                 }, 2000);
@@ -558,6 +517,7 @@
                 const floatingBtn = document.createElement('button');
                 floatingBtn.className = `floating-btn ${currentShape === 'square' ? 'square' : ''} position-${currentPosition}`;
                 floatingBtn.style.backgroundColor = currentColor;
+                floatingBtn.style.color = (currentColor === '#FFFFFF' || currentColor === '#FFD700') ? '#1A1A1A' : 'white';
                 floatingBtn.innerHTML = currentIcon;
                 
                 if (currentButtonText) {
@@ -581,6 +541,7 @@
                 const modalHeader = document.createElement('div');
                 modalHeader.className = 'modal-header';
                 modalHeader.style.backgroundColor = currentColor;
+                modalHeader.style.color = (currentColor === '#FFFFFF' || currentColor === '#FFD700') ? '#1A1A1A' : 'white';
                 
                 const modalTitle = document.createElement('h3');
                 modalTitle.textContent = currentModalTitle || ' ';
@@ -589,6 +550,7 @@
                 const modalClose = document.createElement('button');
                 modalClose.className = 'modal-close';
                 modalClose.innerHTML = currentIcon;
+                modalClose.style.color = (currentColor === '#FFFFFF' || currentColor === '#FFD700') ? '#1A1A1A' : 'white';
                 modalHeader.appendChild(modalClose);
                 
                 const modalContent = document.createElement('iframe');
@@ -622,130 +584,104 @@
             
             // Função para gerar o código final
             function generateCode() {
+                const textColor = (currentColor === '#FFFFFF' || currentColor === '#FFD700') ? '#1A1A1A' : 'white';
+                
                 const code = `
-<!-- Botão Flutuante Personalizado - Gerado pelo Criador de Botão Flutuante -->
+<!-- Botão Flutuante Beemote - Gerado Automaticamente -->
 <style>
 .floating-btn-container {
-    position: fixed;
-    z-index: 9999;
+    position: fixed !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
 }
 
 .floating-btn {
-    width: ${currentButtonText ? 'auto' : '60px'};
-    height: 60px;
-    background-color: ${currentColor};
-    color: white;
-    border: none;
-    border-radius: ${currentShape === 'round' ? '50%' : '8px'};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    padding: ${currentButtonText ? '0 15px' : '0'};
+    width: ${currentButtonText ? 'auto' : '60px'} !important;
+    height: 60px !important;
+    background-color: ${currentColor} !important;
+    color: ${textColor} !important;
+    border: none !important;
+    border-radius: ${currentShape === 'round' ? '50%' : '8px'} !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease !important;
+    padding: ${currentButtonText ? '0 15px' : '0'} !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
 }
 
 .floating-btn span {
-    margin-left: 5px;
-    font-size: 14px;
+    margin-left: 5px !important;
+    font-size: 14px !important;
 }
 
 .floating-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9998;
-    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    z-index: 999998 !important;
+    display: none !important;
 }
 
 .floating-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 800px;
-    height: 80%;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 9999;
-    display: none;
-    overflow: hidden;
-    animation: modalFadeIn 0.3s ease-out;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 800px !important;
+    height: 80% !important;
+    background-color: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    z-index: 999999 !important;
+    display: none !important;
+    overflow: hidden !important;
+    animation: modalFadeIn 0.3s ease-out !important;
 }
 
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -40%);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+    from { opacity: 0 !important; transform: translate(-50%, -40%) !important; }
+    to { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
 }
 
 .modal-header {
-    padding: 15px 20px;
-    background-color: ${currentColor};
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 15px 20px !important;
+    background-color: ${currentColor} !important;
+    color: ${textColor} !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
 }
 
 .modal-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
+    background: none !important;
+    border: none !important;
+    color: ${textColor} !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
 }
 
 .modal-content {
-    height: calc(100% - 50px);
-    width: 100%;
-    border: none;
+    height: calc(100% - 50px) !important;
+    width: 100% !important;
+    border: none !important;
 }
 
-/* Posições do botão */
-.position-bottom-right {
-    bottom: 20px;
-    right: 20px;
-}
-
-.position-bottom-left {
-    bottom: 20px;
-    left: 20px;
-}
-
-.position-top-right {
-    top: 20px;
-    right: 20px;
-}
-
-.position-top-left {
-    top: 20px;
-    left: 20px;
-}
-
-.position-center-right {
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
-
-.position-center-left {
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-}
+/* Posições */
+.position-bottom-right { bottom: 20px !important; right: 20px !important; }
+.position-bottom-left { bottom: 20px !important; left: 20px !important; }
+.position-top-right { top: 20px !important; right: 20px !important; }
+.position-top-left { top: 20px !important; left: 20px !important; }
+.position-center-right { top: 50% !important; right: 20px !important; transform: translateY(-50%) !important; }
+.position-center-left { top: 50% !important; left: 20px !important; transform: translateY(-50%) !important; }
 </style>
 
 <div class="floating-btn-container position-${currentPosition}">
@@ -765,28 +701,44 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Garante que o botão sempre fique visível
+    setInterval(() => {
+        const btn = document.querySelector('.floating-btn-container');
+        if(btn) btn.style.zIndex = '999999';
+    }, 1000);
+
     const floatingBtn = document.querySelector('.floating-btn');
     const modalOverlay = document.querySelector('.floating-modal-overlay');
     const floatingModal = document.querySelector('.floating-modal');
     const modalClose = document.querySelector('.modal-close');
     
-    floatingBtn.addEventListener('click', function() {
+    floatingBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
         modalOverlay.style.display = 'block';
         floatingModal.style.display = 'block';
     });
     
-    modalClose.addEventListener('click', function() {
+    modalClose.addEventListener('click', function(e) {
+        e.stopPropagation();
         modalOverlay.style.display = 'none';
         floatingModal.style.display = 'none';
     });
     
-    modalOverlay.addEventListener('click', function() {
+    modalOverlay.addEventListener('click', function(e) {
+        e.stopPropagation();
         modalOverlay.style.display = 'none';
         floatingModal.style.display = 'none';
     });
+
+    // Proteção contra outros event listeners
+    document.body.addEventListener('click', function(e) {
+        if(e.target.closest('.floating-btn-container')) {
+            e.stopImmediatePropagation();
+        }
+    }, true);
 });
 <\/script>
-<!-- Fim do Botão Flutuante Personalizado -->
+<!-- Fim do Botão Flutuante Beemote -->
                 `;
                 
                 outputCode.value = code.trim();
