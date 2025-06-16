@@ -3,523 +3,794 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Botão Flutuante</title>
+    <title>Criador de Botão Flutuante</title>
     <style>
-        /* --- Estilos Gerais da Página --- */
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #f8f9fa;
-            --dark-color: #343a40;
-            --light-color: #fff;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
+            --primary-color: #4285f4;
+            --secondary-color: #f1f3f4;
+            --text-color: #202124;
+            --light-text: #5f6368;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--secondary-color);
-            color: var(--dark-color);
-            margin: 0;
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            gap: 20px;
         }
 
-        main {
-            background: var(--light-color);
-            padding: 30px;
-            border-radius: var(--border-radius);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
             box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        aside {
-            width: 100%;
-            max-width: 600px;
-            position: sticky;
-            top: 20px;
         }
 
         h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        p {
             text-align: center;
             margin-bottom: 30px;
-            color: #6c757d;
+            color: var(--primary-color);
         }
 
-        /* --- Estilos do Formulário de Controle --- */
+        .app-description {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--light-text);
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .config-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 500px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: #495057;
+            font-weight: 600;
+            color: var(--text-color);
         }
 
-        .form-group input[type="url"],
-        .form-group select {
+        input[type="text"],
+        input[type="url"],
+        select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 16px;
-            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .form-group input[type="url"]:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
-
-        .color-picker-group {
+        .color-options {
             display: flex;
-            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: var(--text-color);
+        }
+
+        .shape-options {
+            display: flex;
             gap: 15px;
         }
 
-        .color-picker-group input[type="color"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            width: 50px;
-            height: 50px;
-            padding: 0;
-            border: none;
-            border-radius: 50%;
+        .shape-option {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             cursor: pointer;
-            background-color: transparent;
-        }
-        .color-picker-group input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0;
-        }
-        .color-picker-group input[type="color"]::-webkit-color-swatch {
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* --- Área de Pré-visualização --- */
-        .preview-container {
-            position: relative;
-            height: 250px;
-            background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            background-color: var(--light-color);
-            border: 1px dashed var(--border-color);
-            border-radius: var(--border-radius);
+        .shape-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .position-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .position-option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .position-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .icon-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .icon-option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .icon-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(66, 133, 244, 0.1);
+        }
+
+        .output-section {
+            margin-top: 40px;
             padding: 20px;
-            box-sizing: border-box;
-            overflow: hidden;
-            margin-bottom: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
         }
-        .preview-container p{
-            color: #aaa;
+
+        .output-code {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
+            resize: vertical;
+            white-space: pre-wrap;
         }
-        
-        #preview-button {
+
+        .copy-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #3367d6;
+        }
+
+        /* Estilos para o botão flutuante de preview */
+        .floating-btn {
             position: absolute;
             width: 60px;
             height: 60px;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            z-index: 1000;
         }
 
-        #preview-button svg {
-            width: 32px;
-            height: 32px;
+        .floating-btn.square {
+            border-radius: 8px;
         }
 
-        /* Posições para Preview */
-        .preview-container.pos-bottom-right #preview-button { bottom: 20px; right: 20px; }
-        .preview-container.pos-bottom-left  #preview-button { bottom: 20px; left: 20px; }
-        .preview-container.pos-top-right   #preview-button { top: 20px; right: 20px; }
-        .preview-container.pos-top-left    #preview-button { top: 20px; left: 20px; }
-        
-        #preview-button.shape-square {
+        /* Estilos para o modal de preview */
+        .floating-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 80%;
+            background-color: white;
             border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
         }
 
-        /* --- Área de Código --- */
-        .code-container {
-            background-color: var(--dark-color);
-            border-radius: var(--border-radius);
-            padding: 10px 20px 20px;
-            box-shadow: var(--shadow);
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
         }
-        
-        .code-header {
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .code-header h3 {
-            color: #e9ecef;
-            margin: 0;
         }
 
-        #copy-button {
-            background: var(--primary-color);
-            color: var(--light-color);
+        .modal-close {
+            background: none;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            color: white;
+            font-size: 24px;
             cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-        
-        #copy-button:hover {
-            background: #0056b3;
-        }
-        
-        #copy-button:active {
-            background: #004a99;
         }
 
-        #code-output {
-            background: #212529;
-            color: #ced4da;
-            padding: 15px;
-            border-radius: 5px;
-            max-height: 400px;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+        .modal-content {
+            height: calc(100% - 50px);
+            width: 100%;
+            border: none;
         }
 
-        /* --- Media Queries para Responsividade do Gerador --- */
-        @media (max-width: 1150px) {
-            body {
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Posições do botão */
+        .position-bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .position-bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .position-top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .position-top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .position-center-right {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        .position-center-left {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+
+        /* Cores pré-definidas */
+        .color-blue { background-color: #4285f4; }
+        .color-red { background-color: #ea4335; }
+        .color-green { background-color: #34a853; }
+        .color-yellow { background-color: #fbbc05; }
+        .color-purple { background-color: #9c27b0; }
+        .color-pink { background-color: #e91e63; }
+        .color-teal { background-color: #009688; }
+        .color-orange { background-color: #ff9800; }
+        .color-gray { background-color: #9e9e9e; }
+        .color-black { background-color: #212121; }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .app-container {
                 flex-direction: column;
-                align-items: center;
             }
-            main, aside {
-                max-width: 700px;
-                position: static;
+            
+            .position-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .icon-options {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
 </head>
 <body>
-
-    <main>
-        <h1>Gerador de Botão Flutuante</h1>
-        <p>Personalize seu botão e copie o código para usar em qualquer site.</p>
-
-        <div class="form-group">
-            <label for="url-input">URL de Destino</label>
-            <input type="url" id="url-input" value="https://www.wikipedia.org/" placeholder="https://exemplo.com">
-        </div>
-
-        <div class="form-group">
-            <label>Cor do Botão</label>
-            <div class="color-picker-group">
-                <input type="color" id="color-picker" value="#007bff">
-                <span>Clique no círculo para escolher uma cor</span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="shape-select">Formato do Botão</label>
-            <select id="shape-select">
-                <option value="round" selected>Redondo</option>
-                <option value="square">Quadrado</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="position-select">Posição na Tela</label>
-            <select id="position-select">
-                <option value="bottom-right" selected>Canto Inferior Direito</option>
-                <option value="bottom-left">Canto Inferior Esquerdo</option>
-                <option value="top-right">Canto Superior Direito</option>
-                <option value="top-left">Canto Superior Esquerdo</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="template-select">Modelo / Ícone</label>
-            <select id="template-select">
-                <option value="chat" selected>Chat / Mensagem</option>
-                <option value="help">Ajuda / Informação</option>
-                <option value="form">Formulário / Contato</option>
-                <option value="link">Link / Externo</option>
-            </select>
-        </div>
-    </main>
-
-    <aside>
-        <div class="preview-container" id="preview-area">
-            <p>Pré-visualização do Botão</p>
-            <button id="preview-button">
-                <!-- SVG do ícone será inserido aqui pelo JS -->
-            </button>
-        </div>
-
-        <div class="code-container">
-            <div class="code-header">
-                <h3>Seu Código (Copiar e Colar)</h3>
-                <button id="copy-button">Copiar</button>
-            </div>
-            <pre><code id="code-output"><!-- Código gerado aparecerá aqui --></code></pre>
-        </div>
-    </aside>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- ELEMENTOS DO DOM ---
-            const urlInput = document.getElementById('url-input');
-            const colorPicker = document.getElementById('color-picker');
-            const shapeSelect = document.getElementById('shape-select');
-            const positionSelect = document.getElementById('position-select');
-            const templateSelect = document.getElementById('template-select');
-            const previewArea = document.getElementById('preview-area');
-            const previewButton = document.getElementById('preview-button');
-            const codeOutput = document.getElementById('code-output');
-            const copyButton = document.getElementById('copy-button');
-
-            // --- ÍCONES SVG (MODELOS) ---
-            const icons = {
-                chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
-                help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
-                form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
-                link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09l-2.09-2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22 1.22-3.2 1.22-4.42 0z"/></svg>',
-                close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>'
-            };
-
-            // --- FUNÇÃO PARA ATUALIZAR O PREVIEW ---
-            function updatePreview() {
-                const color = colorPicker.value;
-                const shape = shapeSelect.value;
-                const position = positionSelect.value;
-                const template = templateSelect.value;
-
-                // Atualizar cor
-                previewButton.style.backgroundColor = color;
-
-                // Atualizar formato
-                previewButton.classList.toggle('shape-square', shape === 'square');
-
-                // Atualizar posição
-                previewArea.className = 'preview-container'; // Reset
-                previewArea.classList.add(`pos-${position}`);
-
-                // Atualizar ícone
-                previewButton.innerHTML = icons[template];
-            }
-
-            // --- FUNÇÃO PARA GERAR O CÓDIGO FINAL ---
-            function generateCode() {
-                const url = urlInput.value || "https://example.com";
-                const color = colorPicker.value;
-                const shape = shapeSelect.value;
-                const position = positionSelect.value;
-                const template = templateSelect.value;
-
-                const borderRadius = shape === 'round' ? '50%' : '12px';
+    <div class="container">
+        <h1>Criador de Botão Flutuante</h1>
+        <p class="app-description">Transforme qualquer URL em um botão flutuante personalizável para seu site</p>
+        
+        <div class="app-container">
+            <div class="config-panel">
+                <div class="form-group">
+                    <label for="url-input">URL para abrir no modal:</label>
+                    <input type="url" id="url-input" placeholder="https://exemplo.com" class="full-width">
+                </div>
                 
-                let positionStyles = '';
-                switch (position) {
-                    case 'bottom-left': positionStyles = 'bottom: 20px; left: 20px;'; break;
-                    case 'top-right': positionStyles = 'top: 20px; right: 20px;'; break;
-                    case 'top-left': positionStyles = 'top: 20px; left: 20px;'; break;
-                    default: positionStyles = 'bottom: 20px; right: 20px;'; break; // bottom-right
-                }
-
-                const iconSVG = icons[template];
-                const closeSVG = icons.close;
-
-                const code = `
-<!-- Início do Código do Botão Flutuante -->
-<div id="floating-button-container">
-    <!-- O código é encapsulado em um IIFE para não poluir o escopo global -->
-    <style>
-        #fab-button {
-            position: fixed;
-            ${positionStyles}
-            width: 60px;
-            height: 60px;
-            background-color: ${color};
-            border-radius: ${borderRadius};
-            border: none;
-            color: white;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 9998;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.3s ease-in-out, background-color 0.3s;
-        }
-        #fab-button:hover {
-            transform: scale(1.1);
-        }
-        #fab-button svg {
-            width: 32px;
-            height: 32px;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        .fab-icon-close {
-            display: none;
-            transform: rotate(-90deg);
-        }
-        #fab-button.active .fab-icon-open {
-            opacity: 0;
-            transform: rotate(90deg);
-            display: none;
-        }
-        #fab-button.active .fab-icon-close {
-            opacity: 1;
-            transform: rotate(0deg);
-            display: block;
-        }
-        #fab-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
-        }
-        #fab-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        .fab-modal-content {
-            background-color: #fff;
-            width: 90%;
-            height: 90%;
-            max-width: 1200px;
-            max-height: 800px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            transform: scale(0.8);
-            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
-        #fab-modal.show .fab-modal-content {
-            transform: scale(1);
-        }
-        .fab-modal-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        /* Responsividade para telas menores */
-        @media (max-width: 768px) {
-            #fab-button {
-                width: 55px;
-                height: 55px;
-            }
-             .fab-modal-content {
-                width: 95%;
-                height: 85%;
-                border-radius: 10px;
-            }
-        }
-    </style>
-
-    <button id="fab-button">
-        <span class="fab-icon-open">${iconSVG}</span>
-        <span class="fab-icon-close">${closeSVG}</span>
-    </button>
-    
-    <div id="fab-modal">
-        <div class="fab-modal-content">
-            <iframe src="${url}" title="Conteúdo do Modal"></iframe>
+                <div class="form-group">
+                    <label>Cor do botão:</label>
+                    <div class="color-options">
+                        <div class="color-option color-blue selected" data-color="#4285f4"></div>
+                        <div class="color-option color-red" data-color="#ea4335"></div>
+                        <div class="color-option color-green" data-color="#34a853"></div>
+                        <div class="color-option color-yellow" data-color="#fbbc05"></div>
+                        <div class="color-option color-purple" data-color="#9c27b0"></div>
+                        <div class="color-option color-pink" data-color="#e91e63"></div>
+                        <div class="color-option color-teal" data-color="#009688"></div>
+                        <div class="color-option color-orange" data-color="#ff9800"></div>
+                        <div class="color-option color-gray" data-color="#9e9e9e"></div>
+                        <div class="color-option color-black" data-color="#212121"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Forma do botão:</label>
+                    <div class="shape-options">
+                        <div class="shape-option selected" data-shape="round">
+                            <span>🔘</span> Redondo
+                        </div>
+                        <div class="shape-option" data-shape="square">
+                            <span>🟦</span> Quadrado
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Posição do botão:</label>
+                    <div class="position-options">
+                        <div class="position-option" data-position="top-left">↖ Superior Esquerdo</div>
+                        <div class="position-option" data-position="top-right">↗ Superior Direito</div>
+                        <div class="position-option selected" data-position="bottom-right">↘ Inferior Direito</div>
+                        <div class="position-option" data-position="bottom-left">↙ Inferior Esquerdo</div>
+                        <div class="position-option" data-position="center-right">⮕ Centro Direito</div>
+                        <div class="position-option" data-position="center-left">⬅ Centro Esquerdo</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ícone do botão:</label>
+                    <div class="icon-options">
+                        <div class="icon-option selected" data-icon="💬">💬</div>
+                        <div class="icon-option" data-icon="❓">❓</div>
+                        <div class="icon-option" data-icon="✉️">✉️</div>
+                        <div class="icon-option" data-icon="🛒">🛒</div>
+                        <div class="icon-option" data-icon="📞">📞</div>
+                        <div class="icon-option" data-icon="🔍">🔍</div>
+                        <div class="icon-option" data-icon="📝">📝</div>
+                        <div class="icon-option" data-icon="👤">👤</div>
+                        <div class="icon-option" data-icon="⚙️">⚙️</div>
+                        <div class="icon-option" data-icon="❤️">❤️</div>
+                        <div class="icon-option" data-icon="📱">📱</div>
+                        <div class="icon-option" data-icon="🔔">🔔</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="button-text">Texto do botão (opcional):</label>
+                    <input type="text" id="button-text" placeholder="Fale conosco" class="full-width">
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-title">Título do modal (opcional):</label>
+                    <input type="text" id="modal-title" placeholder="Central de Ajuda" class="full-width">
+                </div>
+            </div>
+            
+            <div class="preview-panel">
+                <h3>Pré-visualização:</h3>
+                <p>Clique no botão para testar o modal</p>
+                
+                <!-- Aqui será inserido o botão de preview -->
+                <div id="preview-button-container"></div>
+                <div id="preview-modal-overlay" class="modal-overlay"></div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <h3>Código gerado:</h3>
+            <p>Copie e cole este código em seu site para adicionar o botão flutuante.</p>
+            <textarea id="output-code" class="output-code" readonly></textarea>
+            <button id="copy-btn" class="copy-btn">Copiar Código</button>
         </div>
     </div>
-    
+
     <script>
-        (function() {
-            const fabButton = document.getElementById('fab-button');
-            const fabModal = document.getElementById('fab-modal');
-
-            if (!fabButton || !fabModal) return;
-
-            fabButton.addEventListener('click', () => {
-                fabModal.classList.toggle('show');
-                fabButton.classList.toggle('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da UI
+            const urlInput = document.getElementById('url-input');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const shapeOptions = document.querySelectorAll('.shape-option');
+            const positionOptions = document.querySelectorAll('.position-option');
+            const iconOptions = document.querySelectorAll('.icon-option');
+            const buttonTextInput = document.getElementById('button-text');
+            const modalTitleInput = document.getElementById('modal-title');
+            const previewContainer = document.getElementById('preview-button-container');
+            const outputCode = document.getElementById('output-code');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            // Estado do aplicativo
+            let currentColor = '#4285f4';
+            let currentShape = 'round';
+            let currentPosition = 'bottom-right';
+            let currentIcon = '💬';
+            let currentButtonText = '';
+            let currentModalTitle = '';
+            let currentUrl = '';
+            
+            // Inicializar preview
+            updatePreview();
+            generateCode();
+            
+            // Event listeners
+            urlInput.addEventListener('input', function() {
+                currentUrl = this.value;
+                generateCode();
             });
-
-            // Opcional: fechar o modal ao clicar fora da área do conteúdo
-            fabModal.addEventListener('click', (e) => {
-                if (e.target === fabModal) {
-                    fabModal.classList.remove('show');
-                    fabButton.classList.remove('active');
-                }
-            });
-        })();
-    <\/script>
-</div>
-<!-- Fim do Código do Botão Flutuante -->`;
-
-                // Usamos textContent para escapar o HTML e exibi-lo como texto literal
-                codeOutput.textContent = code.trim();
-            }
-
-            // --- EVENT LISTENERS ---
-            [urlInput, colorPicker, shapeSelect, positionSelect, templateSelect].forEach(el => {
-                el.addEventListener('input', () => {
+            
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentColor = this.dataset.color;
                     updatePreview();
                     generateCode();
                 });
             });
-
-            copyButton.addEventListener('click', () => {
-                navigator.clipboard.writeText(codeOutput.textContent).then(() => {
-                    copyButton.textContent = 'Copiado!';
-                    setTimeout(() => {
-                        copyButton.textContent = 'Copiar';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Erro ao copiar: ', err);
-                    alert('Não foi possível copiar o código.');
+            
+            shapeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    shapeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentShape = this.dataset.shape;
+                    updatePreview();
+                    generateCode();
                 });
             });
+            
+            positionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    positionOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentPosition = this.dataset.position;
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            iconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    iconOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentIcon = this.dataset.icon;
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            buttonTextInput.addEventListener('input', function() {
+                currentButtonText = this.value;
+                updatePreview();
+                generateCode();
+            });
+            
+            modalTitleInput.addEventListener('input', function() {
+                currentModalTitle = this.value;
+                generateCode();
+            });
+            
+            copyBtn.addEventListener('click', function() {
+                outputCode.select();
+                document.execCommand('copy');
+                this.textContent = 'Código Copiado!';
+                setTimeout(() => {
+                    this.textContent = 'Copiar Código';
+                }, 2000);
+            });
+            
+            // Função para atualizar a pré-visualização
+            function updatePreview() {
+                previewContainer.innerHTML = '';
+                
+                // Criar botão flutuante
+                const floatingBtn = document.createElement('button');
+                floatingBtn.className = `floating-btn ${currentShape === 'square' ? 'square' : ''} position-${currentPosition}`;
+                floatingBtn.style.backgroundColor = currentColor;
+                floatingBtn.innerHTML = currentIcon;
+                
+                if (currentButtonText) {
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = currentButtonText;
+                    textSpan.style.marginLeft = '5px';
+                    textSpan.style.fontSize = '14px';
+                    floatingBtn.appendChild(textSpan);
+                    floatingBtn.style.padding = '0 15px';
+                    floatingBtn.style.width = 'auto';
+                }
+                
+                // Criar modal
+                const modalOverlay = document.createElement('div');
+                modalOverlay.className = 'modal-overlay';
+                modalOverlay.id = 'preview-modal-overlay';
+                
+                const floatingModal = document.createElement('div');
+                floatingModal.className = 'floating-modal';
+                
+                const modalHeader = document.createElement('div');
+                modalHeader.className = 'modal-header';
+                modalHeader.style.backgroundColor = currentColor;
+                
+                const modalTitle = document.createElement('h3');
+                modalTitle.textContent = currentModalTitle || ' ';
+                modalHeader.appendChild(modalTitle);
+                
+                const modalClose = document.createElement('button');
+                modalClose.className = 'modal-close';
+                modalClose.innerHTML = currentIcon;
+                modalHeader.appendChild(modalClose);
+                
+                const modalContent = document.createElement('iframe');
+                modalContent.className = 'modal-content';
+                modalContent.src = currentUrl || 'about:blank';
+                
+                floatingModal.appendChild(modalHeader);
+                floatingModal.appendChild(modalContent);
+                
+                // Adicionar eventos
+                floatingBtn.addEventListener('click', function() {
+                    modalOverlay.style.display = 'block';
+                    floatingModal.style.display = 'block';
+                });
+                
+                modalClose.addEventListener('click', function() {
+                    modalOverlay.style.display = 'none';
+                    floatingModal.style.display = 'none';
+                });
+                
+                modalOverlay.addEventListener('click', function() {
+                    modalOverlay.style.display = 'none';
+                    floatingModal.style.display = 'none';
+                });
+                
+                // Adicionar ao DOM
+                previewContainer.appendChild(floatingBtn);
+                previewContainer.appendChild(modalOverlay);
+                previewContainer.appendChild(floatingModal);
+            }
+            
+            // Função para gerar o código final
+            function generateCode() {
+                const code = `
+<!-- Botão Flutuante Personalizado - Gerado pelo Criador de Botão Flutuante -->
+<style>
+.floating-btn-container {
+    position: fixed;
+    z-index: 9999;
+}
 
+.floating-btn {
+    width: ${currentButtonText ? 'auto' : '60px'};
+    height: 60px;
+    background-color: ${currentColor};
+    color: white;
+    border: none;
+    border-radius: ${currentShape === 'round' ? '50%' : '8px'};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    padding: ${currentButtonText ? '0 15px' : '0'};
+}
 
-            // --- INICIALIZAÇÃO ---
-            updatePreview();
-            generateCode();
+.floating-btn span {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.floating-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+}
+
+.floating-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    height: 80%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    display: none;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background-color: ${currentColor};
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-content {
+    height: calc(100% - 50px);
+    width: 100%;
+    border: none;
+}
+
+/* Posições do botão */
+.position-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.position-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.position-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+.position-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.position-center-right {
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.position-center-left {
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+}
+</style>
+
+<div class="floating-btn-container position-${currentPosition}">
+    <button class="floating-btn">
+        ${currentIcon}${currentButtonText ? '<span>' + currentButtonText + '</span>' : ''}
+    </button>
+</div>
+
+<div class="floating-modal-overlay"></div>
+<div class="floating-modal">
+    <div class="modal-header">
+        <h3>${currentModalTitle || ' '}</h3>
+        <button class="modal-close">${currentIcon}</button>
+    </div>
+    <iframe class="modal-content" src="${currentUrl || 'about:blank'}" frameborder="0"></iframe>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const floatingBtn = document.querySelector('.floating-btn');
+    const modalOverlay = document.querySelector('.floating-modal-overlay');
+    const floatingModal = document.querySelector('.floating-modal');
+    const modalClose = document.querySelector('.modal-close');
+    
+    floatingBtn.addEventListener('click', function() {
+        modalOverlay.style.display = 'block';
+        floatingModal.style.display = 'block';
+    });
+    
+    modalClose.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+    
+    modalOverlay.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+});
+<\/script>
+<!-- Fim do Botão Flutuante Personalizado -->
+                `;
+                
+                outputCode.value = code.trim();
+            }
         });
     </script>
 </body>
