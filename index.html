@@ -5,166 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Gerador Web</title>
     <style>
-        /* --- ESTILOS GERAIS E VARIÁVEIS --- */
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --bg-color: #f4f7fc;
-            --dark-color: #343a40;
-            --light-color: #fff;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
-        }
-
+        :root{--primary-color:#6a11cb;--secondary-color:#2575fc;--bg-color:#f4f7fc;--dark-color:#343a40;--light-color:#fff;--border-color:#dee2e6;--shadow:0 4px 15px rgba(0,0,0,.1);--border-radius:12px}
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--dark-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header h1 {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 5px;
-        }
-        
-        header p {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-
-        /* --- NAVEGAÇÃO ENTRE GERADORES (ABAS) --- */
-        .app-switcher {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        .app-switcher button {
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: 2px solid var(--border-color);
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .app-switcher button:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-        .app-switcher button.active {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: var(--light-color);
-            border-color: transparent;
-        }
-
-        /* --- ESTRUTURA DOS PAINÉIS DOS GERADORES --- */
-        .generator-panel {
-            display: none; /* Oculto por padrão */
-        }
-        .generator-panel.active {
-            display: block; /* Visível quando ativo */
-        }
-        .generator-content {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 30px;
-            background: var(--light-color);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        .controls h2, .output h2 {
-            margin-top: 0;
-            color: var(--dark-color);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 10px; border: 1px solid var(--border-color);
-            border-radius: 8px; font-size: 1rem; box-sizing: border-box;
-        }
-        
-        /* --- ESTILOS DO GERADOR DE BOTÃO FLUTUANTE --- */
-        #floating-preview-container {
-            position: relative; height: 250px; background-color: #f8f9fa;
-            border: 1px dashed var(--border-color); border-radius: var(--border-radius);
-            overflow: hidden; margin-bottom: 20px;
-        }
-        #preview-button {
-            position: absolute; width: 60px; height: 60px; color: white; border: none;
-            border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer;
-            display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;
-        }
-        #preview-button.shape-square { border-radius: 12px; }
-        #preview-button svg { width: 32px; height: 32px; }
-
-        /* --- ESTILOS DO GERADOR DE MOSAICO --- */
-        #items-container .link-item {
-            border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px;
-            margin-bottom: 15px; background-color: #fafafa; position: relative;
-        }
-        .remove-item-btn {
-            position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white;
-            border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
-            font-weight: bold; display: flex; align-items: center; justify-content: center;
-        }
-        .main-actions button {
-            width: 100%; padding: 12px; font-size: 1rem; font-weight: 600;
-            border-radius: 8px; cursor: pointer; border: none; color: white;
-            transition: all 0.3s ease; margin-top: 10px;
-        }
-        #add-item-btn { background: linear-gradient(45deg, var(--secondary-color), #3c93ff); }
-        #generate-mosaic-btn { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); }
-
-        /* --- SAÍDA DE CÓDIGO (COMUM AOS DOIS) --- */
-        .output-header { display: flex; gap: 10px; margin-bottom: 15px; }
-        .output-header button {
-            padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer;
-            color: white; font-weight: 500;
-        }
-        .copy-btn { background-color: #28a745; }
-        .preview-btn { background-color: #17a2b8; }
-        
-        .code-output {
-            background-color: #2b3e50; color: #f8f8f2; padding: 15px;
-            border-radius: var(--border-radius); height: 400px; overflow: auto;
-            white-space: pre; font-family: 'Courier New', Courier, monospace;
-        }
-
-        /* --- RESPONSIVIDADE --- */
-        @media (max-width: 1024px) {
-            .generator-content { grid-template-columns: 1fr; }
-            .code-output { height: 350px; }
-        }
-        @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .app-switcher { flex-direction: column; }
-        }
+        body{font-family:'Poppins',sans-serif;background-color:var(--bg-color);color:var(--dark-color);margin:0;padding:20px}
+        .container{max-width:1200px;margin:0 auto}
+        header h1{background:linear-gradient(45deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;font-size:2.8rem;margin-bottom:5px}
+        header p{text-align:center;margin-top:0;margin-bottom:30px;color:#6c757d;font-size:1.1rem}
+        .app-switcher{display:flex;justify-content:center;gap:10px;margin-bottom:30px}
+        .app-switcher button{padding:12px 25px;font-size:1rem;font-weight:600;border:2px solid var(--border-color);background-color:var(--light-color);color:var(--dark-color);border-radius:var(--border-radius);cursor:pointer;transition:all .3s ease}
+        .app-switcher button:hover{border-color:var(--secondary-color);color:var(--secondary-color)}
+        .app-switcher button.active{background:linear-gradient(45deg,var(--primary-color),var(--secondary-color));color:var(--light-color);border-color:transparent}
+        .generator-panel{display:none}
+        .generator-panel.active{display:block}
+        .generator-content{display:grid;grid-template-columns:450px 1fr;gap:30px;background:var(--light-color);padding:25px;border-radius:var(--border-radius);box-shadow:var(--shadow)}
+        .controls h2,.output h2{margin-top:0;color:var(--dark-color);border-bottom:2px solid #eee;padding-bottom:10px;margin-bottom:20px}
+        .form-group{margin-bottom:15px}
+        .form-group label{display:block;margin-bottom:5px;font-weight:500}
+        .form-group input,.form-group select{width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:1rem;box-sizing:border-box}
+        #floating-preview-container{position:relative;height:250px;background-color:#f8f9fa;border:1px dashed var(--border-color);border-radius:var(--border-radius);overflow:hidden;margin-bottom:20px}
+        #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;display:flex;justify-content:center;align-items:center;transition:all .3s ease;text-decoration:none}
+        #preview-button.shape-square{border-radius:12px}
+        #preview-button svg{width:32px;height:32px}
+        #items-container .link-item{border:1px solid #e0e0e0;padding:15px;border-radius:8px;margin-bottom:15px;background-color:#fafafa;position:relative}
+        .remove-item-btn{position:absolute;top:10px;right:10px;background:#e74c3c;color:white;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center}
+        .main-actions button{width:100%;padding:12px;font-size:1rem;font-weight:600;border-radius:8px;cursor:pointer;border:none;color:white;transition:all .3s ease;margin-top:10px}
+        #add-item-btn{background:linear-gradient(45deg,var(--secondary-color),#3c93ff)}
+        #generate-mosaic-btn{background:linear-gradient(45deg,var(--primary-color),var(--secondary-color))}
+        .output-header{display:flex;gap:10px;margin-bottom:15px}
+        .output-header button{padding:8px 15px;border:none;border-radius:5px;cursor:pointer;color:white;font-weight:500}
+        .copy-btn{background-color:#28a745}
+        .preview-btn{background-color:#17a2b8}
+        .code-output{background-color:#2b3e50;color:#f8f8f2;padding:15px;border-radius:var(--border-radius);height:400px;overflow:auto;white-space:pre;font-family:'Courier New',Courier,monospace}
+        @media (max-width:1024px){.generator-content{grid-template-columns:1fr}.code-output{height:350px}}
+        @media (max-width:768px){header h1{font-size:2rem}.app-switcher{flex-direction:column}}
     </style>
 </head>
 <body>
@@ -191,18 +64,25 @@
                             <input type="url" id="f-url" value="https://www.wikipedia.org/">
                         </div>
                         <div class="form-group">
-                            <label for="f-color">Cor do Botão</label>
-                            <input type="color" id="f-color" value="#007bff" style="width: 50px; height: 50px; padding: 0;">
+                            <label for="f-action">Ação do Clique</label>
+                            <select id="f-action">
+                                <option value="modal" selected>Abrir em Modal</option>
+                                <option value="new_tab">Abrir em Nova Aba</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="f-shape">Formato do Botão</label>
+                            <label for="f-color">Cor do Botão</label>
+                            <input type="color" id="f-color" value="#2575fc" style="width: 50px; height: 50px; padding: 0;">
+                        </div>
+                        <div class="form-group">
+                            <label for="f-shape">Formato</label>
                             <select id="f-shape">
                                 <option value="round" selected>Redondo</option>
                                 <option value="square">Quadrado</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="f-position">Posição na Tela</label>
+                            <label for="f-position">Posição</label>
                             <select id="f-position">
                                 <option value="bottom-right" selected>Canto Inferior Direito</option>
                                 <option value="bottom-left">Canto Inferior Esquerdo</option>
@@ -211,19 +91,19 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="f-template">Modelo / Ícone</label>
+                            <label for="f-template">Ícone</label>
                             <select id="f-template">
                                 <option value="chat" selected>Chat / Mensagem</option>
                                 <option value="help">Ajuda / Informação</option>
                                 <option value="form">Formulário / Contato</option>
-                                <option value="link">Link / Externo</option>
+                                <option value="link">Link Externo</option>
                             </select>
                         </div>
                     </div>
                     <div class="output">
                         <h2>Pré-visualização e Código</h2>
                         <div id="floating-preview-container">
-                             <button id="preview-button"></button>
+                             <a id="preview-button"></a>
                         </div>
                         <div class="output-header">
                             <button class="copy-btn">Copiar Snippet</button>
@@ -260,7 +140,7 @@
                             <button class="copy-btn">Copiar Código</button>
                             <button class="preview-btn">Visualizar em Nova Aba</button>
                         </div>
-                        <pre><code class="code-output" id="m-code-output">Clique em "Gerar Página" para ver o código aqui.</code></pre>
+                        <pre><code class="code-output" id="m-code-output">Clique em "Gerar Página".</code></pre>
                     </div>
                 </div>
             </div>
@@ -270,180 +150,114 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- LÓGICA DE NAVEGAÇÃO POR ABAS ---
     const switcherButtons = document.querySelectorAll('.app-switcher button');
     const generatorPanels = document.querySelectorAll('.generator-panel');
-
     switcherButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const targetId = button.dataset.target;
-
             switcherButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             generatorPanels.forEach(panel => {
-                if ('#' + panel.id === targetId) {
-                    panel.classList.add('active');
-                } else {
-                    panel.classList.remove('active');
-                }
+                panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
             });
         });
     });
 
-    // --- ÍCONES GLOBAIS (USADOS POR AMBOS OS GERADORES) ---
     const ICONS = {
-        // Ícones para botão flutuante
-        chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
-        help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
-        form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
-        link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09l-2.09-2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22 1.22-3.2 1.22-4.42 0z"/></svg>',
-        close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-        // Ícones para mosaico (maiores)
-        code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
-        email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
-        cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
-        stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
-        video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>'
+        chat:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+        help:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
+        form:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
+        link:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22 1.22-3.2-1.22-4.42 0z"/></svg>',
+        close:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+        code:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
+        email:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+        cloud:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
+        stats:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
+        video:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
     };
 
-    // --- FUNÇÃO PARA INICIALIZAR O GERADOR DE BOTÃO FLUTUANTE ---
     function initFloatingButtonGenerator() {
-        const panel = document.getElementById('panel-floating');
-        if (!panel) return;
-
-        const urlInput = panel.querySelector('#f-url');
-        const colorPicker = panel.querySelector('#f-color');
-        const shapeSelect = panel.querySelector('#f-shape');
-        const positionSelect = panel.querySelector('#f-position');
-        const templateSelect = panel.querySelector('#f-template');
-        const previewButton = panel.querySelector('#preview-button');
-        const codeOutput = panel.querySelector('#f-code-output');
-        const copyButton = panel.querySelector('.copy-btn');
-        const previewContainer = panel.querySelector('#floating-preview-container');
-
+        const p = document.getElementById('panel-floating');
+        const url=p.querySelector('#f-url'), action=p.querySelector('#f-action'), color=p.querySelector('#f-color'), shape=p.querySelector('#f-shape'), position=p.querySelector('#f-position'), template=p.querySelector('#f-template'), preview=p.querySelector('#preview-button'), codeOut=p.querySelector('#f-code-output'), copyBtn=p.querySelector('.copy-btn');
+        
         function update() {
-            // Preview
-            const color = colorPicker.value;
-            previewButton.style.backgroundColor = color;
-            previewButton.classList.toggle('shape-square', shapeSelect.value === 'square');
-            previewContainer.className = 'preview-container'; // Reset
-            previewButton.style.cssText += `bottom: auto; top: auto; left: auto; right: auto;`; // Reset position
-            const position = positionSelect.value.split('-'); // e.g., ['bottom', 'right']
-            previewButton.style[position[0]] = '20px';
-            previewButton.style[position[1]] = '20px';
-            previewButton.innerHTML = ICONS[templateSelect.value];
-            
-            // Code Generation
-            const borderRadius = shapeSelect.value === 'round' ? '50%' : '12px';
-            let posStyles = '';
-            switch(positionSelect.value) {
-                case 'bottom-left': posStyles = 'bottom: 20px; left: 20px;'; break;
-                case 'top-right': posStyles = 'top: 20px; right: 20px;'; break;
-                case 'top-left': posStyles = 'top: 20px; left: 20px;'; break;
-                default: posStyles = 'bottom: 20px; right: 20px;'; break;
-            }
-            
-            codeOutput.textContent = `<!-- Início do Código do Botão Flutuante -->
-<style>#fab-button{position:fixed;${posStyles}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,0.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:all .3s}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style>
-<button id="fab-button"><span class="fab-icon-open">${ICONS[templateSelect.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>
-<div id="fab-modal"><div class="fab-modal-content"><iframe src="${urlInput.value}" title="Conteúdo"></iframe></div></div>
+            preview.style.backgroundColor = color.value;
+            preview.classList.toggle('shape-square', shape.value === 'square');
+            preview.style.cssText += `bottom:auto;top:auto;left:auto;right:auto;`;
+            const pos = position.value.split('-');
+            preview.style[pos[0]] = '20px';
+            preview.style[pos[1]] = '20px';
+            preview.innerHTML = ICONS[template.value];
+            preview.href = action.value === 'new_tab' ? url.value : '#';
+
+            let finalCode = '';
+            const borderRadius = shape.value === 'round' ? '50%' : '12px';
+            const posStyles = `${pos[0]}:20px; ${pos[1]}:20px;`;
+            const baseStyles = `position:fixed;${posStyles}width:60px;height:60px;background-color:${color.value};border-radius:${borderRadius};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:all .3s;text-decoration:none;`;
+
+            if (action.value === 'new_tab') {
+                finalCode = `<!-- Início do Código do Botão Flutuante -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" style="${baseStyles}">${ICONS[template.value]}</a>\n<!-- Fim do Código -->`;
+            } else {
+                finalCode = `<!-- Início do Código do Botão Flutuante -->
+<style>#fab-button{${baseStyles}}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open,.fab-icon-close{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style>
+<button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>
+<div id="fab-modal"><div class="modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div>
 <script>(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;btn.addEventListener('click',()=>{modal.classList.toggle('show');btn.classList.toggle('active')});modal.addEventListener('click',e=>e.target===modal&&(modal.classList.remove('show'),btn.classList.remove('active')))})()<\/script>
-<!-- Fim do Código -->`.trim();
+<!-- Fim do Código -->`;
+            }
+            codeOut.textContent = finalCode.trim();
         }
 
-        [urlInput, colorPicker, shapeSelect, positionSelect, templateSelect].forEach(el => el.addEventListener('input', update));
-        copyButton.addEventListener('click', () => {
-            navigator.clipboard.writeText(codeOutput.textContent).then(() => {
-                copyButton.textContent = 'Copiado!';
-                setTimeout(() => { copyButton.textContent = 'Copiar Snippet'; }, 2000);
-            });
-        });
+        [url, action, color, shape, position, template].forEach(el => el.addEventListener('input', update));
+        copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(codeOut.textContent).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar Snippet'; }, 2000); }); });
         update();
     }
     
-    // --- FUNÇÃO PARA INICIALIZAR O GERADOR DE MOSAICO ---
     function initMosaicGenerator() {
-        const panel = document.getElementById('panel-mosaic');
-        if (!panel) return;
-
-        const titleInput = panel.querySelector('#m-page-title');
-        const descriptionInput = panel.querySelector('#m-page-description');
-        const itemsContainer = panel.querySelector('#items-container');
-        const addItemBtn = panel.querySelector('#add-item-btn');
-        const generateBtn = panel.querySelector('#generate-mosaic-btn');
-        const codeOutput = panel.querySelector('#m-code-output');
-        const copyBtn = panel.querySelector('.copy-btn');
-        const previewBtn = panel.querySelector('.preview-btn');
+        const p = document.getElementById('panel-mosaic');
+        const title=p.querySelector('#m-page-title'), desc=p.querySelector('#m-page-description'), items=p.querySelector('#items-container'), addBtn=p.querySelector('#add-item-btn'), genBtn=p.querySelector('#generate-mosaic-btn'), codeOut=p.querySelector('#m-code-output'), copyBtn=p.querySelector('.copy-btn'), previewBtn=p.querySelector('.preview-btn');
         
-        const mosaicIcons = { link: ICONS.link, chat: ICONS.chat, code: ICONS.code, email: ICONS.email, cloud: ICONS.cloud, stats: ICONS.stats, video: ICONS.video };
+        const mosaicIcons = {link:ICONS.link, chat:ICONS.chat, code:ICONS.code, email:ICONS.email, cloud:ICONS.cloud, stats:ICONS.stats, video:ICONS.video};
         let itemCount = 0;
 
-        function createIconOptions() {
-            return Object.keys(mosaicIcons).map(key => `<option value="${key}">${key.charAt(0).toUpperCase() + key.slice(1)}</option>`).join('');
-        }
-
+        function createIconOptions(){return Object.keys(mosaicIcons).map(k=>`<option value="${k}">${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join('')}
+        
         function addItem() {
             itemCount++;
-            const itemHtml = `
-                <div class="link-item" id="item-${itemCount}">
-                    <button class="remove-item-btn" title="Remover">×</button>
-                    <div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div>
-                    <div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div>
-                    <div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div>
-                </div>`;
-            itemsContainer.insertAdjacentHTML('beforeend', itemHtml);
-            const newItem = document.getElementById(`item-${itemCount}`);
-            newItem.querySelector('.remove-item-btn').addEventListener('click', () => newItem.remove());
+            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div></div>`;
+            items.insertAdjacentHTML('beforeend', itemHtml);
+            document.getElementById(`item-${itemCount}`).querySelector('.remove-item-btn').addEventListener('click', (e) => e.currentTarget.parentElement.remove());
         }
         
         function generateCode() {
             let buttonsHTML = '';
-            itemsContainer.querySelectorAll('.link-item').forEach(item => {
-                const name = item.querySelector('.item-name').value || 'Link';
-                const url = item.querySelector('.item-url').value;
-                const iconKey = item.querySelector('.item-icon').value;
+            items.querySelectorAll('.link-item').forEach(item => {
+                const name=item.querySelector('.item-name').value||'Link', url=item.querySelector('.item-url').value, iconKey=item.querySelector('.item-icon').value, action=item.querySelector('.item-action').value;
+                if (!url) return;
                 const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
-                if (url) buttonsHTML += `<button class="mosaic-button" data-url="${url}"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`;
+                const commonAttrs = `class="mosaic-button"`;
+                if (action === 'new_tab') {
+                    buttonsHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`;
+                } else {
+                    buttonsHTML += `<button ${commonAttrs} data-url="${url}"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`;
+                }
             });
 
-            codeOutput.textContent = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${titleInput.value}</title><meta name="description" content="${descriptionInput.value}">
-<style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.1)}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 0;font-size:1.1rem;opacity:.9}#mosaic-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:25px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;flex-basis:220px;flex-grow:1;max-width:300px}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-label{font-weight:600;font-size:1rem;color:#343a40}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style>
-</head>
-<body>
-<header class="header"><h1>${titleInput.value}</h1><p>${descriptionInput.value}</p></header>
-<main id="mosaic-grid">${buttonsHTML}</main>
+            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title.value}</title><meta name="description" content="${desc.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 0;font-size:1.1rem;opacity:.9}#mosaic-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:25px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;flex-basis:220px;flex-grow:1;max-width:300px;color:inherit;text-decoration:none}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-label{font-weight:600;font-size:1rem;color:#343a40}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>
+<header class="header"><h1>${title.value}</h1><p>${desc.value}</p></header><main id="mosaic-grid">${buttonsHTML}</main>
 <div id="page-modal"><div class="modal-content"><div class="modal-header"><button class="close-modal" title="Fechar">×</button></div><div class="modal-body"><iframe src="" title="Conteúdo"></iframe></div></div></div>
-<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal');document.querySelectorAll('.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}closeModalBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})<\/script>
-</body></html>`.trim();
+<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}closeModalBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})<\/script></body></html>`.trim();
         }
 
-        addItemBtn.addEventListener('click', addItem);
-        generateBtn.addEventListener('click', generateCode);
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(codeOutput.textContent).then(() => {
-                copyBtn.textContent = 'Copiado!';
-                setTimeout(() => copyBtn.textContent = 'Copiar Código', 2000);
-            });
-        });
-        previewBtn.addEventListener('click', () => {
-            const code = codeOutput.textContent;
-            if (code.startsWith('Clique em')) return;
-            const blob = new Blob([code], { type: 'text/html' });
-            window.open(URL.createObjectURL(blob), '_blank');
-        });
+        addBtn.addEventListener('click', addItem);
+        genBtn.addEventListener('click', generateCode);
+        copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(codeOut.textContent).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => copyBtn.textContent = 'Copiar Código', 2000); }); });
+        previewBtn.addEventListener('click', () => { const code = codeOut.textContent; if (code.startsWith('Clique')) return; window.open(URL.createObjectURL(new Blob([code], { type: 'text/html' })), '_blank'); });
         
         addItem();
     }
 
-    // --- INICIALIZAÇÃO DE AMBOS OS GERADORES ---
     initFloatingButtonGenerator();
     initMosaicGenerator();
-
 });
 </script>
 
