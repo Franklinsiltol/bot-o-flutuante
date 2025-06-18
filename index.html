@@ -59,55 +59,17 @@
                 <div class="generator-content">
                     <div class="controls">
                         <h2>Personalizar Botão</h2>
-                        <div class="form-group">
-                            <label for="f-url">URL de Destino</label>
-                            <input type="url" id="f-url" value="https://www.wikipedia.org/">
-                        </div>
-                        <div class="form-group">
-                            <label for="f-action">Ação do Clique</label>
-                            <select id="f-action">
-                                <option value="modal" selected>Abrir em Modal</option>
-                                <option value="new_tab">Abrir em Nova Aba</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-color">Cor do Botão</label>
-                            <input type="color" id="f-color" value="#2575fc" style="width: 50px; height: 50px; padding: 0;">
-                        </div>
-                        <div class="form-group">
-                            <label for="f-shape">Formato</label>
-                            <select id="f-shape">
-                                <option value="round" selected>Redondo</option>
-                                <option value="square">Quadrado</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-position">Posição</label>
-                            <select id="f-position">
-                                <option value="bottom-right" selected>Canto Inferior Direito</option>
-                                <option value="bottom-left">Canto Inferior Esquerdo</option>
-                                <option value="top-right">Canto Superior Direito</option>
-                                <option value="top-left">Canto Superior Esquerdo</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-template">Ícone</label>
-                            <select id="f-template">
-                                <option value="chat" selected>Chat / Mensagem</option>
-                                <option value="help">Ajuda / Informação</option>
-                                <option value="form">Formulário / Contato</option>
-                                <option value="link">Link Externo</option>
-                            </select>
-                        </div>
+                        <div class="form-group"><label for="f-url">URL de Destino</label><input type="url" id="f-url" value="https://www.wikipedia.org/"></div>
+                        <div class="form-group"><label for="f-action">Ação do Clique</label><select id="f-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div>
+                        <div class="form-group"><label for="f-color">Cor do Botão</label><input type="color" id="f-color" value="#2575fc" style="width:50px;height:50px;padding:0"></div>
+                        <div class="form-group"><label for="f-shape">Formato</label><select id="f-shape"><option value="round" selected>Redondo</option><option value="square">Quadrado</option></select></div>
+                        <div class="form-group"><label for="f-position">Posição</label><select id="f-position"><option value="bottom-right" selected>Canto Inferior Direito</option><option value="bottom-left">Canto Inferior Esquerdo</option><option value="top-right">Canto Superior Direito</option><option value="top-left">Canto Superior Esquerdo</option></select></div>
+                        <div class="form-group"><label for="f-template">Ícone</label><select id="f-template"><option value="chat" selected>Chat / Mensagem</option><option value="help">Ajuda</option><option value="form">Formulário</option><option value="link">Link Externo</option></select></div>
                     </div>
                     <div class="output">
                         <h2>Pré-visualização e Código</h2>
-                        <div id="floating-preview-container">
-                             <a id="preview-button"></a>
-                        </div>
-                        <div class="output-header">
-                            <button class="copy-btn">Copiar Snippet</button>
-                        </div>
+                        <div id="floating-preview-container"><a id="preview-button"></a></div>
+                        <div class="output-header"><button class="copy-btn">Copiar Snippet</button></div>
                         <pre><code class="code-output" id="f-code-output"></code></pre>
                     </div>
                 </div>
@@ -118,28 +80,16 @@
                  <div class="generator-content">
                     <div class="controls">
                         <h2>Configurações da Página</h2>
-                        <div class="form-group">
-                            <label for="m-page-title">Título da Página</label>
-                            <input type="text" id="m-page-title" value="Meu Dashboard de Links">
-                        </div>
-                        <div class="form-group">
-                            <label for="m-page-description">Descrição da Página</label>
-                            <input type="text" id="m-page-description" value="Acesso rápido aos meus sites e ferramentas.">
-                        </div>
-                        <hr style="margin: 25px 0; border: 1px solid #eee;">
+                        <div class="form-group"><label for="m-page-title">Título da Página</label><input type="text" id="m-page-title" value="Meu Dashboard de Links"></div>
+                        <div class="form-group"><label for="m-page-description">Descrição da Página</label><input type="text" id="m-page-description" value="Acesso rápido aos meus sites e ferramentas."></div>
+                        <hr style="margin:25px 0;border:1px solid #eee">
                         <h2>Links do Mosaico</h2>
                         <div id="items-container"></div>
-                        <div class="main-actions">
-                            <button id="add-item-btn">Adicionar Link</button>
-                            <button id="generate-mosaic-btn">Gerar Página »</button>
-                        </div>
+                        <div class="main-actions"><button id="add-item-btn">Adicionar Link</button><button id="generate-mosaic-btn">Gerar Página »</button></div>
                     </div>
                     <div class="output">
                         <h2>Código da Página Gerada</h2>
-                        <div class="output-header">
-                            <button class="copy-btn">Copiar Código</button>
-                            <button class="preview-btn">Visualizar em Nova Aba</button>
-                        </div>
+                        <div class="output-header"><button class="copy-btn">Copiar Código</button><button class="preview-btn">Visualizar em Nova Aba</button></div>
                         <pre><code class="code-output" id="m-code-output">Clique em "Gerar Página".</code></pre>
                     </div>
                 </div>
@@ -168,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
         link:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22 1.22-3.2-1.22-4.42 0z"/></svg>',
         close:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+        search:'<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',
         code:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
         email:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
         cloud:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
@@ -175,42 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         video:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
     };
 
-    function initFloatingButtonGenerator() {
-        const p = document.getElementById('panel-floating');
-        const url=p.querySelector('#f-url'), action=p.querySelector('#f-action'), color=p.querySelector('#f-color'), shape=p.querySelector('#f-shape'), position=p.querySelector('#f-position'), template=p.querySelector('#f-template'), preview=p.querySelector('#preview-button'), codeOut=p.querySelector('#f-code-output'), copyBtn=p.querySelector('.copy-btn');
-        
-        function update() {
-            preview.style.backgroundColor = color.value;
-            preview.classList.toggle('shape-square', shape.value === 'square');
-            preview.style.cssText += `bottom:auto;top:auto;left:auto;right:auto;`;
-            const pos = position.value.split('-');
-            preview.style[pos[0]] = '20px';
-            preview.style[pos[1]] = '20px';
-            preview.innerHTML = ICONS[template.value];
-            preview.href = action.value === 'new_tab' ? url.value : '#';
-
-            let finalCode = '';
-            const borderRadius = shape.value === 'round' ? '50%' : '12px';
-            const posStyles = `${pos[0]}:20px; ${pos[1]}:20px;`;
-            const baseStyles = `position:fixed;${posStyles}width:60px;height:60px;background-color:${color.value};border-radius:${borderRadius};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:all .3s;text-decoration:none;`;
-
-            if (action.value === 'new_tab') {
-                finalCode = `<!-- Início do Código do Botão Flutuante -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" style="${baseStyles}">${ICONS[template.value]}</a>\n<!-- Fim do Código -->`;
-            } else {
-                finalCode = `<!-- Início do Código do Botão Flutuante -->
-<style>#fab-button{${baseStyles}}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open,.fab-icon-close{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style>
-<button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>
-<div id="fab-modal"><div class="modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div>
-<script>(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;btn.addEventListener('click',()=>{modal.classList.toggle('show');btn.classList.toggle('active')});modal.addEventListener('click',e=>e.target===modal&&(modal.classList.remove('show'),btn.classList.remove('active')))})()<\/script>
-<!-- Fim do Código -->`;
-            }
-            codeOut.textContent = finalCode.trim();
-        }
-
-        [url, action, color, shape, position, template].forEach(el => el.addEventListener('input', update));
-        copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(codeOut.textContent).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar Snippet'; }, 2000); }); });
-        update();
-    }
+    function initFloatingButtonGenerator(){const p=document.getElementById("panel-floating"),url=p.querySelector("#f-url"),action=p.querySelector("#f-action"),color=p.querySelector("#f-color"),shape=p.querySelector("#f-shape"),position=p.querySelector("#f-position"),template=p.querySelector("#f-template"),preview=p.querySelector("#preview-button"),codeOut=p.querySelector("#f-code-output"),copyBtn=p.querySelector(".copy-btn");function update(){preview.style.backgroundColor=color.value,preview.classList.toggle("shape-square","square"===shape.value),preview.style.cssText+="bottom:auto;top:auto;left:auto;right:auto;";const e=position.value.split("-");preview.style[e[0]]="20px",preview.style[e[1]]="20px",preview.innerHTML=ICONS[template.value],preview.href="new_tab"===action.value?url.value:"#";let t="";const o="round"===shape.value?"50%":"12px",c=`${e[0]}:20px; ${e[1]}:20px;`,l=`position:fixed;${c}width:60px;height:60px;background-color:${color.value};border-radius:${o};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:all .3s;text-decoration:none;`;"new_tab"===action.value?t=`<!-- Início do Código do Botão Flutuante -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" style="${l}">${ICONS[template.value]}</a>\n<!-- Fim do Código -->`:t=`<!-- Início do Código do Botão Flutuante -->\n<style>#fab-button{${l}}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style>\n<button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>\n<div id="fab-modal"><div class="fab-modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div>\n<script>(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;btn.addEventListener('click',()=>{modal.classList.toggle('show');btn.classList.toggle('active')});modal.addEventListener('click',e=>e.target===modal&&(modal.classList.remove('show'),btn.classList.remove('active')))})()<\/script>\n<!-- Fim do Código -->`,codeOut.textContent=t.trim()}[url,action,color,shape,position,template].forEach(e=>{e.addEventListener("input",update)}),copyBtn.addEventListener("click",()=>{navigator.clipboard.writeText(codeOut.textContent).then(()=>{copyBtn.textContent="Copiado!",setTimeout(()=>{copyBtn.textContent="Copiar Snippet"},2e3)})}),update()}
     
     function initMosaicGenerator() {
         const p = document.getElementById('panel-mosaic');
@@ -223,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function addItem() {
             itemCount++;
-            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div></div>`;
+            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small">Pequeno</option><option value="medium" selected>Médio</option><option value="large">Grande</option></select></div></div>`;
             items.insertAdjacentHTML('beforeend', itemHtml);
             document.getElementById(`item-${itemCount}`).querySelector('.remove-item-btn').addEventListener('click', (e) => e.currentTarget.parentElement.remove());
         }
@@ -231,10 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
         function generateCode() {
             let buttonsHTML = '';
             items.querySelectorAll('.link-item').forEach(item => {
-                const name=item.querySelector('.item-name').value||'Link', url=item.querySelector('.item-url').value, iconKey=item.querySelector('.item-icon').value, action=item.querySelector('.item-action').value;
+                const name=item.querySelector('.item-name').value||'Link', url=item.querySelector('.item-url').value, iconKey=item.querySelector('.item-icon').value, action=item.querySelector('.item-action').value, size=item.querySelector('.item-size').value;
                 if (!url) return;
                 const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
-                const commonAttrs = `class="mosaic-button"`;
+                const commonAttrs = `class="mosaic-button size-${size}"`;
                 if (action === 'new_tab') {
                     buttonsHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`;
                 } else {
@@ -242,10 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title.value}</title><meta name="description" content="${desc.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 0;font-size:1.1rem;opacity:.9}#mosaic-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:25px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;flex-basis:220px;flex-grow:1;max-width:300px;color:inherit;text-decoration:none}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-label{font-weight:600;font-size:1rem;color:#343a40}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>
-<header class="header"><h1>${title.value}</h1><p>${desc.value}</p></header><main id="mosaic-grid">${buttonsHTML}</main>
+            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title.value}</title><meta name="description" content="${desc.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:25px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease}.size-small{flex-basis:150px;height:120px}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{flex-basis:220px;height:180px}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{flex-basis:300px;height:240px}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>
+<header class="header"><h1>${title.value}</h1><p>${desc.value}</p><div class="search-container"><span class="icon">${ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div></header><main id="mosaic-grid">${buttonsHTML}</main>
 <div id="page-modal"><div class="modal-content"><div class="modal-header"><button class="close-modal" title="Fechar">×</button></div><div class="modal-body"><iframe src="" title="Conteúdo"></iframe></div></div></div>
-<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}closeModalBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})<\/script></body></html>`.trim();
+<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal'),searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}closeModalBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})})})<\/script></body></html>`.trim();
         }
 
         addBtn.addEventListener('click', addItem);
