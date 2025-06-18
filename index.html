@@ -37,7 +37,17 @@
         .output-header button{padding:8px 15px;border:none;border-radius:5px;cursor:pointer;color:white;font-weight:500}
         .copy-btn{background-color:#28a745}
         .preview-btn{background-color:#17a2b8}
-        .code-output{background-color:#2b3e50;color:#f8f8f2;padding:15px;border-radius:var(--border-radius);height:400px;overflow:auto;white-space:pre;font-family:'Courier New',Courier,monospace}
+        .code-output{
+            background-color:#2b3e50;
+            color:#f8f8f2;
+            padding:15px;
+            border-radius:var(--border-radius);
+            height:400px;
+            overflow:auto;
+            white-space: pre-wrap; /* <-- A CORREÇÃO MÁGICA */
+            word-wrap: break-word; /* <-- Segurança extra */
+            font-family:'Courier New',Courier,monospace;
+        }
         @media (max-width:1024px){.generator-content{grid-template-columns:1fr}}
         @media (max-width:768px){body{padding:10px}header h1{font-size:2.2rem}.app-switcher{flex-direction:column}}
     </style>
