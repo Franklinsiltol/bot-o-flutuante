@@ -170,10 +170,12 @@
             border-radius: var(--border-radius);
             overflow: hidden;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         #preview-button {
-            position: absolute;
             width: 60px;
             height: 60px;
             color: white;
@@ -184,8 +186,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background-color .3s, border-radius .3s;
-            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0;
+            background-color: #2575fc;
         }
         
         #preview-button.shape-square {
@@ -345,7 +348,9 @@
                     <div class="output">
                         <h2>Pré-visualização e Código</h2>
                         <div id="floating-preview-container">
-                            <button id="preview-button"></button>
+                            <button id="preview-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                            </button>
                         </div>
                         <div class="output-header">
                             <button class="copy-btn">Copiar Snippet</button>
@@ -403,19 +408,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Ícones SVG
+    // Ícones SVG - Versão garantida para funcionar
     const ICONS = {
-        chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
-        help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
-        form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
-        link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',
-        close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-        search: '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',
-        code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
-        email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
-        cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
-        stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
-        video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>'
+        chat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`,
+        help: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
+        form: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>`,
+        link: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>`,
+        close: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`,
+        search: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>`
     };
 
     // --- LÓGICA GERAL E DE NAVEGAÇÃO ---
@@ -424,9 +424,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     switcherButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Remove a classe active de todos os botões
             switcherButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Adiciona a classe active apenas ao botão clicado
             button.classList.add('active');
             
+            // Mostra apenas o painel correspondente ao botão clicado
             generatorPanels.forEach(panel => {
                 panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
             });
@@ -447,29 +451,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const codeOut = panel.querySelector("#f-code-output");
         const copyBtn = panel.querySelector(".copy-btn");
 
+        // Função para obter o CSS da posição
         function getPositionCss(pos) {
-            let top = "20px", left = "", transform = "transform:translate(0,0);";
+            let top = "auto", left = "auto", right = "20px", bottom = "20px", transform = "";
             
             switch(pos) {
                 case "center-left":
                     top = "50%";
                     left = "20px";
-                    transform = "transform:translateY(-50%);";
+                    transform = "translateY(-50%)";
                     break;
                 case "center-right":
                     top = "50%";
-                    left = "auto";
-                    transform = "transform:translateY(-50%);";
+                    right = "20px";
+                    transform = "translateY(-50%)";
                     break;
                 case "bottom-center":
-                    top = "auto";
+                    bottom = "20px";
                     left = "50%";
-                    transform = "transform:translateX(-50%);";
+                    transform = "translateX(-50%)";
                     break;
                 case "top-center":
                     top = "20px";
                     left = "50%";
-                    transform = "transform:translateX(-50%);";
+                    transform = "translateX(-50%)";
                     break;
                 case "top-left":
                     top = "20px";
@@ -477,31 +482,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case "top-right":
                     top = "20px";
-                    left = "auto";
+                    right = "20px";
                     break;
                 case "bottom-left":
-                    top = "auto";
+                    bottom = "20px";
                     left = "20px";
                     break;
-                default:
-                    top = "auto";
-                    left = "auto";
+                default: // bottom-right
+                    bottom = "20px";
+                    right = "20px";
             }
             
-            const styles = {
+            return {
                 top,
-                bottom: top === "auto" ? "20px" : undefined,
                 left,
-                right: left === "auto" ? "20px" : undefined,
+                right,
+                bottom,
                 transform
             };
-            
-            return Object.entries(styles)
-                .filter(([_, value]) => value !== undefined)
-                .map(([prop, value]) => `${prop}:${value};`)
-                .join("");
         }
 
+        // Atualiza a pré-visualização do botão
+        function updatePreview() {
+            const pos = getPositionCss(position.value);
+            const selectedIcon = ICONS[template.value] || ICONS.chat;
+            
+            // Aplica os estilos diretamente no botão de pré-visualização
+            preview.style.backgroundColor = color.value;
+            preview.style.borderRadius = shape.value === 'round' ? '50%' : '12px';
+            preview.innerHTML = selectedIcon;
+            
+            // Posicionamento
+            preview.style.top = pos.top;
+            preview.style.left = pos.left;
+            preview.style.right = pos.right;
+            preview.style.bottom = pos.bottom;
+            preview.style.transform = pos.transform;
+            
+            // Garante que o SVG tenha o tamanho correto
+            const svg = preview.querySelector('svg');
+            if (svg) {
+                svg.style.width = '32px';
+                svg.style.height = '32px';
+                svg.style.fill = 'white';
+            }
+            
+            // Atualiza o código de saída
+            updateOutputCode();
+        }
+
+        // Gera o código de arrastar
         function getDraggableScript() {
             return `<script>
                 (function() {
@@ -553,27 +583,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <\/script>`;
         }
 
-        function update() {
-            const posCss = getPositionCss(position.value);
+        // Atualiza o código de saída
+        function updateOutputCode() {
+            const pos = getPositionCss(position.value);
             const selectedIcon = ICONS[template.value] || ICONS.chat;
+            const borderRadius = shape.value === 'round' ? '50%' : '12px';
             
-            // Atualiza a pré-visualização
-            preview.style.cssText = `
-                ${posCss}
-                background-color: ${color.value};
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            `;
-            
-            preview.classList.toggle("shape-square", shape.value === "square");
-            preview.innerHTML = selectedIcon;
-            
-            // Gera o código final
-            const borderRadius = shape.value === "round" ? "50%" : "12px";
+            // Estilos base do botão
             const baseStyles = `
                 position: fixed;
-                ${posCss}
                 width: 60px;
                 height: 60px;
                 background-color: ${color.value};
@@ -588,16 +606,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 transition: transform .3s, background-color .3s;
                 text-decoration: none;
                 border: none;
+                top: ${pos.top};
+                left: ${pos.left};
+                right: ${pos.right};
+                bottom: ${pos.bottom};
+                transform: ${pos.transform};
             `;
             
             let finalCode = "";
             
             if (action.value === "new_tab") {
+                // Código para abrir em nova aba
                 finalCode = `<!-- Floating Button Code -->
 <a href="${url.value}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">
     ${selectedIcon}
 </a>`;
             } else {
+                // Código para abrir em modal
                 const modalActionScript = `(function() {
                     const btn = document.getElementById('fab-button'),
                           modal = document.getElementById('fab-modal'),
@@ -640,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     #fab-button:hover {
-        transform: scale(1.1);
+        transform: ${pos.transform ? pos.transform + ' scale(1.1)' : 'scale(1.1)'};
     }
     
     #fab-button .fab-icon-close {
@@ -740,11 +765,12 @@ document.addEventListener('DOMContentLoaded', () => {
             codeOut.textContent = finalCode.trim();
         }
 
-        // Event listeners
+        // Event listeners para atualização em tempo real
         [url, action, color, shape, position, template, draggable].forEach(element => {
-            element.addEventListener("input", update);
+            element.addEventListener("input", updatePreview);
         });
         
+        // Copiar código
         copyBtn.addEventListener("click", () => {
             navigator.clipboard.writeText(codeOut.textContent).then(() => {
                 copyBtn.textContent = "Copiado!";
@@ -755,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Inicialização
-        update();
+        updatePreview();
     }
 
     // --- GERADOR DE PÁGINA MOSAICO ---
@@ -785,12 +811,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let itemCount = 0;
         
+        // Cria opções de ícone para o seletor
         function createIconOptions() {
             return Object.keys(mosaicIcons).map(key =>
                 `<option value="${key}">${key.charAt(0).toUpperCase() + key.slice(1)}</option>`
             ).join("");
         }
         
+        // Adiciona um novo item de link
         function addItem() {
             itemCount++;
             const itemHtml = `
@@ -828,15 +856,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             items.insertAdjacentHTML("beforeend", itemHtml);
             
+            // Adiciona evento para remover o item
             document.getElementById(`item-${itemCount}`)
                 .querySelector(".remove-item-btn")
                 .addEventListener("click", e => e.currentTarget.parentElement.remove());
         }
         
+        // Gera o código da página mosaico
         function generateCode() {
             const linksData = [];
             const sizeOrder = { large: 1, medium: 2, small: 3 };
             
+            // Coleta dados de todos os itens
             items.querySelectorAll(".link-item").forEach(item => {
                 const name = item.querySelector(".item-name").value || "Link";
                 const url = item.querySelector(".item-url").value;
@@ -849,8 +880,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
+            // Ordena por tamanho (grande, médio, pequeno)
             linksData.sort((a, b) => sizeOrder[a.size] - sizeOrder[b.size]);
             
+            // Gera HTML dos botões
             const buttonsHTML = linksData.map(({ name, url, iconKey, action, size }) => {
                 const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
                 const commonAttrs = `class="mosaic-button size-${size}"`;
@@ -866,6 +899,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>`;
             }).join("");
             
+            // Gera HTML do cabeçalho
             let headerHTML = "";
             
             if (incTitle.checked || incDesc.checked || incSearch.checked) {
@@ -883,6 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             
+            // Script de busca (se habilitado)
             const searchScript = incSearch.checked ? `
                 searchBox.addEventListener('input', () => {
                     const searchTerm = searchBox.value.toLowerCase();
@@ -893,6 +928,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             ` : "";
             
+            // Código completo da página
             codeOut.textContent = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1213,6 +1249,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMosaicGenerator();
 });
 </script>
-
 </body>
 </html>
