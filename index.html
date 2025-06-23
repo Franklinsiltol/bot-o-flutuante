@@ -29,7 +29,10 @@
         #floating-preview-container{position:relative;height:250px;background-color:#f8f9fa;border:1px dashed var(--border-color);border-radius:var(--border-radius);overflow:hidden;margin-bottom:20px}
         #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;display:flex;justify-content:center;align-items:center;transition:background-color .3s,border-radius .3s;text-decoration:none}
         #preview-button.shape-square{border-radius:12px}
-        #preview-button svg{width:32px;height:32px;pointer-events:none}
+        
+        /* AJUSTE APLICADO AQUI */
+        #preview-button svg{width:32px;height:32px;pointer-events:none;fill:currentColor}
+
         .main-actions button{width:100%;padding:12px;font-size:1rem;font-weight:600;border-radius:8px;cursor:pointer;border:none;color:white;transition:all .3s ease;margin-top:10px}
         #add-item-btn{background:linear-gradient(45deg,var(--secondary-color),#3c93ff)}
         #generate-mosaic-btn{background:linear-gradient(45deg,var(--primary-color),var(--secondary-color))}
@@ -105,15 +108,179 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- AJUSTE APLICADO AQUI: removido 'fill="currentColor"' de todos os SVGs ---
+    const ICONS = {
+        chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+        help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
+        form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
+        link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',
+        close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+        search: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',
+        code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
+        email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+        cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
+        stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
+        video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
+    };
+
     // --- LÓGICA GERAL E DE NAVEGAÇÃO ---
-    const switcherButtons=document.querySelectorAll('.app-switcher button'),generatorPanels=document.querySelectorAll('.generator-panel');switcherButtons.forEach(button=>{button.addEventListener('click',()=>{switcherButtons.forEach(btn=>btn.classList.remove('active')),button.classList.add('active'),generatorPanels.forEach(panel=>{panel.classList.toggle('active','#'+panel.id===button.dataset.target)})})});
-    const ICONS={chat:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',help:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',form:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',link:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',close:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',search:'<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',code:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',email:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',cloud:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',stats:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',video:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',};
+    const switcherButtons = document.querySelectorAll('.app-switcher button');
+    const generatorPanels = document.querySelectorAll('.generator-panel');
+    switcherButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            switcherButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            generatorPanels.forEach(panel => {
+                panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
+            });
+        });
+    });
 
     // --- GERADOR DE BOTÃO FLUTUANTE ---
-    function initFloatingButtonGenerator(){const p=document.getElementById("panel-floating"),url=p.querySelector("#f-url"),action=p.querySelector("#f-action"),color=p.querySelector("#f-color"),shape=p.querySelector("#f-shape"),position=p.querySelector("#f-position"),template=p.querySelector("#f-template"),draggable=p.querySelector("#f-draggable"),preview=p.querySelector("#preview-button"),codeOut=p.querySelector("#f-code-output"),copyBtn=p.querySelector(".copy-btn");function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function getDraggableScript(){return `<script>(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=false,offsetX,offsetY,hasMoved=false;btn.addEventListener('mousedown',e=>{isDragging=true;hasMoved=false;offsetX=e.clientX-btn.getBoundingClientRect().left;offsetY=e.clientY-btn.getBoundingClientRect().top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;hasMoved=true;let newX=e.clientX-offsetX,newY=e.clientY-offsetY;const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});document.addEventListener('mouseup',()=>{isDragging=false;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';setTimeout(()=>{if(btn.onclick&&!hasMoved)btn.onclick()},0)})})()<\/script>`}function update(){const posCss=getPositionCss(position.value);preview.style.cssText+=posCss,preview.style.backgroundColor=color.value,preview.classList.toggle("shape-square","square"===shape.value),preview.innerHTML=ICONS[template.value],preview.href="new_tab"===action.value?url.value:"#";let finalCode="";const borderRadius="round"===shape.value?"50%":"12px",baseStyles=`position:fixed;${posCss}width:60px;height:60px;background-color:${color.value};border-radius:${borderRadius};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;`;if("new_tab"===action.value)finalCode=`<!-- Floating Button Code -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${ICONS[template.value]}</a>`;else{const modalActionScript=`(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;let moved=false;btn.addEventListener('mousedown',()=>{moved=false});btn.addEventListener('mousemove',()=>{moved=true});btn.onclick=()=>{if(!moved){modal.classList.toggle('show');btn.classList.toggle('active')}};modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.remove('show');btn.classList.remove('active')}})})()`;finalCode=`<!-- Floating Button Code -->\n<style>#fab-button{${baseStyles}}#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}.fab-icon-close{display:none}</style>\n<button id="fab-button" type="button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>\n<div id="fab-modal"><div class="modal-content"><iframe src="${url.value}" title="Content"></iframe></div></div>\n<script>${modalActionScript}<\/script>`}draggable.checked&&(finalCode+=`\n${getDraggableScript()}`),codeOut.textContent=finalCode.trim()}[url,action,color,shape,position,template,draggable].forEach(e=>{e.addEventListener("input",update)}),copyBtn.addEventListener("click",()=>{navigator.clipboard.writeText(codeOut.textContent).then(()=>{copyBtn.textContent="Copiado!",setTimeout(()=>{copyBtn.textContent="Copiar Snippet"},2e3)})}),update()}
+    function initFloatingButtonGenerator() {
+        const p = document.getElementById("panel-floating");
+        const url = p.querySelector("#f-url"),
+            action = p.querySelector("#f-action"),
+            color = p.querySelector("#f-color"),
+            shape = p.querySelector("#f-shape"),
+            position = p.querySelector("#f-position"),
+            template = p.querySelector("#f-template"),
+            draggable = p.querySelector("#f-draggable"),
+            preview = p.querySelector("#preview-button"),
+            codeOut = p.querySelector("#f-code-output"),
+            copyBtn = p.querySelector(".copy-btn");
+
+        function getPositionCss(pos) {
+            let top = "20px", left = "", transform = "transform:translate(0,0);";
+            switch (pos) {
+                case "center-left": top = "50%"; left = "20px"; transform = "transform:translateY(-50%);"; break;
+                case "center-right": top = "50%"; left = "auto"; transform = "transform:translateY(-50%);"; break;
+                case "bottom-center": top = "auto"; left = "50%"; transform = "transform:translateX(-50%);"; break;
+                case "top-center": top = "20px"; left = "50%"; transform = "transform:translateX(-50%);"; break;
+                case "top-left": top = "20px"; left = "20px"; break;
+                case "top-right": top = "20px"; left = "auto"; break;
+                case "bottom-left": top = "auto"; left = "20px"; break;
+                default: top = "auto"; left = "auto"; break; // bottom-right
+            }
+            const cssProps = { top, bottom: top === 'auto' ? '20px' : undefined, left, right: left === 'auto' ? '20px' : undefined, transform };
+            return Object.entries(cssProps).filter(([, val]) => val !== undefined).map(([key, val]) => `${key}:${val};`).join('');
+        }
+
+        function getDraggableScript() {
+            return `<script>(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=false,offsetX,offsetY,hasMoved=false;btn.addEventListener('mousedown',e=>{isDragging=true;hasMoved=false;offsetX=e.clientX-btn.getBoundingClientRect().left;offsetY=e.clientY-btn.getBoundingClientRect().top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;hasMoved=true;let newX=e.clientX-offsetX,newY=e.clientY-offsetY;const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});document.addEventListener('mouseup',()=>{isDragging=false;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';setTimeout(()=>{if(btn.onclick&&!hasMoved)btn.onclick()},0)})})()<\/script>`;
+        }
+
+        function update() {
+            const posCss = getPositionCss(position.value);
+            preview.style.cssText += posCss;
+            preview.style.backgroundColor = color.value;
+            preview.classList.toggle("shape-square", shape.value === "square");
+            preview.innerHTML = ICONS[template.value];
+            preview.href = action.value === "new_tab" ? url.value : "#";
+            
+            let finalCode = "";
+            const borderRadius = shape.value === "round" ? "50%" : "12px";
+            const baseStyles = `position:fixed;${posCss}width:60px;height:60px;background-color:${color.value};border-radius:${borderRadius};border:none;color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;`;
+            const svgIconStyle = `svg{width:32px;height:32px;fill:currentColor;}`;
+            
+            if (action.value === "new_tab") {
+                finalCode = `<!-- Floating Button Code -->\n<style>#fab-button{${baseStyles}}#fab-button ${svgIconStyle}</style>\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" id="fab-button">${ICONS[template.value]}</a>`;
+            } else {
+                const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;let moved=false;btn.addEventListener('mousedown',()=>{moved=false});btn.addEventListener('mousemove',()=>{moved=true});btn.onclick=()=>{if(!moved){modal.classList.toggle('show');btn.classList.toggle('active')}};modal.addEventListener('click',e=>{if(e.target===modal){modal.classList.remove('show');btn.classList.remove('active')}})})()`;
+                finalCode = `<!-- Floating Button Code -->\n<style>#fab-button{${baseStyles}}#fab-button ${svgIconStyle}#fab-button .fab-icon-open{display:block}#fab-button .fab-icon-close{display:none}#fab-button.active .fab-icon-open{display:none}#fab-button.active .fab-icon-close{display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:90%;height:90%;max-width:1200px;border-radius:15px;overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style>\n<button id="fab-button" type="button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>\n<div id="fab-modal"><div class="modal-content"><iframe src="${url.value}" title="Content"></iframe></div></div>\n<script>${modalActionScript}<\/script>`;
+            }
+            if (draggable.checked) {
+                finalCode += `\n${getDraggableScript()}`;
+            }
+            codeOut.textContent = finalCode.trim();
+        }
+
+        [url, action, color, shape, position, template, draggable].forEach(el => {
+            el.addEventListener("input", update);
+        });
+        copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(codeOut.textContent).then(() => {
+                copyBtn.textContent = "Copiado!";
+                setTimeout(() => { copyBtn.textContent = "Copiar Snippet"; }, 2000);
+            });
+        });
+        update();
+    }
 
     // --- GERADOR DE PÁGINA MOSAICO ---
-    function initMosaicGenerator(){const p=document.getElementById("panel-mosaic"),titleIn=p.querySelector("#m-page-title"),descIn=p.querySelector("#m-page-description"),incTitle=p.querySelector("#m-inc-title"),incDesc=p.querySelector("#m-inc-desc"),incSearch=p.querySelector("#m-inc-search"),items=p.querySelector("#items-container"),addBtn=p.querySelector("#add-item-btn"),genBtn=p.querySelector("#generate-mosaic-btn"),codeOut=p.querySelector("#m-code-output"),copyBtn=p.querySelector(".copy-btn"),previewBtn=p.querySelector(".preview-btn"),mosaicIcons={link:ICONS.link,chat:ICONS.chat,code:ICONS.code,email:ICONS.email,cloud:ICONS.cloud,stats:ICONS.stats,video:ICONS.video};let itemCount=0;function createIconOptions(){return Object.keys(mosaicIcons).map(k=>`<option value="${k}">${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}function addItem(){itemCount++;const itemHtml=`<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small">Pequeno</option><option value="medium" selected>Médio</option><option value="large">Grande</option></select></div></div>`;items.insertAdjacentHTML("beforeend",itemHtml),document.getElementById(`item-${itemCount}`).querySelector(".remove-item-btn").addEventListener("click",e=>e.currentTarget.parentElement.remove())}function generateCode(){const linksData=[],sizeOrder={large:1,medium:2,small:3};items.querySelectorAll(".link-item").forEach(item=>{const name=item.querySelector(".item-name").value||"Link",url=item.querySelector(".item-url").value,iconKey=item.querySelector(".item-icon").value,action=item.querySelector(".item-action").value,size=item.querySelector(".item-size").value;url&&linksData.push({name,url,iconKey,action,size})});linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name,url,iconKey,action,size})=>{const iconSVG=mosaicIcons[iconKey]||mosaicIcons.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("");let headerHTML="";incTitle.checked||incDesc.checked||incSearch.checked?headerHTML=`<header class="header">${incTitle.checked?`<h1>${titleIn.value}</h1>`:""}${incDesc.checked?`<p>${descIn.value}</p>`:""}${incSearch.checked?`<div class="search-container"><span class="icon">${ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}</header>`:"";const searchScript=incSearch.checked?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";codeOut.textContent=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titleIn.value}</title><meta name="description" content="${descIn.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease}.size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}@media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}@media(min-width:900px){.size-large{grid-column:span 3}}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>\n${headerHTML}\n<main id="mosaic-grid">${buttonsHTML}</main>\n<div id="page-modal"><div class="modal-content"><div class="modal-header"><button class="close-modal" title="Fechar">×</button></div><div class="modal-body"><iframe src="" title="Conteúdo"></iframe></div></div></div>\n<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal'),searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);if(modal)modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});if(searchBox){${searchScript}}})<\/script></body></html>`.trim()}addBtn.addEventListener("click",addItem),genBtn.addEventListener("click",generateCode),copyBtn.addEventListener("click",()=>{navigator.clipboard.writeText(codeOut.textContent).then(()=>{copyBtn.textContent="Copiado!",setTimeout(()=>{copyBtn.textContent="Copiar Código"},2e3)})}),previewBtn.addEventListener("click",()=>{const code=codeOut.textContent;if(code.startsWith("Clique"))return;window.open(URL.createObjectURL(new Blob([code],{type:"text/html"})),"_blank")}),addItem()}
+    function initMosaicGenerator() {
+        const p = document.getElementById("panel-mosaic");
+        const titleIn = p.querySelector("#m-page-title"),
+            descIn = p.querySelector("#m-page-description"),
+            incTitle = p.querySelector("#m-inc-title"),
+            incDesc = p.querySelector("#m-inc-desc"),
+            incSearch = p.querySelector("#m-inc-search"),
+            items = p.querySelector("#items-container"),
+            addBtn = p.querySelector("#add-item-btn"),
+            genBtn = p.querySelector("#generate-mosaic-btn"),
+            codeOut = p.querySelector("#m-code-output"),
+            copyBtn = p.querySelector(".copy-btn"),
+            previewBtn = p.querySelector(".preview-btn");
+        
+        const mosaicIcons = { link: ICONS.link, chat: ICONS.chat, code: ICONS.code, email: ICONS.email, cloud: ICONS.cloud, stats: ICONS.stats, video: ICONS.video };
+        let itemCount = 0;
+        
+        function createIconOptions() { return Object.keys(mosaicIcons).map(k => `<option value="${k}">${k.charAt(0).toUpperCase() + k.slice(1)}</option>`).join(""); }
+        function addItem() {
+            itemCount++;
+            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small">Pequeno</option><option value="medium" selected>Médio</option><option value="large">Grande</option></select></div></div>`;
+            items.insertAdjacentHTML("beforeend", itemHtml);
+            document.getElementById(`item-${itemCount}`).querySelector(".remove-item-btn").addEventListener("click", e => e.currentTarget.parentElement.remove());
+        }
+
+        function generateCode() {
+            const linksData = [];
+            const sizeOrder = { large: 1, medium: 2, small: 3 };
+            items.querySelectorAll(".link-item").forEach(item => {
+                const name = item.querySelector(".item-name").value || "Link",
+                    url = item.querySelector(".item-url").value,
+                    iconKey = item.querySelector(".item-icon").value,
+                    action = item.querySelector(".item-action").value,
+                    size = item.querySelector(".item-size").value;
+                if (url) linksData.push({ name, url, iconKey, action, size });
+            });
+            linksData.sort((a, b) => sizeOrder[a.size] - sizeOrder[b.size]);
+            
+            const buttonsHTML = linksData.map(({ name, url, iconKey, action, size }) => {
+                const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
+                const commonAttrs = `class="mosaic-button size-${size}"`;
+                if (action === "new_tab") {
+                    return `<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`;
+                }
+                return `<button ${commonAttrs} data-url="${url}"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`;
+            }).join("");
+
+            let headerHTML = "";
+            if (incTitle.checked || incDesc.checked || incSearch.checked) {
+                headerHTML = `<header class="header">${incTitle.checked?`<h1>${titleIn.value}</h1>`:""}${incDesc.checked?`<p>${descIn.value}</p>`:""}${incSearch.checked?`<div class="search-container"><span class="icon">${ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}</header>`;
+            }
+
+            const searchScript = incSearch.checked ? "searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});" : "";
+
+            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titleIn.value}</title><meta name="description" content="${descIn.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease;fill:currentColor}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease}.size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}@media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}@media(min-width:900px){.size-large{grid-column:span 3}}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>\n${headerHTML}\n<main id="mosaic-grid">${buttonsHTML}</main>\n<div id="page-modal"><div class="modal-content"><div class="modal-header"><button class="close-modal" title="Fechar">×</button></div><div class="modal-body"><iframe src="" title="Conteúdo"></iframe></div></div></div>\n<script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal'),searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}if(closeModalBtn)closeModalBtn.addEventListener('click',closeModal);if(modal)modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});if(searchBox){${searchScript}}})<\/script></body></html>`.trim();
+        }
+
+        addBtn.addEventListener("click", addItem);
+        genBtn.addEventListener("click", generateCode);
+        copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(codeOut.textContent).then(() => {
+                copyBtn.textContent = "Copiado!";
+                setTimeout(() => { copyBtn.textContent = "Copiar Código"; }, 2000);
+            });
+        });
+        previewBtn.addEventListener("click", () => {
+            const code = codeOut.textContent;
+            if (code.startsWith("Clique")) return;
+            window.open(URL.createObjectURL(new Blob([code], { type: "text/html" })), "_blank");
+        });
+        addItem();
+    }
 
     // --- INICIALIZAÇÃO DE AMBOS OS GERADORES ---
     initFloatingButtonGenerator();
