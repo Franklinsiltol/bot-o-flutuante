@@ -5,74 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGen Pro - Gerador de Snippets</title>
     <style>
-        :root {
-            --primary-hue: 220; --secondary-hue: 265;
-            --primary: hsl(var(--primary-hue), 90%, 60%); --secondary: hsl(var(--secondary-hue), 90%, 60%);
-            --gradient: linear-gradient(45deg, var(--primary), var(--secondary));
-            --bg-light: #f6f8fa; --bg-card: #ffffff; --text-dark: #24292e; --text-light: #586069;
-            --border-color: #e1e4e8; --success: #28a745; --danger: #d73a49;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08); --radius: 12px;
-        }
+        :root{--primary-hue:220;--secondary-hue:265;--primary:hsl(var(--primary-hue),90%,60%);--secondary:hsl(var(--secondary-hue),90%,60%);--gradient:linear-gradient(45deg,var(--primary),var(--secondary));--bg-light:#f6f8fa;--bg-card:#ffffff;--text-dark:#24292e;--text-light:#586069;--border-color:#e1e4e8;--success:#28a745;--danger:#d73a49;--shadow:0 4px 12px rgba(0,0,0,.08);--radius:12px}
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding: 2rem; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 2rem; }
-        .logo { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--text-dark); text-decoration: none; }
-        .logo svg { color: var(--primary); }
-        .header h1 { font-size: 2.5rem; margin: 0; }
-        .header p { font-size: 1.1rem; color: var(--text-light); margin: 0.5rem 0 0; }
-        .app-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; }
-        .app-switcher button { padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color); background-color: var(--bg-card); color: var(--text-light); border-radius: var(--radius); cursor: pointer; transition: all 0.2s ease; }
-        .app-switcher button:hover { border-color: var(--primary); color: var(--primary); }
-        .app-switcher button.active { background: var(--gradient); color: white; border-color: transparent; }
-        .generator-panel { display: none; }
-        .generator-panel.active { display: grid; grid-template-columns: minmax(320px, 450px) 1fr; gap: 2rem; }
-        .card { background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem; }
-        .card-header h2 { margin: 0; font-size: 1.25rem; }
-        .btn-reset { font-size: 0.9rem; font-weight: 500; color: var(--text-light); background: none; border: none; cursor: pointer; }
-        .btn-reset:hover { color: var(--danger); }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label, .checkbox-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; transition: all 0.2s ease; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px hsla(var(--primary-hue), 90%, 60%, 0.2); }
-        .checkbox-group { display: flex; align-items: center; gap: 0.75rem; background-color: var(--bg-light); padding: 0.75rem; border-radius: 8px; }
-        .checkbox-group label { margin: 0; }
-        #floating-preview-container { position: relative; height: 300px; background-color: var(--bg-light); border: 2px dashed var(--border-color); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-        #preview-button { position: absolute; width: 60px; height: 60px; color: white; border: none; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,.2); cursor: grab; display: flex; justify-content: center; align-items: center; transition: background-color .2s, border-radius .2s; text-decoration: none; user-select: none; }
-        #preview-button.shape-square { border-radius: 12px; }
-        #preview-button svg { width: 32px; height: 32px; pointer-events: none; }
-        .link-item { border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; background-color: #fcfdff; position: relative; }
-        .link-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .link-item-header span { font-weight: 600; color: var(--primary); }
-        .btn-remove-item { background: var(--danger); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-        .btn-add-item, .btn-generate-mosaic { width: 100%; padding: 0.8rem; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; color: white; transition: all .2s ease; margin-top: 0.5rem; }
-        .btn-add-item { background-color: var(--primary); }
-        .btn-generate-mosaic { background: var(--gradient); }
-        .btn-add-item:hover { background-color: hsl(var(--primary-hue), 90%, 50%); }
-        .output .card-header { margin-bottom: 0.5rem; }
-        .btn-copy { background-color: var(--bg-light); border: 1px solid var(--border-color); color: var(--text-light); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
-        .btn-copy:hover { border-color: var(--success); color: var(--success); }
-        .code-output { background-color: #24292e; color: #f8f8f2; padding: 1rem; border-radius: 8px; height: 450px; overflow: auto; white-space: pre-wrap; word-wrap: break-word; font-family: 'Menlo', 'Consolas', monospace; }
-        @media (max-width: 1200px) { .generator-panel { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { body { padding: 1rem; } header h1 { font-size: 2rem; } .app-switcher { flex-direction: column; } }
+        *{box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background-color:var(--bg-light);color:var(--text-dark);margin:0;padding:2rem}
+        .container{max-width:1400px;margin:0 auto}
+        .header{text-align:center;margin-bottom:2rem}
+        .logo{display:inline-flex;align-items:center;gap:.75rem;color:var(--text-dark);text-decoration:none}
+        .logo svg{color:var(--primary)}
+        .header h1{font-size:2.5rem;margin:0}
+        .header p{font-size:1.1rem;color:var(--text-light);margin:.5rem 0 0}
+        .app-switcher{display:flex;justify-content:center;gap:10px;margin-bottom:2rem}
+        .app-switcher button{padding:.75rem 1.5rem;font-size:1rem;font-weight:600;border:2px solid var(--border-color);background-color:var(--bg-card);color:var(--text-light);border-radius:var(--radius);cursor:pointer;transition:all .2s ease}
+        .app-switcher button:hover{border-color:var(--primary);color:var(--primary)}
+        .app-switcher button.active{background:var(--gradient);color:white;border-color:transparent}
+        .generator-panel{display:none}
+        .generator-panel.active{display:grid;grid-template-columns:minmax(320px,450px) 1fr;gap:2rem}
+        .card{background:var(--bg-card);padding:1.5rem;border-radius:var(--radius);box-shadow:var(--shadow)}
+        .card-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color);padding-bottom:1rem;margin-bottom:1.5rem}
+        .card-header h2{margin:0;font-size:1.25rem}
+        .btn-reset{font-size:.9rem;font-weight:500;color:var(--text-light);background:none;border:none;cursor:pointer}
+        .btn-reset:hover{color:var(--danger)}
+        .form-group{margin-bottom:1rem}
+        .form-group label,.checkbox-group label{display:block;margin-bottom:.5rem;font-weight:500}
+        .form-group input,.form-group select{width:100%;padding:.75rem;border:1px solid var(--border-color);border-radius:8px;font-size:1rem;transition:all .2s ease}
+        .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--primary-hue),90%,60%,.2)}
+        .checkbox-group{display:flex;align-items:center;gap:.75rem;background-color:var(--bg-light);padding:.75rem;border-radius:8px}
+        .checkbox-group label{margin:0}
+        #floating-preview-container{position:relative;height:300px;background-color:var(--bg-light);border:2px dashed var(--border-color);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+        #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:grab;display:flex;justify-content:center;align-items:center;transition:background-color .2s,border-radius .2s;text-decoration:none;-webkit-user-select:none;user-select:none}
+        #preview-button.shape-square{border-radius:12px}
+        #preview-button svg{width:32px;height:32px;pointer-events:none}
+        .link-item{border:1px solid var(--border-color);padding:1rem;border-radius:8px;margin-bottom:1rem;background-color:#fcfdff;position:relative}
+        .link-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+        .link-item-header span{font-weight:600;color:var(--primary)}
+        .btn-remove-item{background:var(--danger);color:white;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-weight:700}
+        .btn-add-item,.btn-generate-mosaic{width:100%;padding:.8rem;font-size:1rem;font-weight:600;border-radius:8px;cursor:pointer;border:none;color:white;transition:all .2s ease;margin-top:.5rem}
+        .btn-add-item{background-color:var(--primary)}
+        .btn-generate-mosaic{background:var(--gradient)}
+        .btn-add-item:hover{background-color:hsl(var(--primary-hue),90%,50%)}
+        .output .card-header{margin-bottom:.5rem}
+        .btn-copy{background-color:var(--bg-light);border:1px solid var(--border-color);color:var(--text-light);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-weight:500;display:flex;align-items:center;gap:.5rem}
+        .btn-copy:hover{border-color:var(--success);color:var(--success)}
+        .code-output{background-color:#24292e;color:#f8f8f2;padding:1rem;border-radius:8px;height:450px;overflow:auto;white-space:pre-wrap;word-wrap:break-word;font-family:'Menlo','Consolas',monospace}
+        @media (max-width:1200px){.generator-panel{grid-template-columns:1fr}}
+        @media (max-width:768px){body{padding:1rem}header h1{font-size:2rem}.app-switcher{flex-direction:column}}
     </style>
 </head>
 <body>
-
     <div class="container">
         <header class="header">
-            <a href="#" class="logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20.562a8.5 8.5 0 1 1 9.518-12.355"/><path d="m2 14 4 4 4-4"/><path d="m22 10-4-4-4 4"/></svg>
-                <h1>WebGen Pro</h1>
-            </a>
+            <a href="#" class="logo"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20.562a8.5 8.5 0 1 1 9.518-12.355"/><path d="m2 14 4 4 4-4"/><path d="m22 10-4-4-4 4"/></svg><h1>WebGen Pro</h1></a>
             <p>Sua ferramenta definitiva para gerar snippets web interativos.</p>
         </header>
-        <nav class="app-switcher">
-            <button class="active" data-target="#panel-floating">Gerador de Botão Flutuante</button>
-            <button data-target="#panel-mosaic">Gerador de Página Mosaico</button>
-        </nav>
+        <nav class="app-switcher"><button class="active" data-target="#panel-floating">Gerador de Botão Flutuante</button><button data-target="#panel-mosaic">Gerador de Página Mosaico</button></nav>
         <main>
             <div id="panel-floating" class="generator-panel active">
                 <div class="controls card">
@@ -114,37 +100,101 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const ICONS={copy:`<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,check:`<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>`,chat:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',help:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',form:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',link:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',close:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',search:'<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',code:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',email:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',cloud:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',stats:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',video:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',};
-    function handleCopy(button, textContent) { navigator.clipboard.writeText(textContent).then(() => { const originalLabel = button.querySelector('.label').textContent; button.innerHTML = `${ICONS.check} <span class="label">Copiado!</span>`; button.style.color = 'var(--success)'; setTimeout(() => { button.innerHTML = `${ICONS.copy} <span class="label">${originalLabel}</span>`; button.style.color = ''; }, 2000); }); }
-    const switcherButtons = document.querySelectorAll('.app-switcher button'); const generatorPanels = document.querySelectorAll('.generator-panel');
-    switcherButtons.forEach(button => { button.addEventListener('click', () => { switcherButtons.forEach(btn => btn.classList.remove('active')); button.classList.add('active'); generatorPanels.forEach(panel => { panel.classList.toggle('active', '#' + panel.id === button.dataset.target); }); }); });
-
-    // --- GERADOR DE BOTÃO FLUTUANTE ---
-    (function initFloatingGenerator(){const p=document.getElementById("panel-floating"),DOMElements={url:p.querySelector("#f-url"),action:p.querySelector("#f-action"),color:p.querySelector("#f-color"),shape:p.querySelector("#f-shape"),position:p.querySelector("#f-position"),template:p.querySelector("#f-template"),draggable:p.querySelector("#f-draggable"),preview:p.querySelector("#preview-button"),previewContainer:p.querySelector("#floating-preview-container"),codeOut:p.querySelector("#f-code-output"),copyBtn:p.querySelector("#f-copy"),resetBtn:p.querySelector("#f-reset")},defaultState={url:"https://www.wikipedia.org/",action:"modal",color:"#2575fc",shape:"round",position:"bottom-right",template:"chat",draggable:!1};let state={...defaultState};function setState(newState){state={...state,...newState};updatePreview();generateCode()}function loadStateIntoForm(){for(const key in state)if(DOMElements[key]){const el=DOMElements[key];"checkbox"===el.type?el.checked=state[key]:el.value=state[key]}}function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function updatePreview(){const{preview:preview}=DOMElements,posCss=getPositionCss(state.position);preview.style.cssText=`background-color: ${state.color}; ${posCss}`,preview.classList.toggle("shape-square","square"===state.shape),preview.innerHTML=ICONS[state.template]}
-    function generateCode() {
-        const { url, action, color, shape, position, template, draggable } = state;
-        let finalCode = "";
-        const borderRadius = shape === 'round' ? '50%' : '12px';
-        const posCss = getPositionCss(position);
-        const baseStyles = `position:fixed;${posCss}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;border:none;`;
-        
-        if (action === 'new_tab') {
-            finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${ICONS[template]}</a>`;
-        } else {
-            const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal)return;let moved=!1;btn.addEventListener('mousedown',()=>{moved=!1});btn.addEventListener('mousemove',()=>{moved=!0});const openModal=()=>{modal.classList.add('show');btn.classList.add('active')},closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',()=>{if(!moved)openModal()});modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});closeBtn.addEventListener('click',closeModal)})()`;
-            finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
+    const App = {
+        ICONS: {
+            copy: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,
+            check: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>`,
+            chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+            help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
+            form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
+            link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',
+            close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+            search: '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',
+            code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
+            email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+            cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
+            stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
+            video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
+        },
+        init: function() {
+            this.setupTabSwitcher();
+            this.floatingGenerator.init();
+            this.mosaicGenerator.init();
+        },
+        setupTabSwitcher: function() {
+            const switcherButtons = document.querySelectorAll('.app-switcher button');
+            const generatorPanels = document.querySelectorAll('.generator-panel');
+            switcherButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switcherButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    generatorPanels.forEach(panel => {
+                        panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
+                    });
+                });
+            });
+        },
+        handleCopy: function(button, textContent) {
+            navigator.clipboard.writeText(textContent).then(() => {
+                const originalLabel = button.querySelector('.label').textContent;
+                button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`;
+                button.style.color = 'var(--success)';
+                setTimeout(() => {
+                    button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`;
+                    button.style.color = '';
+                }, 2000);
+            });
+        },
+        floatingGenerator: {
+            DOMElements: {},
+            state: {},
+            defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat", draggable: false },
+            init: function() {
+                const p = document.getElementById("panel-floating");
+                this.DOMElements = {
+                    controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"),
+                    color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"),
+                    template: p.querySelector("#f-template"), draggable: p.querySelector("#f-draggable"), preview: p.querySelector("#preview-button"),
+                    previewContainer: p.querySelector("#floating-preview-container"), codeOut: p.querySelector("#f-code-output"),
+                    copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset")
+                };
+                this.state = { ...this.defaultState };
+                this.loadStateIntoForm();
+                this.addEventListeners();
+                this.updatePreview();
+                this.generateCode();
+                this.makePreviewDraggable();
+            },
+            setState: function(newState) { this.state = { ...this.state, ...newState }; this.updatePreview(); this.generateCode(); },
+            loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { const el = this.DOMElements[key]; el.type === 'checkbox' ? el.checked = this.state[key] : el.value = this.state[key]; } } },
+            getPositionCss(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
+            updatePreview: function() { const posCss = this.getPositionCss(this.state.position); this.DOMElements.preview.style.cssText = `background-color: ${this.state.color}; ${posCss}`; this.DOMElements.preview.classList.toggle("shape-square", this.state.shape === 'square'); this.DOMElements.preview.innerHTML = App.ICONS[this.state.template]; },
+            generateCode: function() {
+                const { url, action, color, shape, position, template, draggable } = this.state;
+                const borderRadius = shape === 'round' ? '50%' : '12px';
+                const posCss = this.getPositionCss(position);
+                const baseStyles = `position:fixed;${posCss}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;border:none;`;
+                
+                let finalCode;
+                if (action === 'new_tab') {
+                    finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${App.ICONS[template]}</a>`;
+                } else {
+                    const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal||!closeBtn)return;const openModal=()=>{modal.classList.add('show');btn.classList.add('active')};const closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',openModal);closeBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})()`;
+                    finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
 <style>
+    /* Estilos do Botão Principal */
     #fab-button { ${baseStyles} }
     #fab-button:hover { transform: scale(1.1); }
     #fab-button .fab-icon-close { display: none; }
     #fab-button.active .fab-icon-open { display: none; }
     #fab-button.active .fab-icon-close { display: block; }
 
+    /* Estilos do Modal */
     #fab-modal {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background-color: rgba(0,0,0,.7); z-index: 9999;
         display: flex; justify-content: center; align-items: center;
-        opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s;
+        opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease;
     }
     #fab-modal.show { opacity: 1; visibility: visible; }
     .fab-modal-content {
@@ -156,49 +206,71 @@ document.addEventListener('DOMContentLoaded', () => {
     #fab-modal.show .fab-modal-content { transform: scale(1); }
     #fab-modal-close {
         position: absolute; top: 15px; right: 15px;
-        background: rgba(0,0,0,0.1); color: #000;
+        background: rgba(0,0,0,0.08); color: #000;
         border: none; width: 36px; height: 36px;
         border-radius: 50%; cursor: pointer; display: flex;
         align-items: center; justify-content: center;
         transition: background-color 0.2s; z-index: 10;
     }
-    #fab-modal-close:hover { background: rgba(0,0,0,0.2); }
+    #fab-modal-close:hover { background: rgba(0,0,0,0.15); }
     .fab-modal-content iframe { width: 100%; height: 100%; border: none; }
 </style>
 <button id="fab-button" type="button">
-    <span class="fab-icon-open">${ICONS[template]}</span>
-    <span class="fab-icon-close">${ICONS.close}</span>
+    <span class="fab-icon-open">${App.ICONS[template]}</span>
+    <span class="fab-icon-close">${App.ICONS.close}</span>
 </button>
 <div id="fab-modal">
     <div class="fab-modal-content">
-        <button id="fab-modal-close" title="Fechar">${ICONS.close}</button>
+        <button id="fab-modal-close" title="Fechar">${App.ICONS.close}</button>
         <iframe src="${url}" title="Conteúdo do Modal"></iframe>
     </div>
 </div>
 <script>${modalActionScript}<\/script>`;
-        }
-        if (draggable) {
-            const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,offsetX,offsetY,startX,startY;btn.addEventListener('mousedown',e=>{isDragging=!0,startX=e.clientX,startY=e.clientY,offsetX=e.clientX-btn.getBoundingClientRect().left,offsetY=e.clientY-btn.getBoundingClientRect().top,btn.style.transition='none',document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=e.clientX-offsetX,newY=e.clientY-offsetY;const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth)),newY=Math.max(0,Math.min(newY,winHeight-btnHeight)),btn.style.left=\`\${newX}px\`,btn.style.top=\`\${newY}px\`,btn.style.bottom='auto',btn.style.right='auto',btn.style.transform='none'});document.addEventListener('mouseup',e=>{isDragging=!1,btn.style.transition='transform .3s, background-color .3s',document.body.style.userSelect='auto';const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;!moved&&typeof btn.onclick==='function'&&btn.onclick()})})()`;
-            finalCode += `\n<!-- Script para arrastar o botão -->\n<script>${draggableScript}<\/script>`;
-        }
-        DOMElements.codeOut.textContent = finalCode.trim();
-    }
-    (function makePreviewDraggable(){const{preview:preview,previewContainer:previewContainer}=DOMElements;let isDragging=!1,offsetX,offsetY;preview.addEventListener("mousedown",e=>{isDragging=!0,offsetX=e.clientX-preview.getBoundingClientRect().left,offsetY=e.clientY-preview.getBoundingClientRect().top,preview.style.transition="none"}),document.addEventListener("mousemove",e=>{if(!isDragging)return;let newX=e.clientX-previewContainer.getBoundingClientRect().left-offsetX,newY=e.clientY-previewContainer.getBoundingClientRect().top-offsetY;const contWidth=previewContainer.offsetWidth,contHeight=previewContainer.offsetHeight,btnWidth=preview.offsetWidth,btnHeight=preview.offsetHeight;newX=Math.max(0,Math.min(newX,contWidth-btnWidth)),newY=Math.max(0,Math.min(newY,contHeight-btnHeight)),preview.style.left=`${newX}px`,preview.style.top=`${newY}px`,preview.style.bottom="auto",preview.style.right="auto",preview.style.transform="none"}),document.addEventListener("mouseup",()=>{isDragging=!1,preview.style.transition="background-color .2s, border-radius .2s"})})();
-    const p=document.getElementById("panel-floating"),DOMElements={url:p.querySelector("#f-url"),action:p.querySelector("#f-action"),color:p.querySelector("#f-color"),shape:p.querySelector("#f-shape"),position:p.querySelector("#f-position"),template:p.querySelector("#f-template"),draggable:p.querySelector("#f-draggable"),preview:p.querySelector("#preview-button"),previewContainer:p.querySelector("#floating-preview-container"),codeOut:p.querySelector("#f-code-output"),copyBtn:p.querySelector("#f-copy"),resetBtn:p.querySelector("#f-reset")},defaultState={url:"https://www.wikipedia.org/",action:"modal",color:"#2575fc",shape:"round",position:"bottom-right",template:"chat",draggable:!1};let state={...defaultState};p.addEventListener("input",e=>{const key=e.target.id.substring(2),value="checkbox"===e.target.type?e.target.checked:e.target.value;state.hasOwnProperty(key)&&setState({[key]:value})});DOMElements.resetBtn.addEventListener("click",()=>{setState(defaultState),loadStateIntoForm()});DOMElements.copyBtn.addEventListener("click",()=>handleCopy(DOMElements.copyBtn,DOMElements.codeOut.textContent));function setState(newState){state={...state,...newState};updatePreview();generateCode()}function loadStateIntoForm(){for(const key in state)if(DOMElements[key]){const el=DOMElements[key];"checkbox"===el.type?el.checked=state[key]:el.value=state[key]}}function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function updatePreview(){const{preview:preview}=DOMElements,posCss=getPositionCss(state.position);preview.style.cssText=`background-color: ${state.color}; ${posCss}`,preview.classList.toggle("shape-square","square"===state.shape),preview.innerHTML=ICONS[state.template]}loadStateIntoForm(),updatePreview(),generateCode();
+                }
 
-    // --- GERADOR DE PÁGINA MOSAICO ---
-    (function initMosaicGenerator(){const p=document.getElementById("panel-mosaic"),DOMElements={titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")},defaultState={title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]};let state={...defaultState};const mosaicIcons={link:ICONS.link,chat:ICONS.chat,code:ICONS.code,email:ICONS.email,cloud:ICONS.cloud,stats:ICONS.stats,video:ICONS.video};function createIconOptions(){return Object.keys(mosaicIcons).map(k=>`<option value="${k}">${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}function renderItems(){DOMElements.itemsContainer.innerHTML=state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon" value="${link.iconKey}">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action" value="${link.action}"><option value="modal">Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size" value="${link.size}"><option value="small">Pequeno</option><option value="medium">Médio</option><option value="large">Grande</option></select></div></div>`).join(""),state.links.forEach((link,index)=>{const itemEl=DOMElements.itemsContainer.querySelector(`[data-index="${index}"]`);itemEl.querySelector(".item-icon").value=link.iconKey,itemEl.querySelector(".item-action").value=link.action,itemEl.querySelector(".item-size").value=link.size})}function addItem(){const newLink={name:"",url:"",iconKey:"link",action:"modal",size:"medium"};state.links.push(newLink);renderItems()}function updateItem(index,key,value){state.links[index][key]=value}function loadStateIntoForm(){DOMElements.titleIn.value=state.title,DOMElements.descIn.value=state.description,DOMElements.incTitle.checked=state.incTitle,DOMElements.incDesc.checked=state.incDesc,DOMElements.incSearch.checked=state.incSearch,renderItems()}function generateCode(){const linksData=[...state.links],sizeOrder={large:1,medium:2,small:3};linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name:name,url:url,iconKey:iconKey,action:action,size:size})=>{if(!url)return"";const iconSVG=mosaicIcons[iconKey]||mosaicIcons.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}" type="button"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("\n            ");let headerHTML="";state.incTitle||state.incDesc||state.incSearch?headerHTML=`\n    <header class="header">${state.incTitle?`\n        <h1>${state.title}</h1>`:""}${state.incDesc?`\n        <p>${state.description}</p>`:""}${state.incSearch?`\n        <div class="search-container"><span class="icon">${ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}\n    </header>`:"";const searchScript=state.incSearch?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";const finalCode=`<!DOCTYPE html>
+                if (draggable) {
+                    const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,startX,startY,initialLeft,initialTop;btn.addEventListener('mousedown',e=>{isDragging=!0;startX=e.clientX;startY=e.clientY;const rect=btn.getBoundingClientRect();initialLeft=rect.left;initialTop=rect.top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=initialLeft+(e.clientX-startX),newY=initialTop+(e.clientY-startY);const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});document.addEventListener('mouseup',e=>{isDragging=!1;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;if(!moved&&typeof btn.onclick==='function'){btn.onclick()}})})()`;
+                    finalCode += `\n\n<!-- Script para arrastar o botão (WebGen Pro) -->\n<script>${draggableScript}<\/script>`;
+                }
+                this.DOMElements.codeOut.textContent = finalCode.trim();
+            },
+            makePreviewDraggable: function() {
+                const { preview, previewContainer } = this.DOMElements;
+                let isDragging = false, offsetX, offsetY;
+                preview.addEventListener('mousedown', (e) => { isDragging = true; offsetX = e.clientX - preview.getBoundingClientRect().left; offsetY = e.clientY - preview.getBoundingClientRect().top; preview.style.transition = 'none'; });
+                document.addEventListener('mousemove', (e) => { if (!isDragging) return; let newX = e.clientX - previewContainer.getBoundingClientRect().left - offsetX; let newY = e.clientY - previewContainer.getBoundingClientRect().top - offsetY; const contWidth = previewContainer.offsetWidth, contHeight = previewContainer.offsetHeight, btnWidth = preview.offsetWidth, btnHeight = preview.offsetHeight; newX = Math.max(0, Math.min(newX, contWidth - btnWidth)); newY = Math.max(0, Math.min(newY, contHeight - btnHeight)); preview.style.left = `${newX}px`; preview.style.top = `${newY}px`; preview.style.bottom = 'auto'; preview.style.right = 'auto'; preview.style.transform = 'none'; });
+                document.addEventListener('mouseup', () => { isDragging = false; preview.style.transition = 'background-color .2s, border-radius .2s'; });
+            },
+            addEventListeners: function() {
+                this.DOMElements.controls.addEventListener('input', (e) => {
+                    const key = e.target.id.substring(2);
+                    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+                    if (this.state.hasOwnProperty(key)) this.setState({ [key]: value });
+                });
+                this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); });
+                this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent));
+            }
+        },
+        mosaicGenerator: {
+            DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]},
+            init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()},
+            loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()},
+            setState:function(newState){this.state={...this.state,...newState}},
+            renderItems:function(){const mosaicIcons=App.ICONS;function createIconOptions(selected){return Object.keys(mosaicIcons).filter(k=>k.length>4).map(k=>`<option value="${k}" ${k===selected?"selected":""}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}this.DOMElements.itemsContainer.innerHTML=this.state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions(link.iconKey)}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" ${"modal"===link.action?"selected":""}>Abrir em Modal</option><option value="new_tab" ${"new_tab"===link.action?"selected":""}>Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" ${"small"===link.size?"selected":""}>Pequeno</option><option value="medium" ${"medium"===link.size?"selected":""}>Médio</option><option value="large" ${"large"===link.size?"selected":""}>Grande</option></select></div></div>`).join("")},
+            addItem:function(){this.state.links.push({name:"",url:"",iconKey:"link",action:"modal",size:"medium"});this.renderItems()},
+            updateLinkItem(index,key,value){this.state.links[index][key]=value},
+            generateAndPreview:function(){const linksData=[...this.state.links],sizeOrder={large:1,medium:2,small:3};linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name:name,url:url,iconKey:iconKey,action:action,size:size})=>{if(!url)return"";const iconSVG=App.ICONS[iconKey]||App.ICONS.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}" type="button"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("\n            ");let headerHTML="";this.state.incTitle||this.state.incDesc||this.state.incSearch?headerHTML=`\n    <header class="header">${this.state.incTitle?`\n        <h1>${this.state.title}</h1>`:""}${this.state.incDesc?`\n        <p>${this.state.description}</p>`:""}${this.state.incSearch?`\n        <div class="search-container"><span class="icon">${App.ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}\n    </header>`:"";const searchScript=this.state.incSearch?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";const finalCode=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${state.title}</title><meta name="description" content="${state.description}">
+    <title>${this.state.title}</title><meta name="description" content="${this.state.description}">
     <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');body{font-family:'Inter',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#2575fc,#6a11cb);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease; word-break: break-word;}.size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}@media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}@media(min-width:900px){.size-large{grid-column:span 3}}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{position:relative;background:#fff;width:95vw;height:95vh;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.close-modal{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.1);color:#000;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}.close-modal:hover { background: rgba(0,0,0,0.2); }.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style>
 </head>
 <body>${headerHTML}
     <main id="mosaic-grid">${buttonsHTML}</main>
     <div id="page-modal">
         <div class="modal-content">
-            <button class="close-modal" title="Fechar">${ICONS.close}</button>
+            <button class="close-modal" title="Fechar">${App.ICONS.close}</button>
             <div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div>
         </div>
     </div>
@@ -218,7 +290,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     <\/script>
 </body>
-</html>`;DOMElements.codeOut.textContent=finalCode;window.open(URL.createObjectURL(new Blob([finalCode],{type:"text/html"})),"_blank")}p.addEventListener("input",e=>{const el=e.target,key=el.id.substring(2);if(state.hasOwnProperty(key))state[key]="checkbox"===el.type?el.checked:el.value;const itemEl=el.closest(".link-item");if(itemEl){const itemKey=el.className.replace("item-",""),index=parseInt(itemEl.dataset.index,10);updateItem(index,itemKey,el.value)}});DOMElements.itemsContainer.addEventListener("click",e=>{if(e.target.classList.contains("btn-remove-item")){const index=parseInt(e.target.closest(".link-item").dataset.index,10);state.links.splice(index,1);renderItems()}});DOMElements.addBtn.addEventListener("click",addItem);DOMElements.genBtn.addEventListener("click",generateCode);DOMElements.resetBtn.addEventListener("click",()=>{state={...defaultState,links:[]};loadStateIntoForm();addItem()});DOMElements.copyBtn.addEventListener("click",()=>handleCopy(DOMElements.copyBtn,DOMElements.codeOut.textContent));loadStateIntoForm();addItem()})();
+</html>`;this.DOMElements.codeOut.textContent=finalCode;window.open(URL.createObjectURL(new Blob([finalCode],{type:"text/html"})),"_blank")},
+            addEventListeners: function() {
+                this.DOMElements.controls.addEventListener('input', (e) => {
+                    const el = e.target;
+                    if(el.id.startsWith('m-')){
+                        const key = el.id.substring(2).replace('inc-','inc');
+                        if (this.state.hasOwnProperty(key)) this.setState({ [key]: el.type === "checkbox" ? el.checked : el.value });
+                    }
+                    const itemEl = el.closest(".link-item");
+                    if (itemEl) {
+                        const itemKey = el.className.replace("item-", "");
+                        const index = parseInt(itemEl.dataset.index, 10);
+                        this.updateLinkItem(index, itemKey, el.value);
+                    }
+                });
+                this.DOMElements.itemsContainer.addEventListener("click", e => { if (e.target.classList.contains("btn-remove-item")) { const index = parseInt(e.target.closest(".link-item").dataset.index, 10); this.state.links.splice(index, 1); this.renderItems(); } });
+                this.DOMElements.addBtn.addEventListener('click', () => this.addItem());
+                this.DOMElements.genBtn.addEventListener('click', () => this.generateAndPreview());
+                this.DOMElements.resetBtn.addEventListener('click', () => { this.state = { ...this.defaultState, links: [] }; this.loadStateIntoForm(); this.addItem(); });
+                this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent));
+            }
+        }
+    };
+    App.init();
 });
 </script>
 
