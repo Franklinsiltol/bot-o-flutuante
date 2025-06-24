@@ -5,37 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGen Pro - Gerador de Snippets</title>
     <style>
-        /* --- DESIGN SYSTEM E ESTILOS GERAIS --- */
         :root {
-            --primary-hue: 220;
-            --secondary-hue: 265;
-            --primary: hsl(var(--primary-hue), 90%, 60%);
-            --secondary: hsl(var(--secondary-hue), 90%, 60%);
+            --primary-hue: 220; --secondary-hue: 265;
+            --primary: hsl(var(--primary-hue), 90%, 60%); --secondary: hsl(var(--secondary-hue), 90%, 60%);
             --gradient: linear-gradient(45deg, var(--primary), var(--secondary));
-            --bg-light: #f6f8fa;
-            --bg-card: #ffffff;
-            --text-dark: #24292e;
-            --text-light: #586069;
-            --border-color: #e1e4e8;
-            --success: #28a745;
-            --danger: #d73a49;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --radius: 12px;
+            --bg-light: #f6f8fa; --bg-card: #ffffff; --text-dark: #24292e; --text-light: #586069;
+            --border-color: #e1e4e8; --success: #28a745; --danger: #d73a49;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08); --radius: 12px;
         }
-
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
         * { box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 2rem;
-        }
-
-        /* --- LAYOUT PRINCIPAL E CABEÇALHO --- */
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding: 2rem; }
         .container { max-width: 1400px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 2rem; }
         .logo { display: inline-flex; align-items: center; gap: 0.75rem; color: var(--text-dark); text-decoration: none; }
@@ -43,15 +23,9 @@
         .header h1 { font-size: 2.5rem; margin: 0; }
         .header p { font-size: 1.1rem; color: var(--text-light); margin: 0.5rem 0 0; }
         .app-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 2rem; }
-        .app-switcher button {
-            padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color);
-            background-color: var(--bg-card); color: var(--text-light); border-radius: var(--radius);
-            cursor: pointer; transition: all 0.2s ease;
-        }
+        .app-switcher button { padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color); background-color: var(--bg-card); color: var(--text-light); border-radius: var(--radius); cursor: pointer; transition: all 0.2s ease; }
         .app-switcher button:hover { border-color: var(--primary); color: var(--primary); }
         .app-switcher button.active { background: var(--gradient); color: white; border-color: transparent; }
-
-        /* --- PAINÉIS DOS GERADORES --- */
         .generator-panel { display: none; }
         .generator-panel.active { display: grid; grid-template-columns: minmax(320px, 450px) 1fr; gap: 2rem; }
         .card { background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); }
@@ -59,63 +33,30 @@
         .card-header h2 { margin: 0; font-size: 1.25rem; }
         .btn-reset { font-size: 0.9rem; font-weight: 500; color: var(--text-light); background: none; border: none; cursor: pointer; }
         .btn-reset:hover { color: var(--danger); }
-        
-        /* --- COMPONENTES DE FORMULÁRIO --- */
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 0.75rem; border: 1px solid var(--border-color);
-            border-radius: 8px; font-size: 1rem; transition: all 0.2s ease;
-        }
+        .form-group label, .checkbox-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; transition: all 0.2s ease; }
         .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px hsla(var(--primary-hue), 90%, 60%, 0.2); }
         .checkbox-group { display: flex; align-items: center; gap: 0.75rem; background-color: var(--bg-light); padding: 0.75rem; border-radius: 8px; }
         .checkbox-group label { margin: 0; }
-        
-        /* --- GERADOR DE BOTÃO FLUTUANTE --- */
-        #floating-preview-container {
-            position: relative; height: 300px; background-color: var(--bg-light);
-            border: 2px dashed var(--border-color); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem;
-        }
-        #preview-button {
-            position: absolute; width: 60px; height: 60px; color: white; border: none; border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,.2); cursor: grab; display: flex; justify-content: center; align-items: center;
-            transition: background-color .2s, border-radius .2s; text-decoration: none; user-select: none;
-        }
+        #floating-preview-container { position: relative; height: 300px; background-color: var(--bg-light); border: 2px dashed var(--border-color); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
+        #preview-button { position: absolute; width: 60px; height: 60px; color: white; border: none; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,.2); cursor: grab; display: flex; justify-content: center; align-items: center; transition: background-color .2s, border-radius .2s; text-decoration: none; user-select: none; }
         #preview-button.shape-square { border-radius: 12px; }
         #preview-button svg { width: 32px; height: 32px; pointer-events: none; }
-
-        /* --- GERADOR DE MOSAICO --- */
         .link-item { border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; background-color: #fcfdff; position: relative; }
         .link-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .link-item-header span { font-weight: 600; color: var(--primary); }
         .btn-remove-item { background: var(--danger); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-        .btn-add-item, .btn-generate-mosaic {
-            width: 100%; padding: 0.8rem; font-size: 1rem; font-weight: 600; border-radius: 8px;
-            cursor: pointer; border: none; color: white; transition: all .2s ease; margin-top: 0.5rem;
-        }
+        .btn-add-item, .btn-generate-mosaic { width: 100%; padding: 0.8rem; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; color: white; transition: all .2s ease; margin-top: 0.5rem; }
         .btn-add-item { background-color: var(--primary); }
         .btn-generate-mosaic { background: var(--gradient); }
         .btn-add-item:hover { background-color: hsl(var(--primary-hue), 90%, 50%); }
-        
-        /* --- ÁREA DE CÓDIGO --- */
         .output .card-header { margin-bottom: 0.5rem; }
-        .btn-copy {
-            background-color: var(--bg-light); border: 1px solid var(--border-color); color: var(--text-light);
-            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;
-        }
+        .btn-copy { background-color: var(--bg-light); border: 1px solid var(--border-color); color: var(--text-light); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
         .btn-copy:hover { border-color: var(--success); color: var(--success); }
-        .code-output {
-            background-color: #24292e; color: #f8f8f2; padding: 1rem; border-radius: 8px;
-            height: 450px; overflow: auto; white-space: pre-wrap; word-wrap: break-word; font-family: 'Menlo', 'Consolas', monospace;
-        }
-
-        /* --- RESPONSIVIDADE --- */
+        .code-output { background-color: #24292e; color: #f8f8f2; padding: 1rem; border-radius: 8px; height: 450px; overflow: auto; white-space: pre-wrap; word-wrap: break-word; font-family: 'Menlo', 'Consolas', monospace; }
         @media (max-width: 1200px) { .generator-panel { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            header h1 { font-size: 2rem; }
-            .app-switcher { flex-direction: column; }
-        }
+        @media (max-width: 768px) { body { padding: 1rem; } header h1 { font-size: 2rem; } .app-switcher { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -128,14 +69,11 @@
             </a>
             <p>Sua ferramenta definitiva para gerar snippets web interativos.</p>
         </header>
-
         <nav class="app-switcher">
             <button class="active" data-target="#panel-floating">Gerador de Botão Flutuante</button>
             <button data-target="#panel-mosaic">Gerador de Página Mosaico</button>
         </nav>
-
         <main>
-            <!-- Painel do Gerador de Botão Flutuante -->
             <div id="panel-floating" class="generator-panel active">
                 <div class="controls card">
                     <div class="card-header"><h2>Controles do Botão</h2><button class="btn-reset" id="f-reset">Resetar</button></div>
@@ -153,10 +91,8 @@
                     <pre><code class="code-output" id="f-code-output"></code></pre>
                 </div>
             </div>
-
-            <!-- Painel do Gerador de Página Mosaico -->
             <div id="panel-mosaic" class="generator-panel">
-                <div class="controls card">
+                 <div class="controls card">
                     <div class="card-header"><h2>Controles do Mosaico</h2><button class="btn-reset" id="m-reset">Resetar</button></div>
                     <div class="form-group"><label for="m-page-title">Título da Página</label><input type="text" id="m-page-title"></div>
                     <div class="form-group"><label for="m-page-description">Descrição da Página (opcional)</label><input type="text" id="m-page-description"></div>
@@ -184,11 +120,22 @@ document.addEventListener('DOMContentLoaded', () => {
     switcherButtons.forEach(button => { button.addEventListener('click', () => { switcherButtons.forEach(btn => btn.classList.remove('active')); button.classList.add('active'); generatorPanels.forEach(panel => { panel.classList.toggle('active', '#' + panel.id === button.dataset.target); }); }); });
 
     // --- GERADOR DE BOTÃO FLUTUANTE ---
-    (function initFloatingGenerator(){const p=document.getElementById("panel-floating"),DOMElements={url:p.querySelector("#f-url"),action:p.querySelector("#f-action"),color:p.querySelector("#f-color"),shape:p.querySelector("#f-shape"),position:p.querySelector("#f-position"),template:p.querySelector("#f-template"),draggable:p.querySelector("#f-draggable"),preview:p.querySelector("#preview-button"),previewContainer:p.querySelector("#floating-preview-container"),codeOut:p.querySelector("#f-code-output"),copyBtn:p.querySelector("#f-copy"),resetBtn:p.querySelector("#f-reset")},defaultState={url:"https://www.wikipedia.org/",action:"modal",color:"#2575fc",shape:"round",position:"bottom-right",template:"chat",draggable:!1};let state={...defaultState};function setState(newState){state={...state,...newState};updatePreview();generateCode()}function loadStateIntoForm(){for(const key in state)if(DOMElements[key]){const el=DOMElements[key];"checkbox"===el.type?el.checked=state[key]:el.value=state[key]}}function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function updatePreview(){const{preview:preview}=DOMElements,posCss=getPositionCss(state.position);preview.style.cssText=`background-color: ${state.color}; ${posCss}`,preview.classList.toggle("shape-square","square"===state.shape),preview.innerHTML=ICONS[state.template]}function generateCode(){const{url:url,action:action,color:color,shape:shape,position:position,template:template,draggable:draggable}=state;let finalCode="";const borderRadius="round"===shape?"50%":"12px",posCss=getPositionCss(position),baseStyles=`position:fixed;${posCss}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;border:none;`;if("new_tab"===action)finalCode=`<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${ICONS[template]}</a>`;else{const modalActionScript=`(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal)return;let moved=!1;btn.addEventListener('mousedown',()=>{moved=!1});btn.addEventListener('mousemove',()=>{moved=!0});const openModal=()=>{modal.classList.add('show');btn.classList.add('active')},closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.onclick=()=>{!moved&&openModal()};modal.addEventListener('click',e=>{e.target===modal&&closeModal()});closeBtn.addEventListener('click',closeModal)})()`;finalCode=`<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
+    (function initFloatingGenerator(){const p=document.getElementById("panel-floating"),DOMElements={url:p.querySelector("#f-url"),action:p.querySelector("#f-action"),color:p.querySelector("#f-color"),shape:p.querySelector("#f-shape"),position:p.querySelector("#f-position"),template:p.querySelector("#f-template"),draggable:p.querySelector("#f-draggable"),preview:p.querySelector("#preview-button"),previewContainer:p.querySelector("#floating-preview-container"),codeOut:p.querySelector("#f-code-output"),copyBtn:p.querySelector("#f-copy"),resetBtn:p.querySelector("#f-reset")},defaultState={url:"https://www.wikipedia.org/",action:"modal",color:"#2575fc",shape:"round",position:"bottom-right",template:"chat",draggable:!1};let state={...defaultState};function setState(newState){state={...state,...newState};updatePreview();generateCode()}function loadStateIntoForm(){for(const key in state)if(DOMElements[key]){const el=DOMElements[key];"checkbox"===el.type?el.checked=state[key]:el.value=state[key]}}function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function updatePreview(){const{preview:preview}=DOMElements,posCss=getPositionCss(state.position);preview.style.cssText=`background-color: ${state.color}; ${posCss}`,preview.classList.toggle("shape-square","square"===state.shape),preview.innerHTML=ICONS[state.template]}
+    function generateCode() {
+        const { url, action, color, shape, position, template, draggable } = state;
+        let finalCode = "";
+        const borderRadius = shape === 'round' ? '50%' : '12px';
+        const posCss = getPositionCss(position);
+        const baseStyles = `position:fixed;${posCss}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;border:none;`;
+        
+        if (action === 'new_tab') {
+            finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${ICONS[template]}</a>`;
+        } else {
+            const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal)return;let moved=!1;btn.addEventListener('mousedown',()=>{moved=!1});btn.addEventListener('mousemove',()=>{moved=!0});const openModal=()=>{modal.classList.add('show');btn.classList.add('active')},closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',()=>{if(!moved)openModal()});modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});closeBtn.addEventListener('click',closeModal)})()`;
+            finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
 <style>
     #fab-button { ${baseStyles} }
     #fab-button:hover { transform: scale(1.1); }
-    #fab-button .fab-icon-open { display: block; }
     #fab-button .fab-icon-close { display: none; }
     #fab-button.active .fab-icon-open { display: none; }
     #fab-button.active .fab-icon-close { display: block; }
@@ -201,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     #fab-modal.show { opacity: 1; visibility: visible; }
     .fab-modal-content {
-        position: relative;
-        background-color: #fff; width: 95vw; height: 95vh;
+        position: relative; background-color: #fff;
+        width: 95vw; height: 95vh;
         border-radius: 15px; overflow: hidden;
         transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28);
     }
@@ -228,47 +175,27 @@ document.addEventListener('DOMContentLoaded', () => {
         <iframe src="${url}" title="Conteúdo do Modal"></iframe>
     </div>
 </div>
-<script>${modalActionScript}<\/script>`}if(draggable){const draggableScript=`(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,offsetX,offsetY,hasMoved=!1;btn.addEventListener('mousedown',e=>{isDragging=!0,hasMoved=!1,offsetX=e.clientX-btn.getBoundingClientRect().left,offsetY=e.clientY-btn.getBoundingClientRect().top,btn.style.transition='none',document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;hasMoved=!0;let newX=e.clientX-offsetX,newY=e.clientY-offsetY;const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth)),newY=Math.max(0,Math.min(newY,winHeight-btnHeight)),btn.style.left=\`\${newX}px\`,btn.style.top=\`\${newY}px\`,btn.style.bottom='auto',btn.style.right='auto',btn.style.transform='none'});document.addEventListener('mouseup',()=>{isDragging=!1,btn.style.transition='transform .3s, background-color .3s',document.body.style.userSelect='auto',setTimeout(()=>{btn.onclick&&!hasMoved&&btn.onclick()},0)})})()`;finalCode+=`\n<!-- Script para arrastar o botão -->\n<script>${draggableScript}<\/script>`}DOMElements.codeOut.textContent=finalCode.trim()}(function makePreviewDraggable(){const{preview:preview,previewContainer:previewContainer}=DOMElements;let isDragging=!1,offsetX,offsetY;preview.addEventListener("mousedown",e=>{isDragging=!0,offsetX=e.clientX-preview.getBoundingClientRect().left,offsetY=e.clientY-preview.getBoundingClientRect().top,preview.style.transition="none"}),document.addEventListener("mousemove",e=>{if(!isDragging)return;let newX=e.clientX-previewContainer.getBoundingClientRect().left-offsetX,newY=e.clientY-previewContainer.getBoundingClientRect().top-offsetY;const contWidth=previewContainer.offsetWidth,contHeight=previewContainer.offsetHeight,btnWidth=preview.offsetWidth,btnHeight=preview.offsetHeight;newX=Math.max(0,Math.min(newX,contWidth-btnWidth)),newY=Math.max(0,Math.min(newY,contHeight-btnHeight)),preview.style.left=`${newX}px`,preview.style.top=`${newY}px`,preview.style.bottom="auto",preview.style.right="auto",preview.style.transform="none"}),document.addEventListener("mouseup",()=>{isDragging=!1,preview.style.transition="background-color .2s, border-radius .2s"})})();p.addEventListener("input",e=>{const key=e.target.id.substring(2),value="checkbox"===e.target.type?e.target.checked:e.target.value;state.hasOwnProperty(key)&&setState({[key]:value})}),DOMElements.resetBtn.addEventListener("click",()=>{setState(defaultState),loadStateIntoForm()}),DOMElements.copyBtn.addEventListener("click",()=>handleCopy(DOMElements.copyBtn,DOMElements.codeOut.textContent)),loadStateIntoForm(),updatePreview(),generateCode()})();
+<script>${modalActionScript}<\/script>`;
+        }
+        if (draggable) {
+            const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,offsetX,offsetY,startX,startY;btn.addEventListener('mousedown',e=>{isDragging=!0,startX=e.clientX,startY=e.clientY,offsetX=e.clientX-btn.getBoundingClientRect().left,offsetY=e.clientY-btn.getBoundingClientRect().top,btn.style.transition='none',document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=e.clientX-offsetX,newY=e.clientY-offsetY;const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth)),newY=Math.max(0,Math.min(newY,winHeight-btnHeight)),btn.style.left=\`\${newX}px\`,btn.style.top=\`\${newY}px\`,btn.style.bottom='auto',btn.style.right='auto',btn.style.transform='none'});document.addEventListener('mouseup',e=>{isDragging=!1,btn.style.transition='transform .3s, background-color .3s',document.body.style.userSelect='auto';const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;!moved&&typeof btn.onclick==='function'&&btn.onclick()})})()`;
+            finalCode += `\n<!-- Script para arrastar o botão -->\n<script>${draggableScript}<\/script>`;
+        }
+        DOMElements.codeOut.textContent = finalCode.trim();
+    }
+    (function makePreviewDraggable(){const{preview:preview,previewContainer:previewContainer}=DOMElements;let isDragging=!1,offsetX,offsetY;preview.addEventListener("mousedown",e=>{isDragging=!0,offsetX=e.clientX-preview.getBoundingClientRect().left,offsetY=e.clientY-preview.getBoundingClientRect().top,preview.style.transition="none"}),document.addEventListener("mousemove",e=>{if(!isDragging)return;let newX=e.clientX-previewContainer.getBoundingClientRect().left-offsetX,newY=e.clientY-previewContainer.getBoundingClientRect().top-offsetY;const contWidth=previewContainer.offsetWidth,contHeight=previewContainer.offsetHeight,btnWidth=preview.offsetWidth,btnHeight=preview.offsetHeight;newX=Math.max(0,Math.min(newX,contWidth-btnWidth)),newY=Math.max(0,Math.min(newY,contHeight-btnHeight)),preview.style.left=`${newX}px`,preview.style.top=`${newY}px`,preview.style.bottom="auto",preview.style.right="auto",preview.style.transform="none"}),document.addEventListener("mouseup",()=>{isDragging=!1,preview.style.transition="background-color .2s, border-radius .2s"})})();
+    const p=document.getElementById("panel-floating"),DOMElements={url:p.querySelector("#f-url"),action:p.querySelector("#f-action"),color:p.querySelector("#f-color"),shape:p.querySelector("#f-shape"),position:p.querySelector("#f-position"),template:p.querySelector("#f-template"),draggable:p.querySelector("#f-draggable"),preview:p.querySelector("#preview-button"),previewContainer:p.querySelector("#floating-preview-container"),codeOut:p.querySelector("#f-code-output"),copyBtn:p.querySelector("#f-copy"),resetBtn:p.querySelector("#f-reset")},defaultState={url:"https://www.wikipedia.org/",action:"modal",color:"#2575fc",shape:"round",position:"bottom-right",template:"chat",draggable:!1};let state={...defaultState};p.addEventListener("input",e=>{const key=e.target.id.substring(2),value="checkbox"===e.target.type?e.target.checked:e.target.value;state.hasOwnProperty(key)&&setState({[key]:value})});DOMElements.resetBtn.addEventListener("click",()=>{setState(defaultState),loadStateIntoForm()});DOMElements.copyBtn.addEventListener("click",()=>handleCopy(DOMElements.copyBtn,DOMElements.codeOut.textContent));function setState(newState){state={...state,...newState};updatePreview();generateCode()}function loadStateIntoForm(){for(const key in state)if(DOMElements[key]){const el=DOMElements[key];"checkbox"===el.type?el.checked=state[key]:el.value=state[key]}}function getPositionCss(pos){let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")}function updatePreview(){const{preview:preview}=DOMElements,posCss=getPositionCss(state.position);preview.style.cssText=`background-color: ${state.color}; ${posCss}`,preview.classList.toggle("shape-square","square"===state.shape),preview.innerHTML=ICONS[state.template]}loadStateIntoForm(),updatePreview(),generateCode();
 
     // --- GERADOR DE PÁGINA MOSAICO ---
     (function initMosaicGenerator(){const p=document.getElementById("panel-mosaic"),DOMElements={titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")},defaultState={title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]};let state={...defaultState};const mosaicIcons={link:ICONS.link,chat:ICONS.chat,code:ICONS.code,email:ICONS.email,cloud:ICONS.cloud,stats:ICONS.stats,video:ICONS.video};function createIconOptions(){return Object.keys(mosaicIcons).map(k=>`<option value="${k}">${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}function renderItems(){DOMElements.itemsContainer.innerHTML=state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon" value="${link.iconKey}">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action" value="${link.action}"><option value="modal">Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size" value="${link.size}"><option value="small">Pequeno</option><option value="medium">Médio</option><option value="large">Grande</option></select></div></div>`).join(""),state.links.forEach((link,index)=>{const itemEl=DOMElements.itemsContainer.querySelector(`[data-index="${index}"]`);itemEl.querySelector(".item-icon").value=link.iconKey,itemEl.querySelector(".item-action").value=link.action,itemEl.querySelector(".item-size").value=link.size})}function addItem(){const newLink={name:"",url:"",iconKey:"link",action:"modal",size:"medium"};state.links.push(newLink);renderItems()}function updateItem(index,key,value){state.links[index][key]=value}function loadStateIntoForm(){DOMElements.titleIn.value=state.title,DOMElements.descIn.value=state.description,DOMElements.incTitle.checked=state.incTitle,DOMElements.incDesc.checked=state.incDesc,DOMElements.incSearch.checked=state.incSearch,renderItems()}function generateCode(){const linksData=[...state.links],sizeOrder={large:1,medium:2,small:3};linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name:name,url:url,iconKey:iconKey,action:action,size:size})=>{if(!url)return"";const iconSVG=mosaicIcons[iconKey]||mosaicIcons.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}" type="button"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("\n            ");let headerHTML="";state.incTitle||state.incDesc||state.incSearch?headerHTML=`\n    <header class="header">${state.incTitle?`\n        <h1>${state.title}</h1>`:""}${state.incDesc?`\n        <p>${state.description}</p>`:""}${state.incSearch?`\n        <div class="search-container"><span class="icon">${ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}\n    </header>`:"";const searchScript=state.incSearch?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";const finalCode=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${state.title}</title>
-    <meta name="description" content="${state.description}">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-        body{font-family:'Inter',sans-serif;margin:0;background-color:#f4f7fc;color:#333}
-        .header{background:linear-gradient(45deg,#2575fc,#6a11cb);color:white;padding:40px 20px;text-align:center}
-        .header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}
-        .search-container{max-width:500px;margin:0 auto;position:relative}
-        .search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}
-        #search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}
-        #mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}
-        .mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}
-        .mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}
-        .mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}
-        .mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease; word-break: break-word;}
-        .size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}
-        .size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}
-        .size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}
-        @media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}
-        @media(min-width:900px){.size-large{grid-column:span 3}}
-        #page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
-        #page-modal.show{opacity:1;visibility:visible}
-        .modal-content{position:relative;background:#fff;width:95vw;height:95vh;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}
-        #page-modal.show .modal-content{transform:scale(1)}
-        .close-modal{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.1);color:#000;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}
-        .close-modal:hover { background: rgba(0,0,0,0.2); }
-        .modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}
-    </style>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${state.title}</title><meta name="description" content="${state.description}">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');body{font-family:'Inter',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#2575fc,#6a11cb);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease; word-break: break-word;}.size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}@media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}@media(min-width:900px){.size-large{grid-column:span 3}}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{position:relative;background:#fff;width:95vw;height:95vh;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.close-modal{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.1);color:#000;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}.close-modal:hover { background: rgba(0,0,0,0.2); }.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style>
 </head>
 <body>${headerHTML}
-    <main id="mosaic-grid">
-            ${buttonsHTML}
-    </main>
+    <main id="mosaic-grid">${buttonsHTML}</main>
     <div id="page-modal">
         <div class="modal-content">
             <button class="close-modal" title="Fechar">${ICONS.close}</button>
@@ -277,25 +204,13 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('page-modal');
-            const iframe = modal ? modal.querySelector('iframe') : null;
-            const closeModalBtn = modal ? modal.querySelector('.close-modal') : null;
-            const searchBox = document.getElementById('search-box');
-            const mosaicGrid = document.getElementById('mosaic-grid');
-
+            const modal=document.getElementById('page-modal'),iframe=modal?modal.querySelector('iframe'):null,closeModalBtn=modal?modal.querySelector('.close-modal'):null,searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');
             if (mosaicGrid) {
                 mosaicGrid.addEventListener('click', (e) => {
                     const button = e.target.closest('button.mosaic-button');
-                    if (button && iframe) {
-                        const url = button.dataset.url;
-                        if (url) {
-                            iframe.src = url;
-                            modal.classList.add('show');
-                        }
-                    }
+                    if (button && iframe) { const url = button.dataset.url; if (url) { iframe.src = url; modal.classList.add('show'); } }
                 });
             }
-            
             function closeModal() { if (modal) { modal.classList.remove('show'); if(iframe) iframe.src = 'about:blank'; } }
             if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
             if(modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
