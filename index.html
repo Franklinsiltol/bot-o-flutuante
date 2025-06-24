@@ -30,8 +30,6 @@
         .form-group label,.checkbox-group label{display:block;margin-bottom:.5rem;font-weight:500}
         .form-group input,.form-group select{width:100%;padding:.75rem;border:1px solid var(--border-color);border-radius:8px;font-size:1rem;transition:all .2s ease}
         .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--primary-hue),90%,60%,.2)}
-        .checkbox-group{display:flex;align-items:center;gap:.75rem;background-color:var(--bg-light);padding:.75rem;border-radius:8px}
-        .checkbox-group label{margin:0}
         #floating-preview-container{position:relative;height:300px;background-color:var(--bg-light);border:2px dashed var(--border-color);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
         #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;display:flex;justify-content:center;align-items:center;transition:background-color .2s,border-radius .2s;text-decoration:none}
         #preview-button.shape-square{border-radius:12px}
@@ -118,17 +116,18 @@ document.addEventListener('DOMContentLoaded', () => {
         init: function() { this.setupTabSwitcher(); this.floatingGenerator.init(); this.mosaicGenerator.init(); },
         setupTabSwitcher: function() { const btns = document.querySelectorAll('.app-switcher button'), panels = document.querySelectorAll('.generator-panel'); btns.forEach(btn => { btn.addEventListener('click', () => { btns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); panels.forEach(p => p.classList.toggle('active', '#' + p.id === btn.dataset.target)); }); }); },
         handleCopy: function(button, textContent) { navigator.clipboard.writeText(textContent).then(() => { const label = button.querySelector('.label'), originalLabel = label.textContent; button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`; button.style.color = 'var(--success)'; setTimeout(() => { button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`; button.style.color = ''; }, 2000); }); },
-
+        
         floatingGenerator: {
             DOMElements: {}, state: {}, defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat" },
             init: function() {
                 const p = document.getElementById("panel-floating");
                 this.DOMElements = { controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"), color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"), template: p.querySelector("#f-template"), preview: p.querySelector("#preview-button"), codeOut: p.querySelector("#f-code-output"), copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset") };
+                const draggableCheckboxGroup = p.querySelector("#f-draggable")?.closest('.checkbox-group'); if(draggableCheckboxGroup) draggableCheckboxGroup.remove();
                 this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.addEventListeners();
             },
             setState: function(newState) { this.state = { ...this.state, ...newState }; this.updatePreview(); this.generateCode(); },
             loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { this.DOMElements[key].value = this.state[key]; } } },
-            getPositionCss(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
+            getPositionCss: function(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
             updatePreview: function() { const posCss = this.getPositionCss(this.state.position); this.DOMElements.preview.style.cssText = `background-color: ${this.state.color}; ${posCss}`; this.DOMElements.preview.classList.toggle("shape-square", this.state.shape === 'square'); this.DOMElements.preview.innerHTML = App.ICONS[this.state.template]; },
             generateCode: function() {
                 const { url, action, color, shape, position, template } = this.state;
@@ -144,24 +143,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('wgp-fab-button');
         const modal = document.getElementById('wgp-fab-modal');
         const closeBtn = document.getElementById('wgp-fab-modal-close');
-        
         if (!btn || !modal || !closeBtn) return;
-
         const openModal = () => { modal.classList.add('show'); btn.classList.add('active'); };
         const closeModal = () => { modal.classList.remove('show'); btn.classList.remove('active'); };
-
         btn.addEventListener('click', openModal);
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     })();`;
                     finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
 <style>
+    /* Estilos do Botão Principal */
     #wgp-fab-button { ${baseStyles} }
     #wgp-fab-button:hover { transform: scale(1.1); }
-    #wgp-fab-button .wgp-fab-icon-open, #wgp-fab-button .wgp-fab-icon-close { display: flex; align-items: center; justify-content: center; }
+    #wgp-fab-button .wgp-fab-icon-open { display: block; }
     #wgp-fab-button .wgp-fab-icon-close { display: none; }
     #wgp-fab-button.active .wgp-fab-icon-open { display: none; }
     #wgp-fab-button.active .wgp-fab-icon-close { display: block; }
+    
+    /* Estilos do Modal */
     #wgp-fab-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.7); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease; }
     #wgp-fab-modal.show { opacity: 1; visibility: visible; }
     .wgp-fab-modal-content { position: relative; background-color: #fff; width: 95vw; height: 95vh; border-radius: 15px; overflow: hidden; transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28); }
@@ -185,16 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 this.DOMElements.codeOut.textContent = finalCode.trim();
             },
-            addEventListeners: function() { this.DOMElements.controls.addEventListener('input', () => this.setStateFromForm()); this.DOMElements.resetBtn.addEventListener('click', () => { this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.setState(this.state); }); this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent)); },
-            setStateFromForm: function() {
-                const newState = {};
-                for (const key in this.state) {
-                    if (this.DOMElements[key]) {
-                        newState[key] = this.DOMElements[key].value;
-                    }
-                }
-                this.setState(newState);
-            }
+            addEventListeners: function() { this.DOMElements.controls.addEventListener('input', (e) => { const key = e.target.id.substring(2); const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value; if (this.state.hasOwnProperty(key)) this.setState({ [key]: value }); }); this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); }); this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent)); }
         },
         mosaicGenerator: { DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]}, init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()}, loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()}, setState:function(newState){this.state={...this.state,...newState}},
             renderItems:function(){const mosaicIcons=App.ICONS;function createIconOptions(selected){return Object.keys(mosaicIcons).filter(k=>k.length>4).map(k=>`<option value="${k}" ${k===selected?"selected":""}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}this.DOMElements.itemsContainer.innerHTML=this.state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions(link.iconKey)}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" ${"modal"===link.action?"selected":""}>Abrir em Modal</option><option value="new_tab" ${"new_tab"===link.action?"selected":""}>Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" ${"small"===link.size?"selected":""}>Pequeno</option><option value="medium" ${"medium"===link.size?"selected":""}>Médio</option><option value="large" ${"large"===link.size?"selected":""}>Grande</option></select></div></div>`).join(""),this.state.links.forEach((link,index)=>{const itemEl=this.DOMElements.itemsContainer.querySelector(`[data-index="${index}"]`);itemEl.querySelector(".item-icon").value=link.iconKey,itemEl.querySelector(".item-action").value=link.action,itemEl.querySelector(".item-size").value=link.size})},
@@ -208,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </head>
 <body>${headerHTML}
     <main id="mosaic-grid">${buttonsHTML}</main>
-    <div id="page-modal"><div class="modal-content"><button class="close-modal" title="Fechar">${App.ICONS.close}</button><div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div></div></div>
+    <div id="page-modal"><div class="modal-content"><button class="close-modal" title="Fechar">${ICONS.close}</button><div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div></div></div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const modal=document.getElementById('page-modal'),iframe=modal?modal.querySelector('iframe'):null,closeModalBtn=modal?modal.querySelector('.close-modal'):null,searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');
