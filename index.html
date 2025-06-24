@@ -116,54 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
             stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
             video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
         },
-        init: function() {
-            this.setupTabSwitcher();
-            this.floatingGenerator.init();
-            this.mosaicGenerator.init();
-        },
-        setupTabSwitcher: function() {
-            const switcherButtons = document.querySelectorAll('.app-switcher button');
-            const generatorPanels = document.querySelectorAll('.generator-panel');
-            switcherButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    switcherButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    generatorPanels.forEach(panel => {
-                        panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
-                    });
-                });
-            });
-        },
-        handleCopy: function(button, textContent) {
-            navigator.clipboard.writeText(textContent).then(() => {
-                const originalLabel = button.querySelector('.label').textContent;
-                button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`;
-                button.style.color = 'var(--success)';
-                setTimeout(() => {
-                    button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`;
-                    button.style.color = '';
-                }, 2000);
-            });
-        },
+        init: function() { this.setupTabSwitcher(); this.floatingGenerator.init(); this.mosaicGenerator.init(); },
+        setupTabSwitcher: function() { const btns = document.querySelectorAll('.app-switcher button'), panels = document.querySelectorAll('.generator-panel'); btns.forEach(btn => { btn.addEventListener('click', () => { btns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); panels.forEach(p => p.classList.toggle('active', '#' + p.id === btn.dataset.target)); }); }); },
+        handleCopy: function(button, textContent) { navigator.clipboard.writeText(textContent).then(() => { const label = button.querySelector('.label'), originalLabel = label.textContent; button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`; button.style.color = 'var(--success)'; setTimeout(() => { button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`; button.style.color = ''; }, 2000); }); },
         floatingGenerator: {
-            DOMElements: {},
-            state: {},
-            defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat", draggable: false },
+            DOMElements: {}, state: {}, defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat", draggable: false },
             init: function() {
-                const p = document.getElementById("panel-floating");
-                this.DOMElements = {
-                    controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"),
-                    color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"),
-                    template: p.querySelector("#f-template"), draggable: p.querySelector("#f-draggable"), preview: p.querySelector("#preview-button"),
-                    previewContainer: p.querySelector("#floating-preview-container"), codeOut: p.querySelector("#f-code-output"),
-                    copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset")
-                };
-                this.state = { ...this.defaultState };
-                this.loadStateIntoForm();
-                this.addEventListeners();
-                this.updatePreview();
-                this.generateCode();
-                this.makePreviewDraggable();
+                const p = document.getElementById("panel-floating"); this.DOMElements = { controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"), color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"), template: p.querySelector("#f-template"), draggable: p.querySelector("#f-draggable"), preview: p.querySelector("#preview-button"), previewContainer: p.querySelector("#floating-preview-container"), codeOut: p.querySelector("#f-code-output"), copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset") };
+                this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.addEventListeners(); this.makePreviewDraggable();
             },
             setState: function(newState) { this.state = { ...this.state, ...newState }; this.updatePreview(); this.generateCode(); },
             loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { const el = this.DOMElements[key]; el.type === 'checkbox' ? el.checked = this.state[key] : el.value = this.state[key]; } } },
@@ -182,36 +142,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal||!closeBtn)return;const openModal=()=>{modal.classList.add('show');btn.classList.add('active')};const closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',openModal);closeBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})()`;
                     finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
 <style>
-    /* Estilos do Botão Principal */
     #fab-button { ${baseStyles} }
     #fab-button:hover { transform: scale(1.1); }
+    #fab-button .fab-icon-open, #fab-button .fab-icon-close { display: flex; align-items: center; justify-content: center; }
     #fab-button .fab-icon-close { display: none; }
     #fab-button.active .fab-icon-open { display: none; }
-    #fab-button.active .fab-icon-close { display: block; }
+    #fab-button.active .fab-icon-close { display: flex; }
 
-    /* Estilos do Modal */
-    #fab-modal {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,.7); z-index: 9999;
-        display: flex; justify-content: center; align-items: center;
-        opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease;
-    }
+    #fab-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.7); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease; }
     #fab-modal.show { opacity: 1; visibility: visible; }
-    .fab-modal-content {
-        position: relative; background-color: #fff;
-        width: 95vw; height: 95vh;
-        border-radius: 15px; overflow: hidden;
-        transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28);
-    }
+    .fab-modal-content { position: relative; background-color: #fff; width: 95vw; height: 95vh; border-radius: 15px; overflow: hidden; transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28); }
     #fab-modal.show .fab-modal-content { transform: scale(1); }
-    #fab-modal-close {
-        position: absolute; top: 15px; right: 15px;
-        background: rgba(0,0,0,0.08); color: #000;
-        border: none; width: 36px; height: 36px;
-        border-radius: 50%; cursor: pointer; display: flex;
-        align-items: center; justify-content: center;
-        transition: background-color 0.2s; z-index: 10;
-    }
+    #fab-modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.08); color: #000; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; z-index: 10; }
     #fab-modal-close:hover { background: rgba(0,0,0,0.15); }
     .fab-modal-content iframe { width: 100%; height: 100%; border: none; }
 </style>
@@ -227,38 +169,18 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <script>${modalActionScript}<\/script>`;
                 }
-
                 if (draggable) {
-                    const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,startX,startY,initialLeft,initialTop;btn.addEventListener('mousedown',e=>{isDragging=!0;startX=e.clientX;startY=e.clientY;const rect=btn.getBoundingClientRect();initialLeft=rect.left;initialTop=rect.top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=initialLeft+(e.clientX-startX),newY=initialTop+(e.clientY-startY);const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});document.addEventListener('mouseup',e=>{isDragging=!1;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;if(!moved&&typeof btn.onclick==='function'){btn.onclick()}})})()`;
+                    const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,startX,startY,initialLeft,initialTop;btn.addEventListener('mousedown',e=>{if(e.button!==0)return;isDragging=!0;startX=e.clientX;startY=e.clientY;const rect=btn.getBoundingClientRect();initialLeft=rect.left;initialTop=rect.top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=initialLeft+(e.clientX-startX),newY=initialTop+(e.clientY-startY);const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});btn.addEventListener('mouseup',e=>{const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;isDragging=!1;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';if(!moved&&typeof btn.onclick==='function'){btn.click()}})})();`;
                     finalCode += `\n\n<!-- Script para arrastar o botão (WebGen Pro) -->\n<script>${draggableScript}<\/script>`;
                 }
                 this.DOMElements.codeOut.textContent = finalCode.trim();
             },
-            makePreviewDraggable: function() {
-                const { preview, previewContainer } = this.DOMElements;
-                let isDragging = false, offsetX, offsetY;
-                preview.addEventListener('mousedown', (e) => { isDragging = true; offsetX = e.clientX - preview.getBoundingClientRect().left; offsetY = e.clientY - preview.getBoundingClientRect().top; preview.style.transition = 'none'; });
-                document.addEventListener('mousemove', (e) => { if (!isDragging) return; let newX = e.clientX - previewContainer.getBoundingClientRect().left - offsetX; let newY = e.clientY - previewContainer.getBoundingClientRect().top - offsetY; const contWidth = previewContainer.offsetWidth, contHeight = previewContainer.offsetHeight, btnWidth = preview.offsetWidth, btnHeight = preview.offsetHeight; newX = Math.max(0, Math.min(newX, contWidth - btnWidth)); newY = Math.max(0, Math.min(newY, contHeight - btnHeight)); preview.style.left = `${newX}px`; preview.style.top = `${newY}px`; preview.style.bottom = 'auto'; preview.style.right = 'auto'; preview.style.transform = 'none'; });
-                document.addEventListener('mouseup', () => { isDragging = false; preview.style.transition = 'background-color .2s, border-radius .2s'; });
-            },
-            addEventListeners: function() {
-                this.DOMElements.controls.addEventListener('input', (e) => {
-                    const key = e.target.id.substring(2);
-                    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-                    if (this.state.hasOwnProperty(key)) this.setState({ [key]: value });
-                });
-                this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); });
-                this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent));
-            }
+            makePreviewDraggable: function() { const { preview, previewContainer } = this.DOMElements; let isDragging = false, offsetX, offsetY; preview.addEventListener('mousedown', (e) => { isDragging = true; offsetX = e.clientX - preview.getBoundingClientRect().left; offsetY = e.clientY - preview.getBoundingClientRect().top; preview.style.transition = 'none'; }); document.addEventListener('mousemove', (e) => { if (!isDragging) return; let newX = e.clientX - previewContainer.getBoundingClientRect().left - offsetX; let newY = e.clientY - previewContainer.getBoundingClientRect().top - offsetY; const contWidth = previewContainer.offsetWidth, contHeight = previewContainer.offsetHeight, btnWidth = preview.offsetWidth, btnHeight = preview.offsetHeight; newX = Math.max(0, Math.min(newX, contWidth - btnWidth)); newY = Math.max(0, Math.min(newY, contHeight - btnHeight)); preview.style.left = `${newX}px`; preview.style.top = `${newY}px`; preview.style.bottom = 'auto'; preview.style.right = 'auto'; preview.style.transform = 'none'; }); document.addEventListener('mouseup', () => { isDragging = false; preview.style.transition = 'background-color .2s, border-radius .2s'; }); },
+            addEventListeners: function() { this.DOMElements.controls.addEventListener('input', (e) => { const key = e.target.id.substring(2); const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value; if (this.state.hasOwnProperty(key)) this.setState({ [key]: value }); }); this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); }); this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent)); }
         },
-        mosaicGenerator: {
-            DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]},
-            init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()},
-            loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()},
-            setState:function(newState){this.state={...this.state,...newState}},
-            renderItems:function(){const mosaicIcons=App.ICONS;function createIconOptions(selected){return Object.keys(mosaicIcons).filter(k=>k.length>4).map(k=>`<option value="${k}" ${k===selected?"selected":""}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}this.DOMElements.itemsContainer.innerHTML=this.state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions(link.iconKey)}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" ${"modal"===link.action?"selected":""}>Abrir em Modal</option><option value="new_tab" ${"new_tab"===link.action?"selected":""}>Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" ${"small"===link.size?"selected":""}>Pequeno</option><option value="medium" ${"medium"===link.size?"selected":""}>Médio</option><option value="large" ${"large"===link.size?"selected":""}>Grande</option></select></div></div>`).join("")},
-            addItem:function(){this.state.links.push({name:"",url:"",iconKey:"link",action:"modal",size:"medium"});this.renderItems()},
-            updateLinkItem(index,key,value){this.state.links[index][key]=value},
+        mosaicGenerator: { DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]}, init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()}, loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()}, setState:function(newState){this.state={...this.state,...newState}},
+            renderItems:function(){const mosaicIcons=App.ICONS;function createIconOptions(selected){return Object.keys(mosaicIcons).filter(k=>k.length>4).map(k=>`<option value="${k}" ${k===selected?"selected":""}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}this.DOMElements.itemsContainer.innerHTML=this.state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions(link.iconKey)}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" ${"modal"===link.action?"selected":""}>Abrir em Modal</option><option value="new_tab" ${"new_tab"===link.action?"selected":""}>Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" ${"small"===link.size?"selected":""}>Pequeno</option><option value="medium" ${"medium"===link.size?"selected":""}>Médio</option><option value="large" ${"large"===link.size?"selected":""}>Grande</option></select></div></div>`).join(""),this.state.links.forEach((link,index)=>{const itemEl=this.DOMElements.itemsContainer.querySelector(`[data-index="${index}"]`);itemEl.querySelector(".item-icon").value=link.iconKey,itemEl.querySelector(".item-action").value=link.action,itemEl.querySelector(".item-size").value=link.size})},
+            addItem:function(){this.state.links.push({name:"",url:"",iconKey:"link",action:"modal",size:"medium"});this.renderItems()}, updateLinkItem(index,key,value){this.state.links[index][key]=value},
             generateAndPreview:function(){const linksData=[...this.state.links],sizeOrder={large:1,medium:2,small:3};linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name:name,url:url,iconKey:iconKey,action:action,size:size})=>{if(!url)return"";const iconSVG=App.ICONS[iconKey]||App.ICONS.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}" type="button"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("\n            ");let headerHTML="";this.state.incTitle||this.state.incDesc||this.state.incSearch?headerHTML=`\n    <header class="header">${this.state.incTitle?`\n        <h1>${this.state.title}</h1>`:""}${this.state.incDesc?`\n        <p>${this.state.description}</p>`:""}${this.state.incSearch?`\n        <div class="search-container"><span class="icon">${App.ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}\n    </header>`:"";const searchScript=this.state.incSearch?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";const finalCode=`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -268,21 +190,11 @@ document.addEventListener('DOMContentLoaded', () => {
 </head>
 <body>${headerHTML}
     <main id="mosaic-grid">${buttonsHTML}</main>
-    <div id="page-modal">
-        <div class="modal-content">
-            <button class="close-modal" title="Fechar">${App.ICONS.close}</button>
-            <div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div>
-        </div>
-    </div>
+    <div id="page-modal"><div class="modal-content"><button class="close-modal" title="Fechar">${App.ICONS.close}</button><div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div></div></div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const modal=document.getElementById('page-modal'),iframe=modal?modal.querySelector('iframe'):null,closeModalBtn=modal?modal.querySelector('.close-modal'):null,searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');
-            if (mosaicGrid) {
-                mosaicGrid.addEventListener('click', (e) => {
-                    const button = e.target.closest('button.mosaic-button');
-                    if (button && iframe) { const url = button.dataset.url; if (url) { iframe.src = url; modal.classList.add('show'); } }
-                });
-            }
+            if (mosaicGrid) { mosaicGrid.addEventListener('click', (e) => { const button = e.target.closest('button.mosaic-button'); if (button && iframe) { const url = button.dataset.url; if (url) { iframe.src = url; modal.classList.add('show'); } } }); }
             function closeModal() { if (modal) { modal.classList.remove('show'); if(iframe) iframe.src = 'about:blank'; } }
             if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
             if(modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
@@ -291,26 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <\/script>
 </body>
 </html>`;this.DOMElements.codeOut.textContent=finalCode;window.open(URL.createObjectURL(new Blob([finalCode],{type:"text/html"})),"_blank")},
-            addEventListeners: function() {
-                this.DOMElements.controls.addEventListener('input', (e) => {
-                    const el = e.target;
-                    if(el.id.startsWith('m-')){
-                        const key = el.id.substring(2).replace('inc-','inc');
-                        if (this.state.hasOwnProperty(key)) this.setState({ [key]: el.type === "checkbox" ? el.checked : el.value });
-                    }
-                    const itemEl = el.closest(".link-item");
-                    if (itemEl) {
-                        const itemKey = el.className.replace("item-", "");
-                        const index = parseInt(itemEl.dataset.index, 10);
-                        this.updateLinkItem(index, itemKey, el.value);
-                    }
-                });
-                this.DOMElements.itemsContainer.addEventListener("click", e => { if (e.target.classList.contains("btn-remove-item")) { const index = parseInt(e.target.closest(".link-item").dataset.index, 10); this.state.links.splice(index, 1); this.renderItems(); } });
-                this.DOMElements.addBtn.addEventListener('click', () => this.addItem());
-                this.DOMElements.genBtn.addEventListener('click', () => this.generateAndPreview());
-                this.DOMElements.resetBtn.addEventListener('click', () => { this.state = { ...this.defaultState, links: [] }; this.loadStateIntoForm(); this.addItem(); });
-                this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent));
-            }
+            addEventListeners:function(){this.DOMElements.controls.addEventListener("input",e=>{const t=e.target,l=t.id.substring(2);if(this.state.hasOwnProperty(l))this.setState({[l]:"checkbox"===t.type?t.checked:t.value});const c=t.closest(".link-item");if(c){const n=t.className.replace("item-",""),i=parseInt(c.dataset.index,10);this.updateLinkItem(i,n,t.value)}});this.DOMElements.itemsContainer.addEventListener("click",e=>{if(e.target.classList.contains("btn-remove-item")){const t=parseInt(e.target.closest(".link-item").dataset.index,10);this.state.links.splice(t,1),this.renderItems()}});this.DOMElements.addBtn.addEventListener("click",()=>this.addItem());this.DOMElements.genBtn.addEventListener("click",()=>this.generateAndPreview());this.DOMElements.resetBtn.addEventListener("click",()=>{this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addItem()});this.DOMElements.copyBtn.addEventListener("click",()=>App.handleCopy(this.DOMElements.copyBtn,this.DOMElements.codeOut.textContent))}
         }
     };
     App.init();
