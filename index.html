@@ -30,10 +30,8 @@
         .form-group label,.checkbox-group label{display:block;margin-bottom:.5rem;font-weight:500}
         .form-group input,.form-group select{width:100%;padding:.75rem;border:1px solid var(--border-color);border-radius:8px;font-size:1rem;transition:all .2s ease}
         .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--primary-hue),90%,60%,.2)}
-        .checkbox-group{display:flex;align-items:center;gap:.75rem;background-color:var(--bg-light);padding:.75rem;border-radius:8px}
-        .checkbox-group label{margin:0}
         #floating-preview-container{position:relative;height:300px;background-color:var(--bg-light);border:2px dashed var(--border-color);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
-        #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:grab;display:flex;justify-content:center;align-items:center;transition:background-color .2s,border-radius .2s;text-decoration:none;-webkit-user-select:none;user-select:none}
+        #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;display:flex;justify-content:center;align-items:center;transition:background-color .2s,border-radius .2s;text-decoration:none}
         #preview-button.shape-square{border-radius:12px}
         #preview-button svg{width:32px;height:32px;pointer-events:none}
         .link-item{border:1px solid var(--border-color);padding:1rem;border-radius:8px;margin-bottom:1rem;background-color:#fcfdff;position:relative}
@@ -67,9 +65,8 @@
                     <div class="form-group"><label for="f-action">Ação do Clique</label><select id="f-action"><option value="modal">Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div>
                     <div class="form-group"><label for="f-color">Cor</label><input type="color" id="f-color" style="height:50px;padding:5px"></div>
                     <div class="form-group"><label for="f-shape">Formato</label><select id="f-shape"><option value="round">Redondo</option><option value="square">Quadrado</option></select></div>
-                    <div class="form-group"><label for="f-position">Posição Inicial</label><select id="f-position"><option value="bottom-right">Canto Inferior Direito</option><option value="bottom-left">Canto Inferior Esquerdo</option><option value="top-right">Canto Superior Direito</option><option value="top-left">Canto Superior Esquerdo</option><option value="center-left">Centro Esquerda</option><option value="center-right">Centro Direita</option><option value="bottom-center">Fundo Centro</option><option value="top-center">Topo Centro</option></select></div>
+                    <div class="form-group"><label for="f-position">Posição</label><select id="f-position"><option value="bottom-right">Canto Inferior Direito</option><option value="bottom-left">Canto Inferior Esquerdo</option><option value="top-right">Canto Superior Direito</option><option value="top-left">Canto Superior Esquerdo</option><option value="center-left">Centro Esquerda</option><option value="center-right">Centro Direita</option><option value="bottom-center">Fundo Centro</option><option value="top-center">Topo Centro</option></select></div>
                     <div class="form-group"><label for="f-template">Ícone</label><select id="f-template"><option value="chat">Chat / Mensagem</option><option value="help">Ajuda</option><option value="form">Formulário</option><option value="link">Link Externo</option></select></div>
-                    <div class="checkbox-group"><input type="checkbox" id="f-draggable"><label for="f-draggable">Permitir arrastar</label></div>
                 </div>
                 <div class="output card">
                     <div class="card-header"><h2>Pré-visualização e Código</h2><button class="btn-copy" id="f-copy"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg><span class="label">Copiar</span></button></div>
@@ -120,62 +117,79 @@ document.addEventListener('DOMContentLoaded', () => {
         setupTabSwitcher: function() { const btns = document.querySelectorAll('.app-switcher button'), panels = document.querySelectorAll('.generator-panel'); btns.forEach(btn => { btn.addEventListener('click', () => { btns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); panels.forEach(p => p.classList.toggle('active', '#' + p.id === btn.dataset.target)); }); }); },
         handleCopy: function(button, textContent) { navigator.clipboard.writeText(textContent).then(() => { const label = button.querySelector('.label'), originalLabel = label.textContent; button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`; button.style.color = 'var(--success)'; setTimeout(() => { button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`; button.style.color = ''; }, 2000); }); },
         floatingGenerator: {
-            DOMElements: {}, state: {}, defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat", draggable: false },
+            DOMElements: {}, state: {}, defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat" },
             init: function() {
-                const p = document.getElementById("panel-floating"); this.DOMElements = { controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"), color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"), template: p.querySelector("#f-template"), draggable: p.querySelector("#f-draggable"), preview: p.querySelector("#preview-button"), previewContainer: p.querySelector("#floating-preview-container"), codeOut: p.querySelector("#f-code-output"), copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset") };
-                this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.addEventListeners(); this.makePreviewDraggable();
+                const p = document.getElementById("panel-floating"); this.DOMElements = { controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"), color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"), template: p.querySelector("#f-template"), preview: p.querySelector("#preview-button"), previewContainer: p.querySelector("#floating-preview-container"), codeOut: p.querySelector("#f-code-output"), copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset") };
+                this.DOMElements.controls.querySelector('.checkbox-group').remove(); // Remover opção de arrastar
+                this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.addEventListeners();
             },
             setState: function(newState) { this.state = { ...this.state, ...newState }; this.updatePreview(); this.generateCode(); },
-            loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { const el = this.DOMElements[key]; el.type === 'checkbox' ? el.checked = this.state[key] : el.value = this.state[key]; } } },
-            getPositionCss(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
+            loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { const el = this.DOMElements[key]; el.value = this.state[key]; } } },
+            getPositionCss: function(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
             updatePreview: function() { const posCss = this.getPositionCss(this.state.position); this.DOMElements.preview.style.cssText = `background-color: ${this.state.color}; ${posCss}`; this.DOMElements.preview.classList.toggle("shape-square", this.state.shape === 'square'); this.DOMElements.preview.innerHTML = App.ICONS[this.state.template]; },
             generateCode: function() {
-                const { url, action, color, shape, position, template, draggable } = this.state;
+                const { url, action, color, shape, position, template } = this.state;
                 const borderRadius = shape === 'round' ? '50%' : '12px';
                 const posCss = this.getPositionCss(position);
                 const baseStyles = `position:fixed;${posCss}width:60px;height:60px;background-color:${color};border-radius:${borderRadius};color:white;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:9998;display:flex;justify-content:center;align-items:center;transition:transform .3s,background-color .3s;text-decoration:none;border:none;`;
                 
                 let finalCode;
                 if (action === 'new_tab') {
-                    finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${App.ICONS[template]}</a>`;
+                    finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">${App.ICONS[template]}</a>\n<!-- Fim do Código -->`;
                 } else {
-                    const modalActionScript = `(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal'),closeBtn=document.getElementById('fab-modal-close');if(!btn||!modal||!closeBtn)return;const openModal=()=>{modal.classList.add('show');btn.classList.add('active')};const closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',openModal);closeBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})()`;
+                    const modalActionScript = `(function(){const btn=document.getElementById('wgp-fab-button'),modal=document.getElementById('wgp-fab-modal'),closeBtn=document.getElementById('wgp-fab-modal-close');if(!btn||!modal||!closeBtn)return;const openModal=()=>{modal.classList.add('show');btn.classList.add('active')};const closeModal=()=>{modal.classList.remove('show');btn.classList.remove('active')};btn.addEventListener('click',openModal);closeBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})()`;
                     finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
 <style>
-    #fab-button { ${baseStyles} }
-    #fab-button:hover { transform: scale(1.1); }
-    #fab-button .fab-icon-open, #fab-button .fab-icon-close { display: flex; align-items: center; justify-content: center; }
-    #fab-button .fab-icon-close { display: none; }
-    #fab-button.active .fab-icon-open { display: none; }
-    #fab-button.active .fab-icon-close { display: flex; }
+    /* Estilos do Botão Principal */
+    #wgp-fab-button { ${baseStyles} }
+    #wgp-fab-button:hover { transform: scale(1.1); }
+    #wgp-fab-button .fab-icon-open { display: block; }
+    #wgp-fab-button .fab-icon-close { display: none; }
+    #wgp-fab-button.active .fab-icon-open { display: none; }
+    #wgp-fab-button.active .fab-icon-close { display: block; }
+    #wgp-fab-button > span { display: flex; align-items: center; justify-content: center; }
 
-    #fab-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.7); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease; }
-    #fab-modal.show { opacity: 1; visibility: visible; }
-    .fab-modal-content { position: relative; background-color: #fff; width: 95vw; height: 95vh; border-radius: 15px; overflow: hidden; transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28); }
-    #fab-modal.show .fab-modal-content { transform: scale(1); }
-    #fab-modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.08); color: #000; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; z-index: 10; }
-    #fab-modal-close:hover { background: rgba(0,0,0,0.15); }
-    .fab-modal-content iframe { width: 100%; height: 100%; border: none; }
+    /* Estilos do Modal */
+    #wgp-fab-modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,.7); z-index: 9999;
+        display: flex; justify-content: center; align-items: center;
+        opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease;
+    }
+    #wgp-fab-modal.show { opacity: 1; visibility: visible; }
+    .wgp-fab-modal-content {
+        position: relative; background-color: #fff;
+        width: 95vw; height: 95vh;
+        border-radius: 15px; overflow: hidden;
+        transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28);
+    }
+    #wgp-fab-modal.show .wgp-fab-modal-content { transform: scale(1); }
+    #wgp-fab-modal-close {
+        position: absolute; top: 15px; right: 15px;
+        background: rgba(0,0,0,0.08); color: #000;
+        border: none; width: 36px; height: 36px;
+        border-radius: 50%; cursor: pointer; display: flex;
+        align-items: center; justify-content: center;
+        transition: background-color 0.2s; z-index: 10;
+    }
+    #wgp-fab-modal-close:hover { background: rgba(0,0,0,0.15); }
+    .wgp-fab-modal-content iframe { width: 100%; height: 100%; border: none; }
 </style>
-<button id="fab-button" type="button">
+<button id="wgp-fab-button" type="button">
     <span class="fab-icon-open">${App.ICONS[template]}</span>
     <span class="fab-icon-close">${App.ICONS.close}</span>
 </button>
-<div id="fab-modal">
-    <div class="fab-modal-content">
-        <button id="fab-modal-close" title="Fechar">${App.ICONS.close}</button>
+<div id="wgp-fab-modal">
+    <div class="wgp-fab-modal-content">
+        <button id="wgp-fab-modal-close" title="Fechar">${App.ICONS.close}</button>
         <iframe src="${url}" title="Conteúdo do Modal"></iframe>
     </div>
 </div>
-<script>${modalActionScript}<\/script>`;
-                }
-                if (draggable) {
-                    const draggableScript = `(function(){const btn=document.getElementById('fab-button');if(!btn)return;let isDragging=!1,startX,startY,initialLeft,initialTop;btn.addEventListener('mousedown',e=>{if(e.button!==0)return;isDragging=!0;startX=e.clientX;startY=e.clientY;const rect=btn.getBoundingClientRect();initialLeft=rect.left;initialTop=rect.top;btn.style.transition='none';document.body.style.userSelect='none'});document.addEventListener('mousemove',e=>{if(!isDragging)return;let newX=initialLeft+(e.clientX-startX),newY=initialTop+(e.clientY-startY);const winWidth=window.innerWidth,winHeight=window.innerHeight,btnWidth=btn.offsetWidth,btnHeight=btn.offsetHeight;newX=Math.max(0,Math.min(newX,winWidth-btnWidth));newY=Math.max(0,Math.min(newY,winHeight-btnHeight));btn.style.left=\`\${newX}px\`;btn.style.top=\`\${newY}px\`;btn.style.bottom='auto';btn.style.right='auto';btn.style.transform='none'});btn.addEventListener('mouseup',e=>{const moved=Math.abs(e.clientX-startX)>5||Math.abs(e.clientY-startY)>5;isDragging=!1;btn.style.transition='transform .3s, background-color .3s';document.body.style.userSelect='auto';if(!moved&&typeof btn.onclick==='function'){btn.click()}})})();`;
-                    finalCode += `\n\n<!-- Script para arrastar o botão (WebGen Pro) -->\n<script>${draggableScript}<\/script>`;
+<script>${modalActionScript}<\/script>
+<!-- Fim do Código -->`;
                 }
                 this.DOMElements.codeOut.textContent = finalCode.trim();
             },
-            makePreviewDraggable: function() { const { preview, previewContainer } = this.DOMElements; let isDragging = false, offsetX, offsetY; preview.addEventListener('mousedown', (e) => { isDragging = true; offsetX = e.clientX - preview.getBoundingClientRect().left; offsetY = e.clientY - preview.getBoundingClientRect().top; preview.style.transition = 'none'; }); document.addEventListener('mousemove', (e) => { if (!isDragging) return; let newX = e.clientX - previewContainer.getBoundingClientRect().left - offsetX; let newY = e.clientY - previewContainer.getBoundingClientRect().top - offsetY; const contWidth = previewContainer.offsetWidth, contHeight = previewContainer.offsetHeight, btnWidth = preview.offsetWidth, btnHeight = preview.offsetHeight; newX = Math.max(0, Math.min(newX, contWidth - btnWidth)); newY = Math.max(0, Math.min(newY, contHeight - btnHeight)); preview.style.left = `${newX}px`; preview.style.top = `${newY}px`; preview.style.bottom = 'auto'; preview.style.right = 'auto'; preview.style.transform = 'none'; }); document.addEventListener('mouseup', () => { isDragging = false; preview.style.transition = 'background-color .2s, border-radius .2s'; }); },
             addEventListeners: function() { this.DOMElements.controls.addEventListener('input', (e) => { const key = e.target.id.substring(2); const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value; if (this.state.hasOwnProperty(key)) this.setState({ [key]: value }); }); this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); }); this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent)); }
         },
         mosaicGenerator: { DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]}, init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()}, loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()}, setState:function(newState){this.state={...this.state,...newState}},
