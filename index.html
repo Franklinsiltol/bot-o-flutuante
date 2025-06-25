@@ -3,1251 +3,1378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Gerador Web</title>
+    <title>Beemote - Criador de Botões em Mosaico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --bg-color: #f4f7fc;
-            --dark-color: #343a40;
-            --light-color: #fff;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 15px rgba(0,0,0,.1);
-            --border-radius: 12px;
+            --beemote-yellow: #FFD700;
+            --beemote-black: #1A1A1A;
+            --beemote-white: #FFFFFF;
+            --beemote-gray: #F5F5F5;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--dark-color);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--beemote-gray);
+            color: var(--beemote-black);
+            line-height: 1.6;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        header h1 {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 5px;
-        }
-        
-        header p {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-        
-        .app-switcher {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        
-        .app-switcher button {
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: 2px solid var(--border-color);
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all .3s ease;
-        }
-        
-        .app-switcher button:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-        
-        .app-switcher button.active {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: var(--light-color);
-            border-color: transparent;
-        }
-        
-        .generator-panel {
-            display: none;
-        }
-        
-        .generator-panel.active {
-            display: block;
-        }
-        
-        .generator-content {
-            display: grid;
-            grid-template-columns: minmax(300px, 450px) 1fr;
-            gap: 30px;
-            background: var(--light-color);
-            padding: 25px;
-            border-radius: var(--border-radius);
+            padding: 30px;
+            background-color: var(--beemote-white);
+            border-radius: 12px;
             box-shadow: var(--shadow);
         }
-        
-        .controls h2, .output h2 {
-            margin-top: 0;
-            color: var(--dark-color);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--beemote-yellow);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            color: var(--beemote-black);
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 1.1rem;
             margin-bottom: 20px;
         }
-        
-        .form-group {
-            margin-bottom: 15px;
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
         }
-        
-        .form-group label, .checkbox-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
+
+        .mode-btn {
+            padding: 12px 24px;
+            background-color: var(--beemote-gray);
+            border: 2px solid var(--beemote-yellow);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        
-        .form-group input, .form-group select {
+
+        .mode-btn.active {
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .config-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background-color: var(--beemote-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid #EEE;
+        }
+
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background-color: var(--beemote-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 500px;
+            border: 1px solid #EEE;
+        }
+
+        /* Estilos para o modo mosaico */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
         }
-        
-        .checkbox-group {
+
+        .mosaic-btn {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .checkbox-group label {
-            margin: 0;
-        }
-        
-        #items-container .link-item {
-            border: 1px solid #e0e0e0;
+            justify-content: center;
             padding: 15px;
+            background-color: var(--beemote-yellow);
             border-radius: 8px;
-            margin-bottom: 15px;
-            background-color: #fafafa;
-            position: relative;
-        }
-        
-        .remove-item-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
             cursor: pointer;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: transform 0.3s;
+            text-align: center;
+            min-height: 120px;
         }
-        
-        #floating-preview-container {
-            position: relative;
-            height: 250px;
-            background-color: #f8f9fa;
-            border: 1px dashed var(--border-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
+
+        .mosaic-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mosaic-btn-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: var(--beemote-black);
+        }
+
+        .mosaic-btn-title {
+            font-size: 14px;
+            font-weight: bold;
+            word-break: break-word;
+            color: var(--beemote-black);
+        }
+
+        /* Estilos compartilhados */
+        .form-group {
             margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        
-        #preview-button {
-            width: 60px;
-            height: 60px;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,.2);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            padding: 0;
-            background-color: #2575fc;
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--beemote-black);
         }
-        
-        #preview-button.shape-square {
-            border-radius: 12px;
-        }
-        
-        #preview-button svg {
-            width: 32px;
-            height: 32px;
-            pointer-events: none;
-            fill: currentColor;
-        }
-        
-        .main-actions button {
+
+        input[type="text"],
+        input[type="url"],
+        select,
+        textarea {
             width: 100%;
             padding: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            border: none;
-            color: white;
-            transition: all .3s ease;
-            margin-top: 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: var(--beemote-gray);
         }
-        
-        #add-item-btn {
-            background: linear-gradient(45deg, var(--secondary-color), #3c93ff);
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
         }
-        
-        #generate-mosaic-btn {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-        }
-        
-        .output-header {
+
+        .color-options {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .output-header button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            font-weight: 500;
-        }
-        
-        .copy-btn {
-            background-color: #28a745;
-        }
-        
-        .preview-btn {
-            background-color: #17a2b8;
-        }
-        
-        .code-output {
-            background-color: #2b3e50;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            height: 400px;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        
-        @media (max-width: 1024px) {
-            .generator-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            header h1 {
-                font-size: 2.2rem;
-            }
-            .app-switcher {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Super Gerador Web</h1>
-            <p>Crie um botão flutuante ou uma página de mosaico em segundos.</p>
-        </header>
-
-        <nav class="app-switcher">
-            <button class="active" data-target="#panel-floating">Gerador de Botão Flutuante</button>
-            <button data-target="#panel-mosaic">Gerador de Página Mosaico</button>
-        </nav>
-
-        <main>
-            <!-- Painel do Gerador de Botão Flutuante -->
-            <div id="panel-floating" class="generator-panel active">
-                <div class="generator-content">
-                    <div class="controls">
-                        <h2>Personalizar Botão</h2>
-                        <div class="form-group">
-                            <label for="f-url">URL de Destino</label>
-                            <input type="url" id="f-url" value="https://www.wikipedia.org/">
-                        </div>
-                        <div class="form-group">
-                            <label for="f-action">Ação do Clique</label>
-                            <select id="f-action">
-                                <option value="modal" selected>Abrir em Modal</option>
-                                <option value="new_tab">Abrir em Nova Aba</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-color">Cor</label>
-                            <input type="color" id="f-color" value="#2575fc" style="width:50px;height:50px;padding:0">
-                        </div>
-                        <div class="form-group">
-                            <label for="f-shape">Formato</label>
-                            <select id="f-shape">
-                                <option value="round" selected>Redondo</option>
-                                <option value="square">Quadrado</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-position">Posição Inicial</label>
-                            <select id="f-position">
-                                <option value="bottom-right" selected>Canto Inferior Direito</option>
-                                <option value="bottom-left">Canto Inferior Esquerdo</option>
-                                <option value="top-right">Canto Superior Direito</option>
-                                <option value="top-left">Canto Superior Esquerdo</option>
-                                <option value="center-left">Centro Esquerda</option>
-                                <option value="center-right">Centro Direita</option>
-                                <option value="bottom-center">Fundo Centro</option>
-                                <option value="top-center">Topo Centro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="f-template">Ícone</label>
-                            <select id="f-template">
-                                <option value="chat" selected>Chat / Mensagem</option>
-                                <option value="help">Ajuda</option>
-                                <option value="form">Formulário</option>
-                                <option value="link">Link Externo</option>
-                            </select>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="f-draggable">
-                            <label for="f-draggable">Permitir arrastar</label>
-                        </div>
-                    </div>
-                    <div class="output">
-                        <h2>Pré-visualização e Código</h2>
-                        <div id="floating-preview-container">
-                            <button id="preview-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                            </button>
-                        </div>
-                        <div class="output-header">
-                            <button class="copy-btn">Copiar Snippet</button>
-                        </div>
-                        <pre><code class="code-output" id="f-code-output"></code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Painel do Gerador de Página Mosaico -->
-            <div id="panel-mosaic" class="generator-panel">
-                <div class="generator-content">
-                    <div class="controls">
-                        <h2>Configurações da Página</h2>
-                        <div class="form-group">
-                            <label for="m-page-title">Título</label>
-                            <input type="text" id="m-page-title" value="Meu Dashboard">
-                        </div>
-                        <div class="form-group">
-                            <label for="m-page-description">Descrição</label>
-                            <input type="text" id="m-page-description" value="Acesso rápido aos meus sites e ferramentas.">
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="m-inc-title" checked>
-                            <label for="m-inc-title">Incluir Título</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="m-inc-desc" checked>
-                            <label for="m-inc-desc">Incluir Descrição</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="m-inc-search" checked>
-                            <label for="m-inc-search">Incluir Busca</label>
-                        </div>
-                        <hr style="margin:25px 0;border:1px solid #eee">
-                        <h2>Links do Mosaico</h2>
-                        <div id="items-container"></div>
-                        <div class="main-actions">
-                            <button id="add-item-btn">Adicionar Link</button>
-                            <button id="generate-mosaic-btn">Gerar Página »</button>
-                        </div>
-                    </div>
-                    <div class="output">
-                        <h2>Código da Página Gerada</h2>
-                        <div class="output-header">
-                            <button class="copy-btn">Copiar Código</button>
-                            <button class="preview-btn">Visualizar em Nova Aba</button>
-                        </div>
-                        <pre><code class="code-output" id="m-code-output">Clique em "Gerar Página".</code></pre>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Ícones SVG - Versão garantida para funcionar
-    const ICONS = {
-        chat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`,
-        help: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
-        form: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>`,
-        link: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>`,
-        close: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`,
-        search: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>`
-    };
-
-    // --- LÓGICA GERAL E DE NAVEGAÇÃO ---
-    const switcherButtons = document.querySelectorAll('.app-switcher button');
-    const generatorPanels = document.querySelectorAll('.generator-panel');
-    
-    switcherButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove a classe active de todos os botões
-            switcherButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Adiciona a classe active apenas ao botão clicado
-            button.classList.add('active');
-            
-            // Mostra apenas o painel correspondente ao botão clicado
-            generatorPanels.forEach(panel => {
-                panel.classList.toggle('active', '#' + panel.id === button.dataset.target);
-            });
-        });
-    });
-
-    // --- GERADOR DE BOTÃO FLUTUANTE ---
-    function initFloatingButtonGenerator() {
-        const panel = document.getElementById("panel-floating");
-        const url = panel.querySelector("#f-url");
-        const action = panel.querySelector("#f-action");
-        const color = panel.querySelector("#f-color");
-        const shape = panel.querySelector("#f-shape");
-        const position = panel.querySelector("#f-position");
-        const template = panel.querySelector("#f-template");
-        const draggable = panel.querySelector("#f-draggable");
-        const preview = panel.querySelector("#preview-button");
-        const codeOut = panel.querySelector("#f-code-output");
-        const copyBtn = panel.querySelector(".copy-btn");
-
-        // Função para obter o CSS da posição
-        function getPositionCss(pos) {
-            let top = "auto", left = "auto", right = "20px", bottom = "20px", transform = "";
-            
-            switch(pos) {
-                case "center-left":
-                    top = "50%";
-                    left = "20px";
-                    transform = "translateY(-50%)";
-                    break;
-                case "center-right":
-                    top = "50%";
-                    right = "20px";
-                    transform = "translateY(-50%)";
-                    break;
-                case "bottom-center":
-                    bottom = "20px";
-                    left = "50%";
-                    transform = "translateX(-50%)";
-                    break;
-                case "top-center":
-                    top = "20px";
-                    left = "50%";
-                    transform = "translateX(-50%)";
-                    break;
-                case "top-left":
-                    top = "20px";
-                    left = "20px";
-                    break;
-                case "top-right":
-                    top = "20px";
-                    right = "20px";
-                    break;
-                case "bottom-left":
-                    bottom = "20px";
-                    left = "20px";
-                    break;
-                default: // bottom-right
-                    bottom = "20px";
-                    right = "20px";
-            }
-            
-            return {
-                top,
-                left,
-                right,
-                bottom,
-                transform
-            };
+            flex-wrap: wrap;
         }
 
-        // Atualiza a pré-visualização do botão
-        function updatePreview() {
-            const pos = getPositionCss(position.value);
-            const selectedIcon = ICONS[template.value] || ICONS.chat;
-            
-            // Aplica os estilos diretamente no botão de pré-visualização
-            preview.style.backgroundColor = color.value;
-            preview.style.borderRadius = shape.value === 'round' ? '50%' : '12px';
-            preview.innerHTML = selectedIcon;
-            
-            // Posicionamento
-            preview.style.top = pos.top;
-            preview.style.left = pos.left;
-            preview.style.right = pos.right;
-            preview.style.bottom = pos.bottom;
-            preview.style.transform = pos.transform;
-            
-            // Garante que o SVG tenha o tamanho correto
-            const svg = preview.querySelector('svg');
-            if (svg) {
-                svg.style.width = '32px';
-                svg.style.height = '32px';
-                svg.style.fill = 'white';
-            }
-            
-            // Atualiza o código de saída
-            updateOutputCode();
-        }
-
-        // Gera o código de arrastar
-        function getDraggableScript() {
-            return `<script>
-                (function() {
-                    const btn = document.getElementById('fab-button');
-                    if (!btn) return;
-                    
-                    let isDragging = false, offsetX, offsetY, hasMoved = false;
-                    
-                    btn.addEventListener('mousedown', e => {
-                        isDragging = true;
-                        hasMoved = false;
-                        offsetX = e.clientX - btn.getBoundingClientRect().left;
-                        offsetY = e.clientY - btn.getBoundingClientRect().top;
-                        btn.style.transition = 'none';
-                        document.body.style.userSelect = 'none';
-                    });
-                    
-                    document.addEventListener('mousemove', e => {
-                        if (!isDragging) return;
-                        hasMoved = true;
-                        
-                        let newX = e.clientX - offsetX,
-                            newY = e.clientY - offsetY;
-                        
-                        const winWidth = window.innerWidth,
-                              winHeight = window.innerHeight,
-                              btnWidth = btn.offsetWidth,
-                              btnHeight = btn.offsetHeight;
-                        
-                        newX = Math.max(0, Math.min(newX, winWidth - btnWidth));
-                        newY = Math.max(0, Math.min(newY, winHeight - btnHeight));
-                        
-                        btn.style.left = \`\${newX}px\`;
-                        btn.style.top = \`\${newY}px\`;
-                        btn.style.bottom = 'auto';
-                        btn.style.right = 'auto';
-                        btn.style.transform = 'none';
-                    });
-                    
-                    document.addEventListener('mouseup', () => {
-                        isDragging = false;
-                        btn.style.transition = 'transform .3s, background-color .3s';
-                        document.body.style.userSelect = 'auto';
-                        setTimeout(() => {
-                            if (btn.onclick && !hasMoved) btn.onclick();
-                        }, 0);
-                    });
-                })();
-            <\/script>`;
-        }
-
-        // Atualiza o código de saída
-        function updateOutputCode() {
-            const pos = getPositionCss(position.value);
-            const selectedIcon = ICONS[template.value] || ICONS.chat;
-            const borderRadius = shape.value === 'round' ? '50%' : '12px';
-            
-            // Estilos base do botão
-            const baseStyles = `
-                position: fixed;
-                width: 60px;
-                height: 60px;
-                background-color: ${color.value};
-                border-radius: ${borderRadius};
-                color: white;
-                box-shadow: 0 6px 20px rgba(0,0,0,.2);
-                cursor: pointer;
-                z-index: 9998;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: transform .3s, background-color .3s;
-                text-decoration: none;
-                border: none;
-                top: ${pos.top};
-                left: ${pos.left};
-                right: ${pos.right};
-                bottom: ${pos.bottom};
-                transform: ${pos.transform};
-            `;
-            
-            let finalCode = "";
-            
-            if (action.value === "new_tab") {
-                // Código para abrir em nova aba
-                finalCode = `<!-- Floating Button Code -->
-<a href="${url.value}" target="_blank" rel="noopener noreferrer" id="fab-button" style="${baseStyles}">
-    ${selectedIcon}
-</a>`;
-            } else {
-                // Código para abrir em modal
-                const modalActionScript = `(function() {
-                    const btn = document.getElementById('fab-button'),
-                          modal = document.getElementById('fab-modal'),
-                          closeBtn = document.getElementById('fab-modal-close');
-                    
-                    if (!btn || !modal) return;
-                    
-                    let moved = false;
-                    
-                    btn.addEventListener('mousedown', () => { moved = false; });
-                    btn.addEventListener('mousemove', () => { moved = true; });
-                    
-                    btn.onclick = () => {
-                        if (!moved) {
-                            modal.classList.toggle('show');
-                            btn.classList.toggle('active');
-                        }
-                    };
-                    
-                    function closeModal() {
-                        modal.classList.remove('show');
-                        btn.classList.remove('active');
-                    }
-                    
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', closeModal);
-                    }
-                    
-                    modal.addEventListener('click', e => {
-                        if (e.target === modal) {
-                            closeModal();
-                        }
-                    });
-                })();`;
-                
-                finalCode = `<!-- Floating Button Code -->
-<style>
-    #fab-button {
-        ${baseStyles}
-    }
-    
-    #fab-button:hover {
-        transform: ${pos.transform ? pos.transform + ' scale(1.1)' : 'scale(1.1)'};
-    }
-    
-    #fab-button .fab-icon-close {
-        display: none;
-    }
-    
-    #fab-button.active .fab-icon-open {
-        display: none;
-    }
-    
-    #fab-button.active .fab-icon-close {
-        display: block;
-    }
-    
-    #fab-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,.7);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .4s, visibility .4s;
-    }
-    
-    #fab-modal.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    .fab-modal-content {
-        background-color: #fff;
-        width: 98vw;
-        height: 98vh;
-        border-radius: 15px;
-        overflow: hidden;
-        transform: scale(.9);
-        transition: transform .4s cubic-bezier(.18,.89,.32,1.28);
-        position: relative;
-    }
-    
-    #fab-modal.show .fab-modal-content {
-        transform: scale(1);
-    }
-    
-    .fab-modal-content iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
-    
-    .fab-modal-close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-</style>
-
-<button id="fab-button" type="button">
-    <span class="fab-icon-open">${selectedIcon}</span>
-    <span class="fab-icon-close">${ICONS.close}</span>
-</button>
-
-<div id="fab-modal">
-    <div class="fab-modal-content">
-        <button id="fab-modal-close" class="fab-modal-close" title="Fechar">
-            ${ICONS.close}
-        </button>
-        <iframe src="${url.value}" title="Content" allowfullscreen></iframe>
-    </div>
-</div>
-
-<script>${modalActionScript}<\/script>`;
-            }
-            
-            if (draggable.checked) {
-                finalCode += `\n${getDraggableScript()}`;
-            }
-            
-            codeOut.textContent = finalCode.trim();
-        }
-
-        // Event listeners para atualização em tempo real
-        [url, action, color, shape, position, template, draggable].forEach(element => {
-            element.addEventListener("input", updatePreview);
-        });
-        
-        // Copiar código
-        copyBtn.addEventListener("click", () => {
-            navigator.clipboard.writeText(codeOut.textContent).then(() => {
-                copyBtn.textContent = "Copiado!";
-                setTimeout(() => {
-                    copyBtn.textContent = "Copiar Snippet";
-                }, 2000);
-            });
-        });
-        
-        // Inicialização
-        updatePreview();
-    }
-
-    // --- GERADOR DE PÁGINA MOSAICO ---
-    function initMosaicGenerator() {
-        const panel = document.getElementById("panel-mosaic");
-        const titleIn = panel.querySelector("#m-page-title");
-        const descIn = panel.querySelector("#m-page-description");
-        const incTitle = panel.querySelector("#m-inc-title");
-        const incDesc = panel.querySelector("#m-inc-desc");
-        const incSearch = panel.querySelector("#m-inc-search");
-        const items = panel.querySelector("#items-container");
-        const addBtn = panel.querySelector("#add-item-btn");
-        const genBtn = panel.querySelector("#generate-mosaic-btn");
-        const codeOut = panel.querySelector("#m-code-output");
-        const copyBtn = panel.querySelector(".copy-btn");
-        const previewBtn = panel.querySelector(".preview-btn");
-        
-        const mosaicIcons = {
-            link: ICONS.link,
-            chat: ICONS.chat,
-            code: ICONS.code,
-            email: ICONS.email,
-            cloud: ICONS.cloud,
-            stats: ICONS.stats,
-            video: ICONS.video
-        };
-        
-        let itemCount = 0;
-        
-        // Cria opções de ícone para o seletor
-        function createIconOptions() {
-            return Object.keys(mosaicIcons).map(key =>
-                `<option value="${key}">${key.charAt(0).toUpperCase() + key.slice(1)}</option>`
-            ).join("");
-        }
-        
-        // Adiciona um novo item de link
-        function addItem() {
-            itemCount++;
-            const itemHtml = `
-                <div class="link-item" id="item-${itemCount}">
-                    <button class="remove-item-btn" title="Remover">×</button>
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" class="item-name" placeholder="Ex: Google Drive">
-                    </div>
-                    <div class="form-group">
-                        <label>URL</label>
-                        <input type="url" class="item-url" placeholder="https://drive.google.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Ícone</label>
-                        <select class="item-icon">${createIconOptions()}</select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ação</label>
-                        <select class="item-action">
-                            <option value="modal" selected>Abrir em Modal</option>
-                            <option value="new_tab">Abrir em Nova Aba</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tamanho</label>
-                        <select class="item-size">
-                            <option value="small">Pequeno</option>
-                            <option value="medium" selected>Médio</option>
-                            <option value="large">Grande</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-            
-            items.insertAdjacentHTML("beforeend", itemHtml);
-            
-            // Adiciona evento para remover o item
-            document.getElementById(`item-${itemCount}`)
-                .querySelector(".remove-item-btn")
-                .addEventListener("click", e => e.currentTarget.parentElement.remove());
-        }
-        
-        // Gera o código da página mosaico
-        function generateCode() {
-            const linksData = [];
-            const sizeOrder = { large: 1, medium: 2, small: 3 };
-            
-            // Coleta dados de todos os itens
-            items.querySelectorAll(".link-item").forEach(item => {
-                const name = item.querySelector(".item-name").value || "Link";
-                const url = item.querySelector(".item-url").value;
-                const iconKey = item.querySelector(".item-icon").value;
-                const action = item.querySelector(".item-action").value;
-                const size = item.querySelector(".item-size").value;
-                
-                if (url) {
-                    linksData.push({ name, url, iconKey, action, size });
-                }
-            });
-            
-            // Ordena por tamanho (grande, médio, pequeno)
-            linksData.sort((a, b) => sizeOrder[a.size] - sizeOrder[b.size]);
-            
-            // Gera HTML dos botões
-            const buttonsHTML = linksData.map(({ name, url, iconKey, action, size }) => {
-                const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
-                const commonAttrs = `class="mosaic-button size-${size}"`;
-                
-                return action === "new_tab" ?
-                    `<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}>
-                        <div class="mosaic-icon">${iconSVG}</div>
-                        <span class="mosaic-label">${name}</span>
-                    </a>` :
-                    `<button ${commonAttrs} data-url="${url}" type="button">
-                        <div class="mosaic-icon">${iconSVG}</div>
-                        <span class="mosaic-label">${name}</span>
-                    </button>`;
-            }).join("");
-            
-            // Gera HTML do cabeçalho
-            let headerHTML = "";
-            
-            if (incTitle.checked || incDesc.checked || incSearch.checked) {
-                headerHTML = `
-                    <header class="header">
-                        ${incTitle.checked ? `<h1>${titleIn.value}</h1>` : ""}
-                        ${incDesc.checked ? `<p>${descIn.value}</p>` : ""}
-                        ${incSearch.checked ? `
-                            <div class="search-container">
-                                <span class="icon">${ICONS.search}</span>
-                                <input type="search" id="search-box" placeholder="Buscar...">
-                            </div>
-                        ` : ""}
-                    </header>
-                `;
-            }
-            
-            // Script de busca (se habilitado)
-            const searchScript = incSearch.checked ? `
-                searchBox.addEventListener('input', () => {
-                    const searchTerm = searchBox.value.toLowerCase();
-                    mosaicGrid.querySelectorAll('.mosaic-button').forEach(button => {
-                        const label = button.querySelector('.mosaic-label').textContent.toLowerCase();
-                        button.style.display = label.includes(searchTerm) ? 'flex' : 'none';
-                    });
-                });
-            ` : "";
-            
-            // Código completo da página
-            codeOut.textContent = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${titleIn.value}</title>
-    <meta name="description" content="${descIn.value}">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: #f4f7fc;
-            color: #333;
-        }
-        
-        .header {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        
-        .header p {
-            margin: 10px 0 25px;
-            font-size: 1.1rem;
-            opacity: .9;
-        }
-        
-        .search-container {
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .search-container .icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-        }
-        
-        #search-box {
-            width: 100%;
-            padding: 12px 12px 12px 40px;
-            border-radius: 25px;
-            border: none;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        
-        #mosaic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 20px;
-            padding: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .mosaic-button {
-            background: white;
-            border: 1px solid #e0e6ed;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all .3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: inherit;
-            text-decoration: none;
-            aspect-ratio: 4/3;
-        }
-        
-        .mosaic-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,.1);
-            border-color: #2575fc;
-        }
-        
-        .mosaic-icon {
-            color: #6a11cb;
-            margin-bottom: 15px;
-        }
-        
-        .mosaic-icon svg {
-            transition: all .3s ease;
-        }
-        
-        .mosaic-label {
-            font-weight: 600;
-            color: #343a40;
-            transition: all .3s ease;
-        }
-        
-        .size-small {
-            grid-column: span 1;
-        }
-        
-        .size-small .mosaic-label {
-            font-size: .9rem;
-        }
-        
-        .size-small .mosaic-icon svg {
-            width: 28px;
-            height: 28px;
-        }
-        
-        .size-medium {
-            grid-column: span 1;
-        }
-        
-        .size-medium .mosaic-label {
-            font-size: 1rem;
-        }
-        
-        .size-medium .mosaic-icon svg {
-            width: 36px;
-            height: 36px;
-        }
-        
-        .size-large {
-            grid-column: span 1;
-        }
-        
-        .size-large .mosaic-label {
-            font-size: 1.2rem;
-        }
-        
-        .size-large .mosaic-icon svg {
-            width: 50px;
-            height: 50px;
-        }
-        
-        @media (min-width: 600px) {
-            .size-medium {
-                grid-column: span 2;
-            }
-            
-            .size-large {
-                grid-column: span 2;
-            }
-        }
-        
-        @media (min-width: 900px) {
-            .size-large {
-                grid-column: span 3;
-            }
-        }
-        
-        #page-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,.7);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .3s, visibility .3s;
-        }
-        
-        #page-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background: #fff;
-            width: 98vw;
-            height: 98vh;
-            border-radius: 15px;
-            overflow: hidden;
-            transform: scale(.9);
-            transition: transform .3s ease-out;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        
-        #page-modal.show .modal-content {
-            transform: scale(1);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: flex-end;
-            padding: 10px 15px;
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .close-modal {
-            background: #e74c3c;
-            color: white;
-            border: none;
+        .color-option {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            font-size: 18px;
-            line-height: 1;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: var(--beemote-black);
+        }
+
+        .shape-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .shape-option {
+            padding: 10px 15px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--beemote-gray);
+        }
+
+        .shape-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        .position-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .position-option {
+            padding: 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            background-color: var(--beemote-gray);
+        }
+
+        .position-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        .icon-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .icon-option {
+            padding: 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+            background-color: var(--beemote-gray);
+        }
+
+        .icon-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        /* Estilos para a lista de botões no mosaico */
+        .buttons-list {
+            margin-top: 20px;
+            border: 1px solid #EEE;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .button-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--beemote-gray);
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .button-item-info {
+            flex: 1;
+        }
+
+        .button-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .button-item-url {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .button-item-remove {
+            background-color: #FF5252;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .add-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-btn:hover {
+            background-color: #FFC600;
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: var(--beemote-gray);
+            border-radius: 8px;
+            border: 1px solid #EEE;
+        }
+
+        .output-code {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            background-color: var(--beemote-white);
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #FFC600;
+        }
+
+        /* Estilos do modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .floating-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 80%;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .modal-description {
+            padding: 15px 20px;
+            color: #555;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--beemote-black);
+            font-size: 24px;
             cursor: pointer;
         }
-        
-        .modal-body {
-            flex-grow: 1;
-        }
-        
-        .modal-body iframe {
+
+        .modal-content {
+            height: calc(100% - 100px);
             width: 100%;
-            height: 100%;
             border: none;
+        }
+
+        /* Cores pré-definidas */
+        .color-yellow { background-color: var(--beemote-yellow); }
+        .color-black { background-color: var(--beemote-black); }
+        .color-white { background-color: var(--beemote-white); border: 1px solid #DDD; }
+        .color-red { background-color: #FF5252; }
+        .color-green { background-color: #4CAF50; }
+        .color-blue { background-color: #4285F4; }
+        .color-purple { background-color: #9C27B0; }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .position-options { grid-template-columns: repeat(2, 1fr); }
+            .icon-options { grid-template-columns: repeat(3, 1fr); }
+            .mosaic-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
         }
     </style>
 </head>
 <body>
-    ${headerHTML}
-    
-    <main id="mosaic-grid">
-        ${buttonsHTML}
-    </main>
-    
-    <div id="page-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close-modal" title="Fechar">×</button>
-            </div>
-            <div class="modal-body">
-                <iframe src="" title="Conteúdo" allowfullscreen></iframe>
+    <div class="container">
+        <div class="header">
+            <div class="logo">BEE<span>MOTE</span></div>
+            <p class="subtitle">Crie botões flutuantes ou em mosaico para seu site</p>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="single">Botão Único</button>
+                <button class="mode-btn" data-mode="mosaic">Modo Mosaico</button>
             </div>
         </div>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('page-modal'),
-                  iframe = modal.querySelector('iframe'),
-                  closeModalBtn = modal.querySelector('.close-modal'),
-                  searchBox = document.getElementById('search-box'),
-                  mosaicGrid = document.getElementById('mosaic-grid');
+        
+        <div class="app-container">
+            <div class="config-panel">
+                <!-- Configurações para botão único -->
+                <div id="single-button-config">
+                    <div class="form-group">
+                        <label for="url-input">URL para abrir no modal:</label>
+                        <input type="url" id="url-input" placeholder="https://seusite.com" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Cor do botão:</label>
+                        <div class="color-options">
+                            <div class="color-option color-yellow selected" data-color="#FFD700"></div>
+                            <div class="color-option color-black" data-color="#1A1A1A"></div>
+                            <div class="color-option color-white" data-color="#FFFFFF"></div>
+                            <div class="color-option color-red" data-color="#FF5252"></div>
+                            <div class="color-option color-green" data-color="#4CAF50"></div>
+                            <div class="color-option color-blue" data-color="#4285F4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Forma do botão:</label>
+                        <div class="shape-options">
+                            <div class="shape-option selected" data-shape="round">
+                                <i class="fas fa-circle"></i> Redondo
+                            </div>
+                            <div class="shape-option" data-shape="square">
+                                <i class="fas fa-square"></i> Quadrado
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Posição do botão:</label>
+                        <div class="position-options">
+                            <div class="position-option" data-position="top-left"><i class="fas fa-arrow-up-left"></i> Superior Esquerdo</div>
+                            <div class="position-option" data-position="top-right"><i class="fas fa-arrow-up-right"></i> Superior Direito</div>
+                            <div class="position-option selected" data-position="bottom-right"><i class="fas fa-arrow-down-right"></i> Inferior Direito</div>
+                            <div class="position-option" data-position="bottom-left"><i class="fas fa-arrow-down-left"></i> Inferior Esquerdo</div>
+                            <div class="position-option" data-position="center-right"><i class="fas fa-arrow-right"></i> Centro Direito</div>
+                            <div class="position-option" data-position="center-left"><i class="fas fa-arrow-left"></i> Centro Esquerdo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ícone do botão:</label>
+                        <div class="icon-options">
+                            <div class="icon-option selected" data-icon="fas fa-comment"><i class="fas fa-comment"></i></div>
+                            <div class="icon-option" data-icon="fas fa-question"><i class="fas fa-question"></i></div>
+                            <div class="icon-option" data-icon="fas fa-shopping-cart"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="icon-option" data-icon="fas fa-phone"><i class="fas fa-phone"></i></div>
+                            <div class="icon-option" data-icon="fas fa-edit"><i class="fas fa-edit"></i></div>
+                            <div class="icon-option" data-icon="fas fa-user"><i class="fas fa-user"></i></div>
+                            <div class="icon-option" data-icon="fas fa-cog"><i class="fas fa-cog"></i></div>
+                            <div class="icon-option" data-icon="fas fa-bell"><i class="fas fa-bell"></i></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="button-text">Texto do botão (opcional):</label>
+                        <input type="text" id="button-text" placeholder="Ex: Fale conosco" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-title">Título do modal (opcional):</label>
+                        <input type="text" id="modal-title" placeholder="Ex: Central de Ajuda" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-description">Descrição do modal (opcional):</label>
+                        <textarea id="modal-description" placeholder="Ex: Entre em contato com nossa equipe"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Configurações para modo mosaico -->
+                <div id="mosaic-config" style="display: none;">
+                    <div class="form-group">
+                        <label for="mosaic-title">Título do botão:</label>
+                        <input type="text" id="mosaic-title" placeholder="Ex: Loja Online" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-url">URL:</label>
+                        <input type="url" id="mosaic-url" placeholder="https://seusite.com/loja" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ícone do botão:</label>
+                        <div class="icon-options" id="mosaic-icon-options">
+                            <div class="icon-option" data-icon="fas fa-shopping-cart"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="icon-option" data-icon="fas fa-phone"><i class="fas fa-phone"></i></div>
+                            <div class="icon-option" data-icon="fas fa-edit"><i class="fas fa-edit"></i></div>
+                            <div class="icon-option" data-icon="fas fa-user"><i class="fas fa-user"></i></div>
+                            <div class="icon-option" data-icon="fas fa-cog"><i class="fas fa-cog"></i></div>
+                            <div class="icon-option" data-icon="fas fa-bell"><i class="fas fa-bell"></i></div>
+                            <div class="icon-option" data-icon="fas fa-comment"><i class="fas fa-comment"></i></div>
+                            <div class="icon-option" data-icon="fas fa-question"><i class="fas fa-question"></i></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-description">Descrição (opcional):</label>
+                        <textarea id="mosaic-description" placeholder="Ex: Acesse nossa loja virtual"></textarea>
+                    </div>
+                    
+                    <button id="add-mosaic-btn" class="add-btn">Adicionar Botão</button>
+                    
+                    <div class="buttons-list" id="mosaic-buttons-list">
+                        <p style="text-align: center; color: #666;">Nenhum botão adicionado ainda</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-page-title">Título da página (opcional):</label>
+                        <input type="text" id="mosaic-page-title" placeholder="Ex: Nossos Serviços" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-page-description">Descrição da página (opcional):</label>
+                        <textarea id="mosaic-page-description" placeholder="Ex: Conheça todos os nossos serviços"></textarea>
+                    </div>
+                </div>
+            </div>
             
-            document.querySelectorAll('button.mosaic-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const url = button.dataset.url;
-                    if (url) {
-                        iframe.src = url;
-                        modal.classList.add('show');
+            <div class="preview-panel">
+                <h3>Pré-visualização:</h3>
+                <p id="preview-instructions">Clique no botão para testar</p>
+                
+                <div id="preview-container">
+                    <!-- Aqui será renderizado o preview -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <h3>Código gerado:</h3>
+            <p>Copie e cole este código no final do <code>&lt;body&gt;</code> do seu site.</p>
+            <textarea id="output-code" class="output-code" readonly></textarea>
+            <button id="copy-btn" class="copy-btn">Copiar Código</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da UI
+            const modeBtns = document.querySelectorAll('.mode-btn');
+            const singleConfig = document.getElementById('single-button-config');
+            const mosaicConfig = document.getElementById('mosaic-config');
+            const previewContainer = document.getElementById('preview-container');
+            const previewInstructions = document.getElementById('preview-instructions');
+            const outputCode = document.getElementById('output-code');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            // Estado do aplicativo
+            let currentMode = 'single';
+            let buttons = [];
+            
+            // Inicializar
+            updatePreview();
+            generateCode();
+            
+            // Event listeners para troca de modo
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    modeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    
+                    if (currentMode === 'single') {
+                        singleConfig.style.display = 'block';
+                        mosaicConfig.style.display = 'none';
+                        previewInstructions.textContent = 'Clique no botão para testar';
+                    } else {
+                        singleConfig.style.display = 'none';
+                        mosaicConfig.style.display = 'block';
+                        previewInstructions.textContent = 'Clique nos botões para testar';
                     }
+                    
+                    updatePreview();
+                    generateCode();
                 });
             });
             
-            function closeModal() {
-                modal.classList.remove('show');
-                iframe.src = 'about:blank';
-            }
+            // Configurações para botão único
+            const urlInput = document.getElementById('url-input');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const shapeOptions = document.querySelectorAll('.shape-option');
+            const positionOptions = document.querySelectorAll('.position-option');
+            const iconOptions = document.querySelectorAll('.icon-option');
+            const buttonTextInput = document.getElementById('button-text');
+            const modalTitleInput = document.getElementById('modal-title');
+            const modalDescriptionInput = document.getElementById('modal-description');
             
-            if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', closeModal);
-            }
+            // Configurações para modo mosaico
+            const mosaicTitleInput = document.getElementById('mosaic-title');
+            const mosaicUrlInput = document.getElementById('mosaic-url');
+            const mosaicIconOptions = document.querySelectorAll('#mosaic-icon-options .icon-option');
+            const mosaicDescriptionInput = document.getElementById('mosaic-description');
+            const addMosaicBtn = document.getElementById('add-mosaic-btn');
+            const mosaicButtonsList = document.getElementById('mosaic-buttons-list');
+            const mosaicPageTitleInput = document.getElementById('mosaic-page-title');
+            const mosaicPageDescriptionInput = document.getElementById('mosaic-page-description');
             
-            if (modal) {
-                modal.addEventListener('click', e => {
-                    if (e.target === modal) {
-                        closeModal();
-                    }
+            // Event listeners para botão único
+            urlInput.addEventListener('input', generateCode);
+            
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
                 });
-            }
+            });
             
-            if (searchBox) {
-                ${searchScript}
-            }
-        });
-    <\/script>
-</body>
-</html>`.trim();
-        }
-        
-        // Event listeners
-        addBtn.addEventListener("click", addItem);
-        genBtn.addEventListener("click", generateCode);
-        
-        copyBtn.addEventListener("click", () => {
-            navigator.clipboard.writeText(codeOut.textContent).then(() => {
-                copyBtn.textContent = "Copiado!";
+            shapeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    shapeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            positionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    positionOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            iconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    iconOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            buttonTextInput.addEventListener('input', function() {
+                updatePreview();
+                generateCode();
+            });
+            
+            modalTitleInput.addEventListener('input', generateCode);
+            modalDescriptionInput.addEventListener('input', generateCode);
+            
+            // Event listeners para modo mosaico
+            mosaicIconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    mosaicIconOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            addMosaicBtn.addEventListener('click', function() {
+                const title = mosaicTitleInput.value.trim();
+                const url = mosaicUrlInput.value.trim();
+                const icon = document.querySelector('#mosaic-icon-options .icon-option.selected')?.dataset.icon || 'fas fa-circle';
+                const description = mosaicDescriptionInput.value.trim();
+                
+                if (!title || !url) {
+                    alert('Por favor, preencha pelo menos o título e a URL');
+                    return;
+                }
+                
+                buttons.push({
+                    title,
+                    url,
+                    icon,
+                    description
+                });
+                
+                updateButtonsList();
+                updatePreview();
+                generateCode();
+                
+                // Limpar campos
+                mosaicTitleInput.value = '';
+                mosaicUrlInput.value = '';
+                mosaicDescriptionInput.value = '';
+                mosaicIconOptions.forEach(opt => opt.classList.remove('selected'));
+            });
+            
+            copyBtn.addEventListener('click', function() {
+                outputCode.select();
+                document.execCommand('copy');
+                this.textContent = 'Código Copiado! ✅';
                 setTimeout(() => {
-                    copyBtn.textContent = "Copiar Código";
+                    this.textContent = 'Copiar Código';
                 }, 2000);
             });
-        });
-        
-        previewBtn.addEventListener("click", () => {
-            const code = codeOut.textContent;
-            if (code.startsWith("Clique")) return;
-            window.open(URL.createObjectURL(new Blob([code], { type: "text/html" })), "_blank");
-        });
-        
-        // Inicialização
-        addItem();
-    }
+            
+            // Funções auxiliares
+            function updateButtonsList() {
+                if (buttons.length === 0) {
+                    mosaicButtonsList.innerHTML = '<p style="text-align: center; color: #666;">Nenhum botão adicionado ainda</p>';
+                    return;
+                }
+                
+                mosaicButtonsList.innerHTML = '';
+                buttons.forEach((btn, index) => {
+                    const btnElement = document.createElement('div');
+                    btnElement.className = 'button-item';
+                    btnElement.innerHTML = `
+                        <div class="button-item-info">
+                            <div class="button-item-title">${btn.title}</div>
+                            <div class="button-item-url">${btn.url}</div>
+                        </div>
+                        <button class="button-item-remove" data-index="${index}">Remover</button>
+                    `;
+                    mosaicButtonsList.appendChild(btnElement);
+                    
+                    // Adicionar evento de remoção
+                    btnElement.querySelector('.button-item-remove').addEventListener('click', function() {
+                        buttons.splice(index, 1);
+                        updateButtonsList();
+                        updatePreview();
+                        generateCode();
+                    });
+                });
+            }
+            
+            function updatePreview() {
+                previewContainer.innerHTML = '';
+                
+                if (currentMode === 'single') {
+                    // Pré-visualização para botão único
+                    const color = document.querySelector('.color-option.selected').dataset.color;
+                    const shape = document.querySelector('.shape-option.selected').dataset.shape;
+                    const position = document.querySelector('.position-option.selected').dataset.position;
+                    const icon = document.querySelector('.icon-option.selected').dataset.icon;
+                    const text = buttonTextInput.value;
+                    const modalTitle = modalTitleInput.value;
+                    const modalDescription = modalDescriptionInput.value;
+                    const url = urlInput.value;
+                    
+                    // Criar botão flutuante
+                    const floatingBtn = document.createElement('button');
+                    floatingBtn.className = `floating-btn ${shape === 'square' ? 'square' : ''} position-${position}`;
+                    floatingBtn.style.backgroundColor = color;
+                    floatingBtn.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    floatingBtn.innerHTML = `<i class="${icon}"></i>`;
+                    
+                    if (text) {
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = text;
+                        textSpan.style.marginLeft = '5px';
+                        textSpan.style.fontSize = '14px';
+                        floatingBtn.appendChild(textSpan);
+                        floatingBtn.style.padding = '0 15px';
+                        floatingBtn.style.width = 'auto';
+                    }
+                    
+                    // Criar modal
+                    const modalOverlay = document.createElement('div');
+                    modalOverlay.className = 'modal-overlay';
+                    
+                    const floatingModal = document.createElement('div');
+                    floatingModal.className = 'floating-modal';
+                    
+                    const modalHeader = document.createElement('div');
+                    modalHeader.className = 'modal-header';
+                    modalHeader.style.backgroundColor = color;
+                    modalHeader.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    
+                    const modalTitleElement = document.createElement('h3');
+                    modalTitleElement.className = 'modal-title';
+                    modalTitleElement.textContent = modalTitle || ' ';
+                    modalHeader.appendChild(modalTitleElement);
+                    
+                    const modalClose = document.createElement('button');
+                    modalClose.className = 'modal-close';
+                    modalClose.innerHTML = `<i class="${icon}"></i>`;
+                    modalClose.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    modalHeader.appendChild(modalClose);
+                    
+                    if (modalDescription) {
+                        const modalDescElement = document.createElement('div');
+                        modalDescElement.className = 'modal-description';
+                        modalDescElement.textContent = modalDescription;
+                        floatingModal.appendChild(modalDescElement);
+                    }
+                    
+                    const modalContent = document.createElement('iframe');
+                    modalContent.className = 'modal-content';
+                    modalContent.src = url || 'about:blank';
+                    
+                    floatingModal.appendChild(modalHeader);
+                    floatingModal.appendChild(modalContent);
+                    
+                    // Adicionar eventos
+                    floatingBtn.addEventListener('click', function() {
+                        modalOverlay.style.display = 'block';
+                        floatingModal.style.display = 'block';
+                    });
+                    
+                    modalClose.addEventListener('click', function() {
+                        modalOverlay.style.display = 'none';
+                        floatingModal.style.display = 'none';
+                    });
+                    
+                    modalOverlay.addEventListener('click', function() {
+                        modalOverlay.style.display = 'none';
+                        floatingModal.style.display = 'none';
+                    });
+                    
+                    // Adicionar ao DOM
+                    previewContainer.appendChild(floatingBtn);
+                    previewContainer.appendChild(modalOverlay);
+                    previewContainer.appendChild(floatingModal);
+                } else {
+                    // Pré-visualização para modo mosaico
+                    if (buttons.length === 0) {
+                        previewContainer.innerHTML = '<p style="text-align: center; color: #666;">Adicione botões para ver a pré-visualização</p>';
+                        return;
+                    }
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'mosaic-grid';
+                    
+                    buttons.forEach(btn => {
+                        const btnElement = document.createElement('div');
+                        btnElement.className = 'mosaic-btn';
+                        btnElement.innerHTML = `
+                            <div class="mosaic-btn-icon"><i class="${btn.icon}"></i></div>
+                            <div class="mosaic-btn-title">${btn.title}</div>
+                        `;
+                        
+                        // Criar modal para este botão
+                        const modalOverlay = document.createElement('div');
+                        modalOverlay.className = 'modal-overlay';
+                        modalOverlay.style.display = 'none';
+                        
+                        const floatingModal = document.createElement('div');
+                        floatingModal.className = 'floating-modal';
+                        floatingModal.style.display = 'none';
+                        
+                        const modalHeader = document.createElement('div');
+                        modalHeader.className = 'modal-header';
+                        modalHeader.style.backgroundColor = '#FFD700';
+                        
+                        const modalTitleElement = document.createElement('h3');
+                        modalTitleElement.className = 'modal-title';
+                        modalTitleElement.textContent = btn.title;
+                        modalHeader.appendChild(modalTitleElement);
+                        
+                        const modalClose = document.createElement('button');
+                        modalClose.className = 'modal-close';
+                        modalClose.innerHTML = '<i class="fas fa-times"></i>';
+                        modalHeader.appendChild(modalClose);
+                        
+                        if (btn.description) {
+                            const modalDescElement = document.createElement('div');
+                            modalDescElement.className = 'modal-description';
+                            modalDescElement.textContent = btn.description;
+                            floatingModal.appendChild(modalDescElement);
+                        }
+                        
+                        const modalContent = document.createElement('iframe');
+                        modalContent.className = 'modal-content';
+                        modalContent.src = btn.url;
+                        
+                        floatingModal.appendChild(modalHeader);
+                        floatingModal.appendChild(modalContent);
+                        
+                        // Adicionar eventos
+                        btnElement.addEventListener('click', function() {
+                            modalOverlay.style.display = 'block';
+                            floatingModal.style.display = 'block';
+                        });
+                        
+                        modalClose.addEventListener('click', function() {
+                            modalOverlay.style.display = 'none';
+                            floatingModal.style.display = 'none';
+                        });
+                        
+                        modalOverlay.addEventListener('click', function() {
+                            modalOverlay.style.display = 'none';
+                            floatingModal.style.display = 'none';
+                        });
+                        
+                        // Adicionar ao DOM
+                        previewContainer.appendChild(modalOverlay);
+                        previewContainer.appendChild(floatingModal);
+                        grid.appendChild(btnElement);
+                    });
+                    
+                    // Adicionar título e descrição da página se existirem
+                    const pageTitle = mosaicPageTitleInput.value.trim();
+                    const pageDescription = mosaicPageDescriptionInput.value.trim();
+                    
+                    if (pageTitle || pageDescription) {
+                        const header = document.createElement('div');
+                        header.style.marginBottom = '20px';
+                        
+                        if (pageTitle) {
+                            const titleElement = document.createElement('h3');
+                            titleElement.style.marginBottom = '10px';
+                            titleElement.textContent = pageTitle;
+                            header.appendChild(titleElement);
+                        }
+                        
+                        if (pageDescription) {
+                            const descElement = document.createElement('p');
+                            descElement.style.color = '#666';
+                            descElement.textContent = pageDescription;
+                            header.appendChild(descElement);
+                        }
+                        
+                        previewContainer.appendChild(header);
+                    }
+                    
+                    previewContainer.appendChild(grid);
+                }
+            }
+            
+            function generateCode() {
+                let code = '';
+                
+                if (currentMode === 'single') {
+                    const color = document.querySelector('.color-option.selected').dataset.color;
+                    const shape = document.querySelector('.shape-option.selected').dataset.shape;
+                    const position = document.querySelector('.position-option.selected').dataset.position;
+                    const icon = document.querySelector('.icon-option.selected').dataset.icon;
+                    const text = buttonTextInput.value;
+                    const modalTitle = modalTitleInput.value;
+                    const modalDescription = modalDescriptionInput.value;
+                    const url = urlInput.value;
+                    const textColor = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    
+                    code = `
+<!-- Botão Flutuante Beemote - Gerado Automaticamente -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.floating-btn-container {
+    position: fixed !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
+}
 
-    // --- INICIALIZAÇÃO DE AMBOS OS GERADORES ---
-    initFloatingButtonGenerator();
-    initMosaicGenerator();
+.floating-btn {
+    width: ${text ? 'auto' : '60px'} !important;
+    height: 60px !important;
+    background-color: ${color} !important;
+    color: ${textColor} !important;
+    border: none !important;
+    border-radius: ${shape === 'round' ? '50%' : '8px'} !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease !important;
+    padding: ${text ? '0 15px' : '0'} !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+}
+
+.floating-btn i {
+    margin-right: ${text ? '5px' : '0'};
+}
+
+.floating-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    z-index: 999998 !important;
+    display: none !important;
+}
+
+.floating-modal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 800px !important;
+    height: 80% !important;
+    background-color: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    z-index: 999999 !important;
+    display: none !important;
+    overflow: hidden !important;
+    animation: modalFadeIn 0.3s ease-out !important;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0 !important; transform: translate(-50%, -40%) !important; }
+    to { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
+}
+
+.modal-header {
+    padding: 15px 20px !important;
+    background-color: ${color} !important;
+    color: ${textColor} !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.modal-title {
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+}
+
+.modal-description {
+    padding: 15px 20px !important;
+    color: #555 !important;
+    border-bottom: 1px solid #EEE !important;
+}
+
+.modal-close {
+    background: none !important;
+    border: none !important;
+    color: ${textColor} !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+}
+
+.modal-content {
+    height: calc(100% - ${modalDescription ? '100px' : '50px'}) !important;
+    width: 100% !important;
+    border: none !important;
+}
+
+/* Posições */
+.position-bottom-right { bottom: 20px !important; right: 20px !important; }
+.position-bottom-left { bottom: 20px !important; left: 20px !important; }
+.position-top-right { top: 20px !important; right: 20px !important; }
+.position-top-left { top: 20px !important; left: 20px !important; }
+.position-center-right { top: 50% !important; right: 20px !important; transform: translateY(-50%) !important; }
+.position-center-left { top: 50% !important; left: 20px !important; transform: translateY(-50%) !important; }
+</style>
+
+<div class="floating-btn-container position-${position}">
+    <button class="floating-btn">
+        <i class="${icon}"></i>${text ? '<span>' + text + '</span>' : ''}
+    </button>
+</div>
+
+<div class="floating-modal-overlay"></div>
+<div class="floating-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">${modalTitle || ' '}</h3>
+        <button class="modal-close"><i class="${icon}"></i></button>
+    </div>
+    ${modalDescription ? `<div class="modal-description">${modalDescription}</div>` : ''}
+    <iframe class="modal-content" src="${url || 'about:blank'}" frameborder="0"></iframe>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Garante que o botão sempre fique visível
+    setInterval(() => {
+        const btn = document.querySelector('.floating-btn-container');
+        if(btn) btn.style.zIndex = '999999';
+    }, 1000);
+
+    const floatingBtn = document.querySelector('.floating-btn');
+    const modalOverlay = document.querySelector('.floating-modal-overlay');
+    const floatingModal = document.querySelector('.floating-modal');
+    const modalClose = document.querySelector('.modal-close');
+    
+    floatingBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'block';
+        floatingModal.style.display = 'block';
+    });
+    
+    modalClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+    
+    modalOverlay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+
+    // Proteção contra outros event listeners
+    document.body.addEventListener('click', function(e) {
+        if(e.target.closest('.floating-btn-container')) {
+            e.stopImmediatePropagation();
+        }
+    }, true);
 });
-</script>
+<\/script>
+<!-- Fim do Botão Flutuante Beemote -->
+                    `;
+                } else {
+                    // Código para modo mosaico
+                    const pageTitle = mosaicPageTitleInput.value.trim();
+                    const pageDescription = mosaicPageDescriptionInput.value.trim();
+                    
+                    code = `
+<!-- Mosaico de Botões Beemote - Gerado Automaticamente -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.beemote-mosaic-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.beemote-mosaic-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #1A1A1A;
+}
+
+.beemote-mosaic-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.beemote-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.beemote-mosaic-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #FFD700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    min-height: 150px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.beemote-mosaic-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.beemote-mosaic-btn-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    color: #1A1A1A;
+}
+
+.beemote-mosaic-btn-title {
+    font-size: 16px;
+    font-weight: bold;
+    word-break: break-word;
+    color: #1A1A1A;
+}
+
+.beemote-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999998;
+    display: none;
+}
+
+.beemote-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    height: 80%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 999999;
+    display: none;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.beemote-modal-header {
+    padding: 15px 20px;
+    background-color: #FFD700;
+    color: #1A1A1A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.beemote-modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.beemote-modal-description {
+    padding: 15px 20px;
+    color: #555;
+    border-bottom: 1px solid #EEE;
+}
+
+.beemote-modal-close {
+    background: none;
+    border: none;
+    color: #1A1A1A;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.beemote-modal-content {
+    height: calc(100% - ${buttons.some(b => b.description) ? '100px' : '50px'});
+    width: 100%;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .beemote-mosaic-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+</style>
+
+<div class="beemote-mosaic-container">
+    ${pageTitle ? `<h2 class="beemote-mosaic-title">${pageTitle}</h2>` : ''}
+    ${pageDescription ? `<p class="beemote-mosaic-description">${pageDescription}</p>` : ''}
+    
+    <div class="beemote-mosaic-grid">
+        ${buttons.map(btn => `
+            <div class="beemote-mosaic-btn" data-url="${btn.url}" data-title="${btn.title}" data-description="${btn.description || ''}">
+                <div class="beemote-mosaic-btn-icon"><i class="${btn.icon}"></i></div>
+                <div class="beemote-mosaic-btn-title">${btn.title}</div>
+            </div>
+        `).join('')}
+    </div>
+</div>
+
+<div class="beemote-modal-overlay"></div>
+<div class="beemote-modal">
+    <div class="beemote-modal-header">
+        <h3 class="beemote-modal-title"></h3>
+        <button class="beemote-modal-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="beemote-modal-description"></div>
+    <iframe class="beemote-modal-content" frameborder="0"></iframe>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.beemote-mosaic-btn');
+    const modalOverlay = document.querySelector('.beemote-modal-overlay');
+    const modal = document.querySelector('.beemote-modal');
+    const modalTitle = document.querySelector('.beemote-modal-title');
+    const modalDescription = document.querySelector('.beemote-modal-description');
+    const modalContent = document.querySelector('.beemote-modal-content');
+    const modalClose = document.querySelector('.beemote-modal-close');
+    
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const url = this.getAttribute('data-url');
+            const title = this.getAttribute('data-title');
+            const description = this.getAttribute('data-description');
+            
+            modalTitle.textContent = title;
+            modalContent.src = url;
+            
+            if (description) {
+                modalDescription.textContent = description;
+                modalDescription.style.display = 'block';
+            } else {
+                modalDescription.style.display = 'none';
+            }
+            
+            modalOverlay.style.display = 'block';
+            modal.style.display = 'block';
+        });
+    });
+    
+    modalClose.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        modal.style.display = 'none';
+        modalContent.src = 'about:blank';
+    });
+    
+    modalOverlay.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        modal.style.display = 'none';
+        modalContent.src = 'about:blank';
+    });
+});
+<\/script>
+<!-- Fim do Mosaico de Botões Beemote -->
+                    `;
+                }
+                
+                outputCode.value = code.trim();
+            }
+        });
+    </script>
 </body>
 </html>
