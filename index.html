@@ -223,7 +223,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (action.value === 'new_tab') {
                 finalCode = `<!-- Início do Código do Botão Flutuante -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" style="${baseStyles}">${ICONS[template.value]}</a>\n<!-- Fim do Código -->`;
             } else {
-                finalCode = `<!-- Início do Código do Botão Flutuante --><style>#fab-button{${baseStyles}}#fab-button.active{z-index:10000;background-color:#e74c3c!important;transform:scale(1.1) rotate(360deg)!important}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:95vw;height:95vh;max-width:1400px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style><button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button><div id="fab-modal"><div class="fab-modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div><script>(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;const closeAction=()=>{modal.classList.remove('show');btn.classList.remove('active');const content=modal.querySelector('.fab-modal-content');if(content)content.style.transform='scale(0.8)'};btn.addEventListener('click',()=>{const isActive=btn.classList.contains('active');if(isActive){closeAction()}else{modal.classList.add('show');btn.classList.add('active');const content=modal.querySelector('.fab-modal-content');if(content)content.style.transform='scale(1)'}});modal.addEventListener('click',e=>{if(e.target===modal)closeAction()})})()<\/script><!-- Fim do Código -->`;
+                finalCode = `<!-- Início do Código do Botão Flutuante -->
+<style>
+#fab-button { ${baseStyles} }
+#fab-button.active { z-index: 10000; background-color: #e74c3c !important; transform: scale(1.1) rotate(360deg) !important; }
+#fab-button:hover { transform: scale(1.1); }
+#fab-button svg { width: 32px; height: 32px; transition: opacity .3s, transform .3s; }
+.fab-icon-close { display: none; }
+#fab-button.active .fab-icon-open { display: none; }
+#fab-button.active .fab-icon-close { display: block; }
+#fab-modal { position: fixed; inset: 0; background-color: rgba(0,0,0,.7); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; padding: 20px; box-sizing: border-box; }
+#fab-modal.show { opacity: 1; visibility: visible; }
+.fab-modal-content { background-color: #fff; width: 100%; height: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.3); overflow: hidden; transform: scale(.8); transition: transform .4s cubic-bezier(.18,.89,.32,1.28), width .4s ease, height .4s ease; }
+#fab-modal.show .fab-modal-content { transform: scale(1); }
+.fab-modal-content iframe { width: 100%; height: 100%; border: none; }
+</style>
+<button id="fab-button" data-position="${position.value}"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>
+<div id="fab-modal"><div class="fab-modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div>
+<script>
+(function() {
+    const btn = document.getElementById('fab-button'), modal = document.getElementById('fab-modal');
+    if (!btn || !modal) return;
+    const adjustModalPadding = () => {
+        const position = btn.dataset.position || 'bottom-right';
+        const gap = '85px'; // button size 60px + margin 25px
+        modal.style.padding = '20px'; // Reset
+        if (position.includes('bottom')) modal.style.paddingBottom = gap;
+        if (position.includes('top')) modal.style.paddingTop = gap;
+        if (position.includes('left')) modal.style.paddingLeft = gap;
+        if (position.includes('right')) modal.style.paddingRight = gap;
+    };
+    const openModal = () => {
+        adjustModalPadding();
+        modal.classList.add('show');
+        btn.classList.add('active');
+    };
+    const closeModal = () => {
+        modal.style.padding = '20px'; // Animate back to default padding
+        modal.classList.remove('show');
+        btn.classList.remove('active');
+    };
+    btn.addEventListener('click', () => {
+        btn.classList.contains('active') ? closeModal() : openModal();
+    });
+})()
+<\/script>
+<!-- Fim do Código -->`;
             }
             codeOut.textContent = finalCode.trim();
         }
