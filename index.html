@@ -3,221 +3,1372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGen Pro - Gerador de Snippets</title>
+    <title>Beemote - Criador de Botões em Mosaico</title>
     <style>
-        :root{--primary-hue:220;--secondary-hue:265;--primary:hsl(var(--primary-hue),90%,60%);--secondary:hsl(var(--secondary-hue),90%,60%);--gradient:linear-gradient(45deg,var(--primary),var(--secondary));--bg-light:#f6f8fa;--bg-card:#ffffff;--text-dark:#24292e;--text-light:#586069;--border-color:#e1e4e8;--success:#28a745;--danger:#d73a49;--shadow:0 4px 12px rgba(0,0,0,.08);--radius:12px}
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        *{box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;background-color:var(--bg-light);color:var(--text-dark);margin:0;padding:2rem}
-        .container{max-width:1400px;margin:0 auto}
-        .header{text-align:center;margin-bottom:2rem}
-        .logo{display:inline-flex;align-items:center;gap:.75rem;color:var(--text-dark);text-decoration:none}
-        .logo svg{color:var(--primary)}
-        .header h1{font-size:2.5rem;margin:0}
-        .header p{font-size:1.1rem;color:var(--text-light);margin:.5rem 0 0}
-        .app-switcher{display:flex;justify-content:center;gap:10px;margin-bottom:2rem}
-        .app-switcher button{padding:.75rem 1.5rem;font-size:1rem;font-weight:600;border:2px solid var(--border-color);background-color:var(--bg-card);color:var(--text-light);border-radius:var(--radius);cursor:pointer;transition:all .2s ease}
-        .app-switcher button:hover{border-color:var(--primary);color:var(--primary)}
-        .app-switcher button.active{background:var(--gradient);color:white;border-color:transparent}
-        .generator-panel{display:none}
-        .generator-panel.active{display:grid;grid-template-columns:minmax(320px,450px) 1fr;gap:2rem}
-        .card{background:var(--bg-card);padding:1.5rem;border-radius:var(--radius);box-shadow:var(--shadow)}
-        .card-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-color);padding-bottom:1rem;margin-bottom:1.5rem}
-        .card-header h2{margin:0;font-size:1.25rem}
-        .btn-reset{font-size:.9rem;font-weight:500;color:var(--text-light);background:none;border:none;cursor:pointer}
-        .btn-reset:hover{color:var(--danger)}
-        .form-group{margin-bottom:1rem}
-        .form-group label,.checkbox-group label{display:block;margin-bottom:.5rem;font-weight:500}
-        .form-group input,.form-group select{width:100%;padding:.75rem;border:1px solid var(--border-color);border-radius:8px;font-size:1rem;transition:all .2s ease}
-        .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--primary-hue),90%,60%,.2)}
-        #floating-preview-container{position:relative;height:300px;background-color:var(--bg-light);border:2px dashed var(--border-color);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
-        #preview-button{position:absolute;width:60px;height:60px;color:white;border:none;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.2);cursor:pointer;display:flex;justify-content:center;align-items:center;transition:background-color .2s,border-radius .2s;text-decoration:none}
-        #preview-button.shape-square{border-radius:12px}
-        #preview-button svg{width:32px;height:32px;pointer-events:none}
-        .link-item{border:1px solid var(--border-color);padding:1rem;border-radius:8px;margin-bottom:1rem;background-color:#fcfdff;position:relative}
-        .link-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-        .link-item-header span{font-weight:600;color:var(--primary)}
-        .btn-remove-item{background:var(--danger);color:white;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-weight:700}
-        .btn-add-item,.btn-generate-mosaic{width:100%;padding:.8rem;font-size:1rem;font-weight:600;border-radius:8px;cursor:pointer;border:none;color:white;transition:all .2s ease;margin-top:.5rem}
-        .btn-add-item{background-color:var(--primary)}
-        .btn-generate-mosaic{background:var(--gradient)}
-        .btn-add-item:hover{background-color:hsl(var(--primary-hue),90%,50%)}
-        .output .card-header{margin-bottom:.5rem}
-        .btn-copy{background-color:var(--bg-light);border:1px solid var(--border-color);color:var(--text-light);padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-weight:500;display:flex;align-items:center;gap:.5rem}
-        .btn-copy:hover{border-color:var(--success);color:var(--success)}
-        .code-output{background-color:#24292e;color:#f8f8f2;padding:1rem;border-radius:8px;height:450px;overflow:auto;white-space:pre-wrap;word-wrap:break-word;font-family:'Menlo','Consolas',monospace}
-        @media (max-width:1200px){.generator-panel{grid-template-columns:1fr}}
-        @media (max-width:768px){body{padding:1rem}header h1{font-size:2rem}.app-switcher{flex-direction:column}}
+        :root {
+            --beemote-yellow: #FFD700;
+            --beemote-black: #1A1A1A;
+            --beemote-white: #FFFFFF;
+            --beemote-gray: #F5F5F5;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--beemote-gray);
+            color: var(--beemote-black);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--beemote-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--beemote-yellow);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            color: var(--beemote-black);
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            background-color: var(--beemote-gray);
+            border: 2px solid var(--beemote-yellow);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .config-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background-color: var(--beemote-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid #EEE;
+        }
+
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            background-color: var(--beemote-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 500px;
+            border: 1px solid #EEE;
+        }
+
+        /* Estilos para o modo mosaico */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        .mosaic-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background-color: var(--beemote-yellow);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-align: center;
+            min-height: 120px;
+        }
+
+        .mosaic-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mosaic-btn-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .mosaic-btn-title {
+            font-size: 14px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        /* Estilos compartilhados */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--beemote-black);
+        }
+
+        input[type="text"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: var(--beemote-gray);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: var(--beemote-black);
+        }
+
+        .shape-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .shape-option {
+            padding: 10px 15px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--beemote-gray);
+        }
+
+        .shape-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        .position-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .position-option {
+            padding: 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            background-color: var(--beemote-gray);
+        }
+
+        .position-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        .icon-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .icon-option {
+            padding: 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+            background-color: var(--beemote-gray);
+        }
+
+        .icon-option.selected {
+            border-color: var(--beemote-yellow);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        /* Estilos para a lista de botões no mosaico */
+        .buttons-list {
+            margin-top: 20px;
+            border: 1px solid #EEE;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .button-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--beemote-gray);
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .button-item-info {
+            flex: 1;
+        }
+
+        .button-item-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .button-item-url {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .button-item-remove {
+            background-color: #FF5252;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .add-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-btn:hover {
+            background-color: #FFC600;
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: var(--beemote-gray);
+            border-radius: 8px;
+            border: 1px solid #EEE;
+        }
+
+        .output-code {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            background-color: var(--beemote-white);
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #FFC600;
+        }
+
+        /* Estilos do modal */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .floating-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 80%;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--beemote-yellow);
+            color: var(--beemote-black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .modal-description {
+            padding: 15px 20px;
+            color: #555;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--beemote-black);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            height: calc(100% - 100px);
+            width: 100%;
+            border: none;
+        }
+
+        /* Cores pré-definidas */
+        .color-yellow { background-color: var(--beemote-yellow); }
+        .color-black { background-color: var(--beemote-black); }
+        .color-white { background-color: var(--beemote-white); border: 1px solid #DDD; }
+        .color-red { background-color: #FF5252; }
+        .color-green { background-color: #4CAF50; }
+        .color-blue { background-color: #4285F4; }
+        .color-purple { background-color: #9C27B0; }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .position-options { grid-template-columns: repeat(2, 1fr); }
+            .icon-options { grid-template-columns: repeat(3, 1fr); }
+            .mosaic-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <a href="#" class="logo"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20.562a8.5 8.5 0 1 1 9.518-12.355"/><path d="m2 14 4 4 4-4"/><path d="m22 10-4-4-4 4"/></svg><h1>WebGen Pro</h1></a>
-            <p>Sua ferramenta definitiva para gerar snippets web interativos.</p>
-        </header>
-        <nav class="app-switcher"><button class="active" data-target="#panel-floating">Gerador de Botão Flutuante</button><button data-target="#panel-mosaic">Gerador de Página Mosaico</button></nav>
-        <main>
-            <div id="panel-floating" class="generator-panel active">
-                <div class="controls card">
-                    <div class="card-header"><h2>Controles do Botão</h2><button class="btn-reset" id="f-reset">Resetar</button></div>
-                    <div class="form-group"><label for="f-url">URL de Destino</label><input type="url" id="f-url"></div>
-                    <div class="form-group"><label for="f-action">Ação do Clique</label><select id="f-action"><option value="modal">Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div>
-                    <div class="form-group"><label for="f-color">Cor</label><input type="color" id="f-color" style="height:50px;padding:5px"></div>
-                    <div class="form-group"><label for="f-shape">Formato</label><select id="f-shape"><option value="round">Redondo</option><option value="square">Quadrado</option></select></div>
-                    <div class="form-group"><label for="f-position">Posição</label><select id="f-position"><option value="bottom-right">Canto Inferior Direito</option><option value="bottom-left">Canto Inferior Esquerdo</option><option value="top-right">Canto Superior Direito</option><option value="top-left">Canto Superior Esquerdo</option><option value="center-left">Centro Esquerda</option><option value="center-right">Centro Direita</option><option value="bottom-center">Fundo Centro</option><option value="top-center">Topo Centro</option></select></div>
-                    <div class="form-group"><label for="f-template">Ícone</label><select id="f-template"><option value="chat">Chat / Mensagem</option><option value="help">Ajuda</option><option value="form">Formulário</option><option value="link">Link Externo</option></select></div>
+        <div class="header">
+            <div class="logo">BEE<span>MOTE</span></div>
+            <p class="subtitle">Crie botões flutuantes ou em mosaico para seu site</p>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="single">Botão Único</button>
+                <button class="mode-btn" data-mode="mosaic">Modo Mosaico</button>
+            </div>
+        </div>
+        
+        <div class="app-container">
+            <div class="config-panel">
+                <!-- Configurações para botão único -->
+                <div id="single-button-config">
+                    <div class="form-group">
+                        <label for="url-input">URL para abrir no modal:</label>
+                        <input type="url" id="url-input" placeholder="https://seusite.com" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Cor do botão:</label>
+                        <div class="color-options">
+                            <div class="color-option color-yellow selected" data-color="#FFD700"></div>
+                            <div class="color-option color-black" data-color="#1A1A1A"></div>
+                            <div class="color-option color-white" data-color="#FFFFFF"></div>
+                            <div class="color-option color-red" data-color="#FF5252"></div>
+                            <div class="color-option color-green" data-color="#4CAF50"></div>
+                            <div class="color-option color-blue" data-color="#4285F4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Forma do botão:</label>
+                        <div class="shape-options">
+                            <div class="shape-option selected" data-shape="round">
+                                <span>🔘</span> Redondo
+                            </div>
+                            <div class="shape-option" data-shape="square">
+                                <span>🟦</span> Quadrado
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Posição do botão:</label>
+                        <div class="position-options">
+                            <div class="position-option" data-position="top-left">↖ Superior Esquerdo</div>
+                            <div class="position-option" data-position="top-right">↗ Superior Direito</div>
+                            <div class="position-option selected" data-position="bottom-right">↘ Inferior Direito</div>
+                            <div class="position-option" data-position="bottom-left">↙ Inferior Esquerdo</div>
+                            <div class="position-option" data-position="center-right">⮕ Centro Direito</div>
+                            <div class="position-option" data-position="center-left">⬅ Centro Esquerdo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ícone do botão:</label>
+                        <div class="icon-options">
+                            <div class="icon-option selected" data-icon="💬">💬</div>
+                            <div class="icon-option" data-icon="❓">❓</div>
+                            <div class="icon-option" data-icon="🛒">🛒</div>
+                            <div class="icon-option" data-icon="📞">📞</div>
+                            <div class="icon-option" data-icon="📝">📝</div>
+                            <div class="icon-option" data-icon="👤">👤</div>
+                            <div class="icon-option" data-icon="⚙️">⚙️</div>
+                            <div class="icon-option" data-icon="🐝">🐝</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="button-text">Texto do botão (opcional):</label>
+                        <input type="text" id="button-text" placeholder="Ex: Fale conosco" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-title">Título do modal (opcional):</label>
+                        <input type="text" id="modal-title" placeholder="Ex: Central de Ajuda" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-description">Descrição do modal (opcional):</label>
+                        <textarea id="modal-description" placeholder="Ex: Entre em contato com nossa equipe"></textarea>
+                    </div>
                 </div>
-                <div class="output card">
-                    <div class="card-header"><h2>Código Gerado</h2><button class="btn-copy" id="f-copy"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg><span class="label">Copiar</span></button></div>
-                    <div id="floating-preview-container"><a id="preview-button"></a></div>
-                    <pre><code class="code-output" id="f-code-output"></code></pre>
+                
+                <!-- Configurações para modo mosaico -->
+                <div id="mosaic-config" style="display: none;">
+                    <div class="form-group">
+                        <label for="mosaic-title">Título do botão:</label>
+                        <input type="text" id="mosaic-title" placeholder="Ex: Loja Online" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-url">URL:</label>
+                        <input type="url" id="mosaic-url" placeholder="https://seusite.com/loja" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ícone do botão:</label>
+                        <div class="icon-options" id="mosaic-icon-options">
+                            <div class="icon-option" data-icon="🛒">🛒</div>
+                            <div class="icon-option" data-icon="📞">📞</div>
+                            <div class="icon-option" data-icon="📝">📝</div>
+                            <div class="icon-option" data-icon="👤">👤</div>
+                            <div class="icon-option" data-icon="⚙️">⚙️</div>
+                            <div class="icon-option" data-icon="🐝">🐝</div>
+                            <div class="icon-option" data-icon="💬">💬</div>
+                            <div class="icon-option" data-icon="❓">❓</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-description">Descrição (opcional):</label>
+                        <textarea id="mosaic-description" placeholder="Ex: Acesse nossa loja virtual"></textarea>
+                    </div>
+                    
+                    <button id="add-mosaic-btn" class="add-btn">Adicionar Botão</button>
+                    
+                    <div class="buttons-list" id="mosaic-buttons-list">
+                        <p style="text-align: center; color: #666;">Nenhum botão adicionado ainda</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-page-title">Título da página (opcional):</label>
+                        <input type="text" id="mosaic-page-title" placeholder="Ex: Nossos Serviços" class="full-width">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mosaic-page-description">Descrição da página (opcional):</label>
+                        <textarea id="mosaic-page-description" placeholder="Ex: Conheça todos os nossos serviços"></textarea>
+                    </div>
                 </div>
             </div>
-            <div id="panel-mosaic" class="generator-panel">
-                 <div class="controls card">
-                    <div class="card-header"><h2>Controles do Mosaico</h2><button class="btn-reset" id="m-reset">Resetar</button></div>
-                    <div class="form-group"><label for="m-page-title">Título da Página</label><input type="text" id="m-page-title"></div>
-                    <div class="form-group"><label for="m-page-description">Descrição da Página (opcional)</label><input type="text" id="m-page-description"></div>
-                    <div class="checkbox-group"><input type="checkbox" id="m-inc-title" checked><label for="m-inc-title">Incluir Título</label></div>
-                    <div class="checkbox-group"><input type="checkbox" id="m-inc-desc" checked><label for="m-inc-desc">Incluir Descrição</label></div>
-                    <div class="checkbox-group"><input type="checkbox" id="m-inc-search" checked><label for="m-inc-search">Incluir Barra de Busca</label></div>
-                    <hr style="margin:1.5rem 0;border:1px solid var(--border-color);border-bottom:0;">
-                    <div id="items-container"></div>
-                    <button class="btn-add-item" id="add-item-btn">Adicionar Link</button>
-                </div>
-                <div class="output card">
-                    <div class="card-header"><h2>Página Gerada</h2><button class="btn-copy" id="m-copy"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg><span class="label">Copiar</span></button></div>
-                    <button class="btn-generate-mosaic" id="generate-mosaic-btn">Clique para Gerar e Visualizar</button>
-                    <pre><code class="code-output" id="m-code-output">A pré-visualização abrirá em uma nova aba. O código aparecerá aqui após a geração.</code></pre>
+            
+            <div class="preview-panel">
+                <h3>Pré-visualização:</h3>
+                <p id="preview-instructions">Clique no botão para testar</p>
+                
+                <div id="preview-container">
+                    <!-- Aqui será renderizado o preview -->
                 </div>
             </div>
-        </main>
+        </div>
+        
+        <div class="output-section">
+            <h3>Código gerado:</h3>
+            <p>Copie e cole este código no final do <code>&lt;body&gt;</code> do seu site.</p>
+            <textarea id="output-code" class="output-code" readonly></textarea>
+            <button id="copy-btn" class="copy-btn">Copiar Código</button>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da UI
+            const modeBtns = document.querySelectorAll('.mode-btn');
+            const singleConfig = document.getElementById('single-button-config');
+            const mosaicConfig = document.getElementById('mosaic-config');
+            const previewContainer = document.getElementById('preview-container');
+            const previewInstructions = document.getElementById('preview-instructions');
+            const outputCode = document.getElementById('output-code');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            // Estado do aplicativo
+            let currentMode = 'single';
+            let buttons = [];
+            
+            // Inicializar
+            updatePreview();
+            generateCode();
+            
+            // Event listeners
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    modeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    
+                    if (currentMode === 'single') {
+                        singleConfig.style.display = 'block';
+                        mosaicConfig.style.display = 'none';
+                        previewInstructions.textContent = 'Clique no botão para testar';
+                    } else {
+                        singleConfig.style.display = 'none';
+                        mosaicConfig.style.display = 'block';
+                        previewInstructions.textContent = 'Clique nos botões para testar';
+                    }
+                    
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            // Configurações para botão único
+            const urlInput = document.getElementById('url-input');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const shapeOptions = document.querySelectorAll('.shape-option');
+            const positionOptions = document.querySelectorAll('.position-option');
+            const iconOptions = document.querySelectorAll('.icon-option');
+            const buttonTextInput = document.getElementById('button-text');
+            const modalTitleInput = document.getElementById('modal-title');
+            const modalDescriptionInput = document.getElementById('modal-description');
+            
+            // Configurações para modo mosaico
+            const mosaicTitleInput = document.getElementById('mosaic-title');
+            const mosaicUrlInput = document.getElementById('mosaic-url');
+            const mosaicIconOptions = document.querySelectorAll('#mosaic-icon-options .icon-option');
+            const mosaicDescriptionInput = document.getElementById('mosaic-description');
+            const addMosaicBtn = document.getElementById('add-mosaic-btn');
+            const mosaicButtonsList = document.getElementById('mosaic-buttons-list');
+            const mosaicPageTitleInput = document.getElementById('mosaic-page-title');
+            const mosaicPageDescriptionInput = document.getElementById('mosaic-page-description');
+            
+            // Event listeners para botão único
+            urlInput.addEventListener('input', generateCode);
+            
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    colorOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            shapeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    shapeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            positionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    positionOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            iconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    iconOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                    generateCode();
+                });
+            });
+            
+            buttonTextInput.addEventListener('input', function() {
+                updatePreview();
+                generateCode();
+            });
+            
+            modalTitleInput.addEventListener('input', generateCode);
+            modalDescriptionInput.addEventListener('input', generateCode);
+            
+            // Event listeners para modo mosaico
+            mosaicIconOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    mosaicIconOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            addMosaicBtn.addEventListener('click', function() {
+                const title = mosaicTitleInput.value.trim();
+                const url = mosaicUrlInput.value.trim();
+                const icon = document.querySelector('#mosaic-icon-options .icon-option.selected')?.dataset.icon || '🔘';
+                const description = mosaicDescriptionInput.value.trim();
+                
+                if (!title || !url) {
+                    alert('Por favor, preencha pelo menos o título e a URL');
+                    return;
+                }
+                
+                buttons.push({
+                    title,
+                    url,
+                    icon,
+                    description
+                });
+                
+                updateButtonsList();
+                updatePreview();
+                generateCode();
+                
+                // Limpar campos
+                mosaicTitleInput.value = '';
+                mosaicUrlInput.value = '';
+                mosaicDescriptionInput.value = '';
+                mosaicIconOptions.forEach(opt => opt.classList.remove('selected'));
+            });
+            
+            copyBtn.addEventListener('click', function() {
+                outputCode.select();
+                document.execCommand('copy');
+                this.textContent = 'Código Copiado! ✅';
+                setTimeout(() => {
+                    this.textContent = 'Copiar Código';
+                }, 2000);
+            });
+            
+            // Funções auxiliares
+            function updateButtonsList() {
+                if (buttons.length === 0) {
+                    mosaicButtonsList.innerHTML = '<p style="text-align: center; color: #666;">Nenhum botão adicionado ainda</p>';
+                    return;
+                }
+                
+                mosaicButtonsList.innerHTML = '';
+                buttons.forEach((btn, index) => {
+                    const btnElement = document.createElement('div');
+                    btnElement.className = 'button-item';
+                    btnElement.innerHTML = `
+                        <div class="button-item-info">
+                            <div class="button-item-title">${btn.title}</div>
+                            <div class="button-item-url">${btn.url}</div>
+                        </div>
+                        <button class="button-item-remove" data-index="${index}">Remover</button>
+                    `;
+                    mosaicButtonsList.appendChild(btnElement);
+                    
+                    // Adicionar evento de remoção
+                    btnElement.querySelector('.button-item-remove').addEventListener('click', function() {
+                        buttons.splice(index, 1);
+                        updateButtonsList();
+                        updatePreview();
+                        generateCode();
+                    });
+                });
+            }
+            
+            function updatePreview() {
+                previewContainer.innerHTML = '';
+                
+                if (currentMode === 'single') {
+                    // Pré-visualização para botão único
+                    const color = document.querySelector('.color-option.selected').dataset.color;
+                    const shape = document.querySelector('.shape-option.selected').dataset.shape;
+                    const position = document.querySelector('.position-option.selected').dataset.position;
+                    const icon = document.querySelector('.icon-option.selected').dataset.icon;
+                    const text = buttonTextInput.value;
+                    const modalTitle = modalTitleInput.value;
+                    const modalDescription = modalDescriptionInput.value;
+                    
+                    // Criar botão flutuante
+                    const floatingBtn = document.createElement('button');
+                    floatingBtn.className = `floating-btn ${shape === 'square' ? 'square' : ''} position-${position}`;
+                    floatingBtn.style.backgroundColor = color;
+                    floatingBtn.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    floatingBtn.innerHTML = icon;
+                    
+                    if (text) {
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = text;
+                        textSpan.style.marginLeft = '5px';
+                        textSpan.style.fontSize = '14px';
+                        floatingBtn.appendChild(textSpan);
+                        floatingBtn.style.padding = '0 15px';
+                        floatingBtn.style.width = 'auto';
+                    }
+                    
+                    // Criar modal
+                    const modalOverlay = document.createElement('div');
+                    modalOverlay.className = 'modal-overlay';
+                    
+                    const floatingModal = document.createElement('div');
+                    floatingModal.className = 'floating-modal';
+                    
+                    const modalHeader = document.createElement('div');
+                    modalHeader.className = 'modal-header';
+                    modalHeader.style.backgroundColor = color;
+                    modalHeader.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    
+                    const modalTitleElement = document.createElement('h3');
+                    modalTitleElement.className = 'modal-title';
+                    modalTitleElement.textContent = modalTitle || ' ';
+                    modalHeader.appendChild(modalTitleElement);
+                    
+                    const modalClose = document.createElement('button');
+                    modalClose.className = 'modal-close';
+                    modalClose.innerHTML = icon;
+                    modalClose.style.color = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    modalHeader.appendChild(modalClose);
+                    
+                    if (modalDescription) {
+                        const modalDescElement = document.createElement('div');
+                        modalDescElement.className = 'modal-description';
+                        modalDescElement.textContent = modalDescription;
+                        floatingModal.appendChild(modalDescElement);
+                    }
+                    
+                    const modalContent = document.createElement('iframe');
+                    modalContent.className = 'modal-content';
+                    modalContent.src = urlInput.value || 'about:blank';
+                    
+                    floatingModal.appendChild(modalHeader);
+                    floatingModal.appendChild(modalContent);
+                    
+                    // Adicionar eventos
+                    floatingBtn.addEventListener('click', function() {
+                        modalOverlay.style.display = 'block';
+                        floatingModal.style.display = 'block';
+                    });
+                    
+                    modalClose.addEventListener('click', function() {
+                        modalOverlay.style.display = 'none';
+                        floatingModal.style.display = 'none';
+                    });
+                    
+                    modalOverlay.addEventListener('click', function() {
+                        modalOverlay.style.display = 'none';
+                        floatingModal.style.display = 'none';
+                    });
+                    
+                    // Adicionar ao DOM
+                    previewContainer.appendChild(floatingBtn);
+                    previewContainer.appendChild(modalOverlay);
+                    previewContainer.appendChild(floatingModal);
+                } else {
+                    // Pré-visualização para modo mosaico
+                    if (buttons.length === 0) {
+                        previewContainer.innerHTML = '<p style="text-align: center; color: #666;">Adicione botões para ver a pré-visualização</p>';
+                        return;
+                    }
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'mosaic-grid';
+                    
+                    buttons.forEach(btn => {
+                        const btnElement = document.createElement('div');
+                        btnElement.className = 'mosaic-btn';
+                        btnElement.innerHTML = `
+                            <div class="mosaic-btn-icon">${btn.icon}</div>
+                            <div class="mosaic-btn-title">${btn.title}</div>
+                        `;
+                        
+                        // Criar modal para este botão
+                        const modalOverlay = document.createElement('div');
+                        modalOverlay.className = 'modal-overlay';
+                        modalOverlay.style.display = 'none';
+                        
+                        const floatingModal = document.createElement('div');
+                        floatingModal.className = 'floating-modal';
+                        floatingModal.style.display = 'none';
+                        
+                        const modalHeader = document.createElement('div');
+                        modalHeader.className = 'modal-header';
+                        modalHeader.style.backgroundColor = '#FFD700';
+                        
+                        const modalTitleElement = document.createElement('h3');
+                        modalTitleElement.className = 'modal-title';
+                        modalTitleElement.textContent = btn.title;
+                        modalHeader.appendChild(modalTitleElement);
+                        
+                        const modalClose = document.createElement('button');
+                        modalClose.className = 'modal-close';
+                        modalClose.innerHTML = btn.icon;
+                        modalHeader.appendChild(modalClose);
+                        
+                        if (btn.description) {
+                            const modalDescElement = document.createElement('div');
+                            modalDescElement.className = 'modal-description';
+                            modalDescElement.textContent = btn.description;
+                            floatingModal.appendChild(modalDescElement);
+                        }
+                        
+                        const modalContent = document.createElement('iframe');
+                        modalContent.className = 'modal-content';
+                        modalContent.src = btn.url;
+                        
+                        floatingModal.appendChild(modalHeader);
+                        floatingModal.appendChild(modalContent);
+                        
+                        // Adicionar eventos
+                        btnElement.addEventListener('click', function() {
+                            modalOverlay.style.display = 'block';
+                            floatingModal.style.display = 'block';
+                        });
+                        
+                        modalClose.addEventListener('click', function() {
+                            modalOverlay.style.display = 'none';
+                            floatingModal.style.display = 'none';
+                        });
+                        
+                        modalOverlay.addEventListener('click', function() {
+                            modalOverlay.style.display = 'none';
+                            floatingModal.style.display = 'none';
+                        });
+                        
+                        // Adicionar ao DOM
+                        previewContainer.appendChild(modalOverlay);
+                        previewContainer.appendChild(floatingModal);
+                        grid.appendChild(btnElement);
+                    });
+                    
+                    // Adicionar título e descrição da página se existirem
+                    const pageTitle = mosaicPageTitleInput.value.trim();
+                    const pageDescription = mosaicPageDescriptionInput.value.trim();
+                    
+                    if (pageTitle || pageDescription) {
+                        const header = document.createElement('div');
+                        header.style.marginBottom = '20px';
+                        
+                        if (pageTitle) {
+                            const titleElement = document.createElement('h3');
+                            titleElement.style.marginBottom = '10px';
+                            titleElement.textContent = pageTitle;
+                            header.appendChild(titleElement);
+                        }
+                        
+                        if (pageDescription) {
+                            const descElement = document.createElement('p');
+                            descElement.style.color = '#666';
+                            descElement.textContent = pageDescription;
+                            header.appendChild(descElement);
+                        }
+                        
+                        previewContainer.appendChild(header);
+                    }
+                    
+                    previewContainer.appendChild(grid);
+                }
+            }
+            
+            function generateCode() {
+                let code = '';
+                
+                if (currentMode === 'single') {
+                    const color = document.querySelector('.color-option.selected').dataset.color;
+                    const shape = document.querySelector('.shape-option.selected').dataset.shape;
+                    const position = document.querySelector('.position-option.selected').dataset.position;
+                    const icon = document.querySelector('.icon-option.selected').dataset.icon;
+                    const text = buttonTextInput.value;
+                    const modalTitle = modalTitleInput.value;
+                    const modalDescription = modalDescriptionInput.value;
+                    const url = urlInput.value;
+                    const textColor = (color === '#FFFFFF' || color === '#FFD700') ? '#1A1A1A' : 'white';
+                    
+                    code = `
+<!-- Botão Flutuante Beemote - Gerado Automaticamente -->
+<style>
+.floating-btn-container {
+    position: fixed !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
+}
+
+.floating-btn {
+    width: ${text ? 'auto' : '60px'} !important;
+    height: 60px !important;
+    background-color: ${color} !important;
+    color: ${textColor} !important;
+    border: none !important;
+    border-radius: ${shape === 'round' ? '50%' : '8px'} !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.3s ease !important;
+    padding: ${text ? '0 15px' : '0'} !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+}
+
+.floating-btn span {
+    margin-left: 5px !important;
+    font-size: 14px !important;
+}
+
+.floating-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    z-index: 999998 !important;
+    display: none !important;
+}
+
+.floating-modal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 800px !important;
+    height: 80% !important;
+    background-color: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    z-index: 999999 !important;
+    display: none !important;
+    overflow: hidden !important;
+    animation: modalFadeIn 0.3s ease-out !important;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0 !important; transform: translate(-50%, -40%) !important; }
+    to { opacity: 1 !important; transform: translate(-50%, -50%) !important; }
+}
+
+.modal-header {
+    padding: 15px 20px !important;
+    background-color: ${color} !important;
+    color: ${textColor} !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.modal-title {
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+}
+
+.modal-description {
+    padding: 15px 20px !important;
+    color: #555 !important;
+    border-bottom: 1px solid #EEE !important;
+}
+
+.modal-close {
+    background: none !important;
+    border: none !important;
+    color: ${textColor} !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+}
+
+.modal-content {
+    height: calc(100% - ${modalDescription ? '100px' : '50px'}) !important;
+    width: 100% !important;
+    border: none !important;
+}
+
+/* Posições */
+.position-bottom-right { bottom: 20px !important; right: 20px !important; }
+.position-bottom-left { bottom: 20px !important; left: 20px !important; }
+.position-top-right { top: 20px !important; right: 20px !important; }
+.position-top-left { top: 20px !important; left: 20px !important; }
+.position-center-right { top: 50% !important; right: 20px !important; transform: translateY(-50%) !important; }
+.position-center-left { top: 50% !important; left: 20px !important; transform: translateY(-50%) !important; }
+</style>
+
+<div class="floating-btn-container position-${position}">
+    <button class="floating-btn">
+        ${icon}${text ? '<span>' + text + '</span>' : ''}
+    </button>
+</div>
+
+<div class="floating-modal-overlay"></div>
+<div class="floating-modal">
+    <div class="modal-header">
+        <h3 class="modal-title">${modalTitle || ' '}</h3>
+        <button class="modal-close">${icon}</button>
+    </div>
+    ${modalDescription ? `<div class="modal-description">${modalDescription}</div>` : ''}
+    <iframe class="modal-content" src="${url || 'about:blank'}" frameborder="0"></iframe>
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const App = {
-        ICONS: {
-            copy: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`,
-            check: `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>`,
-            chat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
-            help: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
-            form: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>',
-            link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 13.41c.44-.44.44-1.16 0-1.6l-2.09-2.09c-.44-.44-1.16-.44-1.6 0l-2.09 2.09c-.44.44-.44 1.16 0 1.6l2.09 2.09c.44.44 1.16.44 1.6 0l2.09-2.09zm-2.09 2.09c-1.22-1.22-1.22-3.2 0-4.42l2.09-2.09c1.22-1.22 3.2-1.22 4.42 0l2.09 2.09c1.22 1.22 1.22 3.2 0 4.42l-2.09 2.09c-1.22-1.22-3.2-1.22-4.42 0z"/></svg>',
-            close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-            search: '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" width="16" height="16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>',
-            code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',
-            email: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
-            cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>',
-            stats: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>',
-            video: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
-        },
-        init: function() { this.setupTabSwitcher(); this.floatingGenerator.init(); this.mosaicGenerator.init(); },
-        setupTabSwitcher: function() { const btns = document.querySelectorAll('.app-switcher button'), panels = document.querySelectorAll('.generator-panel'); btns.forEach(btn => { btn.addEventListener('click', () => { btns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); panels.forEach(p => p.classList.toggle('active', '#' + p.id === btn.dataset.target)); }); }); },
-        handleCopy: function(button, textContent) { navigator.clipboard.writeText(textContent).then(() => { const label = button.querySelector('.label'), originalLabel = label.textContent; button.innerHTML = `${this.ICONS.check} <span class="label">Copiado!</span>`; button.style.color = 'var(--success)'; setTimeout(() => { button.innerHTML = `${this.ICONS.copy} <span class="label">${originalLabel}</span>`; button.style.color = ''; }, 2000); }); },
-        
-        floatingGenerator: {
-            DOMElements: {}, state: {}, defaultState: { url: "https://www.wikipedia.org/", action: "modal", color: "#2575fc", shape: "round", position: "bottom-right", template: "chat" },
-            init: function() {
-                const p = document.getElementById("panel-floating");
-                this.DOMElements = { controls: p.querySelector(".controls"), url: p.querySelector("#f-url"), action: p.querySelector("#f-action"), color: p.querySelector("#f-color"), shape: p.querySelector("#f-shape"), position: p.querySelector("#f-position"), template: p.querySelector("#f-template"), preview: p.querySelector("#preview-button"), codeOut: p.querySelector("#f-code-output"), copyBtn: p.querySelector("#f-copy"), resetBtn: p.querySelector("#f-reset") };
-                const draggableCheckboxGroup = p.querySelector("#f-draggable")?.closest('.form-group') || p.querySelector("#f-draggable")?.closest('.checkbox-group'); if(draggableCheckboxGroup) draggableCheckboxGroup.remove();
-                this.state = { ...this.defaultState }; this.loadStateIntoForm(); this.addEventListeners();
-            },
-            setState: function(newState) { this.state = { ...this.state, ...newState }; this.updatePreview(); this.generateCode(); },
-            loadStateIntoForm: function() { for (const key in this.state) { if (this.DOMElements[key]) { this.DOMElements[key].value = this.state[key]; } } },
-            getPositionCss: function(pos) { let t="20px",o="",s="transform:translate(0,0);";switch(pos){case"center-left":t="50%",o="20px",s="transform:translateY(-50%);";break;case"center-right":t="50%",o="auto",s="transform:translateY(-50%);";break;case"bottom-center":t="auto",o="50%",s="transform:translateX(-50%);";break;case"top-center":t="20px",o="50%",s="transform:translateX(-50%);";break;case"top-left":t="20px",o="20px";break;case"top-right":t="20px",o="auto";break;case"bottom-left":t="auto",o="20px";break;default:t="auto",o="auto"}const l={top:t,bottom:"auto"===t?"20px":void 0,left:o,right:"auto"===o?"20px":void 0,transform:s};return Object.entries(l).filter(([,e])=>void 0!==e).map(([e,t])=>`${e}:${t};`).join("")},
-            updatePreview: function() { const posCss = this.getPositionCss(this.state.position); this.DOMElements.preview.style.cssText = `background-color: ${this.state.color}; ${posCss}`; this.DOMElements.preview.classList.toggle("shape-square", this.state.shape === 'square'); this.DOMElements.preview.innerHTML = App.ICONS[this.state.template]; },
-            generateCode: function() {
-                const { url, action, color, shape, position, template } = this.state;
-                const borderRadius = shape === 'round' ? '50%' : '12px';
-                const posCss = this.getPositionCss(position);
-                const baseStyles = `position:fixed; ${posCss} width:60px; height:60px; background-color:${color}; border-radius:${borderRadius}; color:white; box-shadow:0 6px 20px rgba(0,0,0,.2); cursor:pointer; z-index:9998; display:flex; justify-content:center; align-items:center; transition:transform .3s,background-color .3s; text-decoration:none; border:none;`;
-                
-                let finalCode;
-                if (action === 'new_tab') {
-                    finalCode = `<!-- Início: Botão Flutuante (WebGen Pro) -->\n<a href="${url}" target="_blank" rel="noopener noreferrer" style="${baseStyles}">${App.ICONS[template]}</a>\n<!-- Fim do Código -->`;
-                } else {
-                    const modalActionScript = `(function() {
-        const btn = document.getElementById('wgp-fab-button');
-        const modal = document.getElementById('wgp-fab-modal');
-        const closeBtn = document.getElementById('wgp-fab-modal-close');
-        
-        if (!btn || !modal || !closeBtn) return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Garante que o botão sempre fique visível
+    setInterval(() => {
+        const btn = document.querySelector('.floating-btn-container');
+        if(btn) btn.style.zIndex = '999999';
+    }, 1000);
 
-        const openModal = () => { modal.classList.add('show'); btn.classList.add('active'); };
-        const closeModal = () => { modal.classList.remove('show'); btn.classList.remove('active'); };
-
-        btn.addEventListener('click', openModal);
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    })();`;
-                    finalCode = `<!-- Início: Botão Flutuante com Modal (WebGen Pro) -->
-<style>
-    #wgp-fab-button { ${baseStyles} }
-    #wgp-fab-button:hover { transform: scale(1.1); }
-    #wgp-fab-button .wgp-fab-icon-open { display: block; }
-    #wgp-fab-button .wgp-fab-icon-close { display: none; }
-    #wgp-fab-button.active .wgp-fab-icon-open { display: none; }
-    #wgp-fab-button.active .wgp-fab-icon-close { display: block; }
+    const floatingBtn = document.querySelector('.floating-btn');
+    const modalOverlay = document.querySelector('.floating-modal-overlay');
+    const floatingModal = document.querySelector('.floating-modal');
+    const modalClose = document.querySelector('.modal-close');
     
-    #wgp-fab-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.7); z-index: 9999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease; }
-    #wgp-fab-modal.show { opacity: 1; visibility: visible; }
-    .wgp-fab-modal-content { position: relative; background-color: #fff; width: 95vw; height: 95vh; border-radius: 15px; overflow: hidden; transform: scale(.9); transition: transform .4s cubic-bezier(.18,.89,.32,1.28); }
-    #wgp-fab-modal.show .wgp-fab-modal-content { transform: scale(1); }
-    #wgp-fab-modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.08); color: #000; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; z-index: 10; }
-    #wgp-fab-modal-close:hover { background: rgba(0,0,0,0.15); }
-    .wgp-fab-modal-content iframe { width: 100%; height: 100%; border: none; }
+    floatingBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'block';
+        floatingModal.style.display = 'block';
+    });
+    
+    modalClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+    
+    modalOverlay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        modalOverlay.style.display = 'none';
+        floatingModal.style.display = 'none';
+    });
+
+    // Proteção contra outros event listeners
+    document.body.addEventListener('click', function(e) {
+        if(e.target.closest('.floating-btn-container')) {
+            e.stopImmediatePropagation();
+        }
+    }, true);
+});
+<\/script>
+<!-- Fim do Botão Flutuante Beemote -->
+                    `;
+                } else {
+                    // Código para modo mosaico
+                    const pageTitle = mosaicPageTitleInput.value.trim();
+                    const pageDescription = mosaicPageDescriptionInput.value.trim();
+                    
+                    code = `
+<!-- Mosaico de Botões Beemote - Gerado Automaticamente -->
+<style>
+.beemote-mosaic-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.beemote-mosaic-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #1A1A1A;
+}
+
+.beemote-mosaic-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.beemote-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.beemote-mosaic-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #FFD700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    min-height: 150px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.beemote-mosaic-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.beemote-mosaic-btn-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.beemote-mosaic-btn-title {
+    font-size: 16px;
+    font-weight: bold;
+    word-break: break-word;
+}
+
+.beemote-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999998;
+    display: none;
+}
+
+.beemote-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    height: 80%;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 999999;
+    display: none;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.beemote-modal-header {
+    padding: 15px 20px;
+    background-color: #FFD700;
+    color: #1A1A1A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.beemote-modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.beemote-modal-description {
+    padding: 15px 20px;
+    color: #555;
+    border-bottom: 1px solid #EEE;
+}
+
+.beemote-modal-close {
+    background: none;
+    border: none;
+    color: #1A1A1A;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.beemote-modal-content {
+    height: calc(100% - ${buttons.some(b => b.description) ? '100px' : '50px'});
+    width: 100%;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .beemote-mosaic-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
 </style>
-<button id="wgp-fab-button" type="button">
-    <span class="wgp-fab-icon-open">${App.ICONS[template]}</span>
-    <span class="wgp-fab-icon-close">${App.ICONS.close}</span>
-</button>
-<div id="wgp-fab-modal">
-    <div class="wgp-fab-modal-content">
-        <button id="wgp-fab-modal-close" title="Fechar">${App.ICONS.close}</button>
-        <iframe src="${url}" title="Conteúdo do Modal"></iframe>
+
+<div class="beemote-mosaic-container">
+    ${pageTitle ? `<h2 class="beemote-mosaic-title">${pageTitle}</h2>` : ''}
+    ${pageDescription ? `<p class="beemote-mosaic-description">${pageDescription}</p>` : ''}
+    
+    <div class="beemote-mosaic-grid">
+        ${buttons.map(btn => `
+            <div class="beemote-mosaic-btn" data-url="${btn.url}" data-title="${btn.title}" data-description="${btn.description || ''}" data-icon="${btn.icon}">
+                <div class="beemote-mosaic-btn-icon">${btn.icon}</div>
+                <div class="beemote-mosaic-btn-title">${btn.title}</div>
+            </div>
+        `).join('')}
     </div>
 </div>
-<script>${modalActionScript}<\/script>
-<!-- Fim do Código -->`;
-                }
-                this.DOMElements.codeOut.textContent = finalCode.trim();
-            },
-            addEventListeners: function() { this.DOMElements.controls.addEventListener('input', (e) => { const key = e.target.id.substring(2); if (this.state.hasOwnProperty(key)) { this.setState({ [key]: e.target.value }); } }); this.DOMElements.resetBtn.addEventListener('click', () => { this.setState(this.defaultState); this.loadStateIntoForm(); }); this.DOMElements.copyBtn.addEventListener('click', () => App.handleCopy(this.DOMElements.copyBtn, this.DOMElements.codeOut.textContent)); }
-        },
-        mosaicGenerator: { DOMElements:{},state:{},defaultState:{title:"Meu Dashboard",description:"Acesso rápido aos meus sites e ferramentas.",incTitle:!0,incDesc:!0,incSearch:!0,links:[]}, init:function(){const p=document.getElementById("panel-mosaic");this.DOMElements={controls:p.querySelector(".controls"),titleIn:p.querySelector("#m-page-title"),descIn:p.querySelector("#m-page-description"),incTitle:p.querySelector("#m-inc-title"),incDesc:p.querySelector("#m-inc-desc"),incSearch:p.querySelector("#m-inc-search"),itemsContainer:p.querySelector("#items-container"),addBtn:p.querySelector("#add-item-btn"),genBtn:p.querySelector("#generate-mosaic-btn"),codeOut:p.querySelector("#m-code-output"),copyBtn:p.querySelector("#m-copy"),resetBtn:p.querySelector("#m-reset")};this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addEventListeners();this.addItem()}, loadStateIntoForm:function(){this.DOMElements.titleIn.value=this.state.title;this.DOMElements.descIn.value=this.state.description;this.DOMElements.incTitle.checked=this.state.incTitle;this.DOMElements.incDesc.checked=this.state.incDesc;this.DOMElements.incSearch.checked=this.state.incSearch;this.renderItems()}, setState:function(newState){this.state={...this.state,...newState}},
-            renderItems:function(){const mosaicIcons=App.ICONS;function createIconOptions(selected){return Object.keys(mosaicIcons).filter(k=>k.length>4).map(k=>`<option value="${k}" ${k===selected?"selected":""}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join("")}this.DOMElements.itemsContainer.innerHTML=this.state.links.map((link,index)=>`<div class="link-item" data-index="${index}"><div class="link-item-header"><span>Link #${index+1}</span><button class="btn-remove-item" title="Remover">×</button></div><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive" value="${link.name}"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com" value="${link.url}"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions(link.iconKey)}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" ${"modal"===link.action?"selected":""}>Abrir em Modal</option><option value="new_tab" ${"new_tab"===link.action?"selected":""}>Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" ${"small"===link.size?"selected":""}>Pequeno</option><option value="medium" ${"medium"===link.size?"selected":""}>Médio</option><option value="large" ${"large"===link.size?"selected":""}>Grande</option></select></div></div>`).join(""),this.state.links.forEach((link,index)=>{const itemEl=this.DOMElements.itemsContainer.querySelector(`[data-index="${index}"]`);itemEl.querySelector(".item-icon").value=link.iconKey,itemEl.querySelector(".item-action").value=link.action,itemEl.querySelector(".item-size").value=link.size})},
-            addItem:function(){this.state.links.push({name:"",url:"",iconKey:"link",action:"modal",size:"medium"});this.renderItems()}, updateLinkItem(index,key,value){this.state.links[index][key]=value},
-            generateAndPreview:function(){const linksData=[...this.state.links],sizeOrder={large:1,medium:2,small:3};linksData.sort((a,b)=>sizeOrder[a.size]-sizeOrder[b.size]);const buttonsHTML=linksData.map(({name:name,url:url,iconKey:iconKey,action:action,size:size})=>{if(!url)return"";const iconSVG=App.ICONS[iconKey]||App.ICONS.link,commonAttrs=`class="mosaic-button size-${size}"`;return"new_tab"===action?`<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`:`<button ${commonAttrs} data-url="${url}" type="button"><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></button>`}).join("\n            ");let headerHTML="";this.state.incTitle||this.state.incDesc||this.state.incSearch?headerHTML=`\n    <header class="header">${this.state.incTitle?`\n        <h1>${this.state.title}</h1>`:""}${this.state.incDesc?`\n        <p>${this.state.description}</p>`:""}${this.state.incSearch?`\n        <div class="search-container"><span class="icon">${App.ICONS.search}</span><input type="search" id="search-box" placeholder="Buscar..."></div>`:""}\n    </header>`:"";const searchScript=this.state.incSearch?"searchBox.addEventListener('input',()=>{const searchTerm=searchBox.value.toLowerCase();mosaicGrid.querySelectorAll('.mosaic-button').forEach(button=>{const label=button.querySelector('.mosaic-label').textContent.toLowerCase();button.style.display=label.includes(searchTerm)?'flex':'none'})});":"";const finalCode=`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${this.state.title}</title><meta name="description" content="${this.state.description}">
-    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');body{font-family:'Inter',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#2575fc,#6a11cb);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 25px;font-size:1.1rem;opacity:.9}.search-container{max-width:500px;margin:0 auto;position:relative}.search-container .icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa}#search-box{width:100%;padding:12px 12px 12px 40px;border-radius:25px;border:none;font-size:1rem;box-sizing:border-box}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));gap:20px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;aspect-ratio:4/3}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{transition:all .3s ease}.mosaic-label{font-weight:600;color:#343a40;transition:all .3s ease; word-break: break-word;}.size-small{grid-column:span 1}.size-small .mosaic-label{font-size:.9rem}.size-small .mosaic-icon svg{width:28px;height:28px}.size-medium{grid-column:span 1}.size-medium .mosaic-label{font-size:1rem}.size-medium .mosaic-icon svg{width:36px;height:36px}.size-large{grid-column:span 1}.size-large .mosaic-label{font-size:1.2rem}.size-large .mosaic-icon svg{width:50px;height:50px}@media(min-width:600px){.size-medium{grid-column:span 2}.size-large{grid-column:span 2}}@media(min-width:900px){.size-large{grid-column:span 3}}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{position:relative;background:#fff;width:95vw;height:95vh;border-radius:15px;overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.close-modal{position:absolute;top:15px;right:15px;background:rgba(0,0,0,0.1);color:#000;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}.close-modal:hover { background: rgba(0,0,0,0.2); }.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style>
-</head>
-<body>${headerHTML}
-    <main id="mosaic-grid">${buttonsHTML}</main>
-    <div id="page-modal"><div class="modal-content"><button class="close-modal" title="Fechar">${App.ICONS.close}</button><div class="modal-body"><iframe src="" title="Conteúdo do Modal"></iframe></div></div></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal=document.getElementById('page-modal'),iframe=modal?modal.querySelector('iframe'):null,closeModalBtn=modal?modal.querySelector('.close-modal'):null,searchBox=document.getElementById('search-box'),mosaicGrid=document.getElementById('mosaic-grid');
-            if (mosaicGrid) { mosaicGrid.addEventListener('click', (e) => { const button = e.target.closest('button.mosaic-button'); if (button && iframe) { const url = button.dataset.url; if (url) { iframe.src = url; modal.classList.add('show'); } } }); }
-            function closeModal() { if (modal) { modal.classList.remove('show'); if(iframe) iframe.src = 'about:blank'; } }
-            if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-            if(modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-            if(searchBox) { ${searchScript} }
-        });
-    <\/script>
-</body>
-</html>`;this.DOMElements.codeOut.textContent=finalCode;window.open(URL.createObjectURL(new Blob([finalCode],{type:"text/html"})),"_blank")},
-            addEventListeners:function(){this.DOMElements.controls.addEventListener("input",e=>{const t=e.target,l=t.id.substring(2);if(this.state.hasOwnProperty(l))this.setState({[l]:"checkbox"===t.type?t.checked:t.value});const c=t.closest(".link-item");if(c){const n=t.className.replace("item-",""),i=parseInt(c.dataset.index,10);this.updateLinkItem(i,n,t.value)}});this.DOMElements.itemsContainer.addEventListener("click",e=>{if(e.target.classList.contains("btn-remove-item")){const t=parseInt(e.target.closest(".link-item").dataset.index,10);this.state.links.splice(t,1),this.renderItems()}});this.DOMElements.addBtn.addEventListener("click",()=>this.addItem());this.DOMElements.genBtn.addEventListener("click",()=>this.generateAndPreview());this.DOMElements.resetBtn.addEventListener("click",()=>{this.state={...this.defaultState,links:[]};this.loadStateIntoForm();this.addItem()});this.DOMElements.copyBtn.addEventListener("click",()=>App.handleCopy(this.DOMElements.copyBtn,this.DOMElements.codeOut.textContent))}
-        }
-    };
-    App.init();
-});
-</script>
 
+<div class="beemote-modal-overlay"></div>
+<div class="beemote-modal">
+    <div class="beemote-modal-header">
+        <h3 class="beemote-modal-title"></h3>
+        <button class="beemote-modal-close">✕</button>
+    </div>
+    <div class="beemote-modal-description"></div>
+    <iframe class="beemote-modal-content" frameborder="0"></iframe>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.beemote-mosaic-btn');
+    const modalOverlay = document.querySelector('.beemote-modal-overlay');
+    const modal = document.querySelector('.beemote-modal');
+    const modalTitle = document.querySelector('.beemote-modal-title');
+    const modalDescription = document.querySelector('.beemote-modal-description');
+    const modalContent = document.querySelector('.beemote-modal-content');
+    const modalClose = document.querySelector('.beemote-modal-close');
+    
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const url = this.getAttribute('data-url');
+            const title = this.getAttribute('data-title');
+            const description = this.getAttribute('data-description');
+            const icon = this.getAttribute('data-icon');
+            
+            modalTitle.textContent = title;
+            modalContent.src = url;
+            
+            if (description) {
+                modalDescription.textContent = description;
+                modalDescription.style.display = 'block';
+            } else {
+                modalDescription.style.display = 'none';
+            }
+            
+            modalOverlay.style.display = 'block';
+            modal.style.display = 'block';
+        });
+    });
+    
+    modalClose.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        modal.style.display = 'none';
+        modalContent.src = 'about:blank';
+    });
+    
+    modalOverlay.addEventListener('click', function() {
+        modalOverlay.style.display = 'none';
+        modal.style.display = 'none';
+        modalContent.src = 'about:blank';
+    });
+});
+<\/script>
+<!-- Fim do Mosaico de Botões Beemote -->
+                    `;
+                }
+                
+                outputCode.value = code.trim();
+            }
+        });
+    </script>
 </body>
 </html>
