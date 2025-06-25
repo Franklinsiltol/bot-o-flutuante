@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             preview.innerHTML = ICONS[template.value];
             preview.href = action.value === 'new_tab' ? url.value : '#';
 
-            preview.style.cssText += `bottom:auto;top:auto;left:auto;right:auto;transform:none;`; // Reset
+            preview.style.cssText += `bottom:auto;top:auto;left:auto;right:auto;transform:none;`;
             let posStyles = '';
             
             switch (position.value) {
@@ -223,48 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (action.value === 'new_tab') {
                 finalCode = `<!-- Início do Código do Botão Flutuante -->\n<a href="${url.value}" target="_blank" rel="noopener noreferrer" style="${baseStyles}">${ICONS[template.value]}</a>\n<!-- Fim do Código -->`;
             } else {
-                finalCode = `<!-- Início do Código do Botão Flutuante -->
-<style>
-#fab-button{${baseStyles}}
-#fab-button.active{z-index:10000;background-color:#e74c3c!important;transform:scale(1.1) rotate(360deg)!important}
-#fab-button:hover{transform:scale(1.1)}
-#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}
-.fab-icon-close{display:none}
-#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}
-#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}
-#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
-#fab-modal.show{opacity:1;visibility:visible}
-.fab-modal-content{background-color:#fff;width:95vw;height:95vh;max-width:1400px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}
-#fab-modal.show .fab-modal-content{transform:scale(1)}
-.fab-modal-content iframe{width:100%;height:100%;border:none}
-</style>
-<button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button>
-<div id="fab-modal"><div class="fab-modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div>
-<script>
-(function(){
-    const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');
-    if(!btn||!modal)return;
-    const closeAction=()=>{
-        modal.classList.remove('show');
-        btn.classList.remove('active');
-        const content=modal.querySelector('.fab-modal-content');
-        if(content) content.style.transform='scale(0.8)';
-    };
-    btn.addEventListener('click',()=>{
-        const isActive=btn.classList.contains('active');
-        if(isActive){
-            closeAction();
-        }else{
-            modal.classList.add('show');
-            btn.classList.add('active');
-            const content=modal.querySelector('.fab-modal-content');
-            if(content) content.style.transform='scale(1)';
-        }
-    });
-    modal.addEventListener('click',e=>{if(e.target===modal)closeAction()});
-})()
-<\/script>
-<!-- Fim do Código -->`;
+                finalCode = `<!-- Início do Código do Botão Flutuante --><style>#fab-button{${baseStyles}}#fab-button.active{z-index:10000;background-color:#e74c3c!important;transform:scale(1.1) rotate(360deg)!important}#fab-button:hover{transform:scale(1.1)}#fab-button svg{width:32px;height:32px;transition:opacity .3s,transform .3s}.fab-icon-close{display:none}#fab-button.active .fab-icon-open{opacity:0;transform:rotate(90deg);display:none}#fab-button.active .fab-icon-close{opacity:1;transform:rotate(0);display:block}#fab-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);z-index:9999;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}#fab-modal.show{opacity:1;visibility:visible}.fab-modal-content{background-color:#fff;width:95vw;height:95vh;max-width:1400px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);overflow:hidden;transform:scale(.8);transition:transform .4s cubic-bezier(.18,.89,.32,1.28)}#fab-modal.show .fab-modal-content{transform:scale(1)}.fab-modal-content iframe{width:100%;height:100%;border:none}</style><button id="fab-button"><span class="fab-icon-open">${ICONS[template.value]}</span><span class="fab-icon-close">${ICONS.close}</span></button><div id="fab-modal"><div class="fab-modal-content"><iframe src="${url.value}" title="Conteúdo"></iframe></div></div><script>(function(){const btn=document.getElementById('fab-button'),modal=document.getElementById('fab-modal');if(!btn||!modal)return;const closeAction=()=>{modal.classList.remove('show');btn.classList.remove('active');const content=modal.querySelector('.fab-modal-content');if(content)content.style.transform='scale(0.8)'};btn.addEventListener('click',()=>{const isActive=btn.classList.contains('active');if(isActive){closeAction()}else{modal.classList.add('show');btn.classList.add('active');const content=modal.querySelector('.fab-modal-content');if(content)content.style.transform='scale(1)'}});modal.addEventListener('click',e=>{if(e.target===modal)closeAction()})})()<\/script><!-- Fim do Código -->`;
             }
             codeOut.textContent = finalCode.trim();
         }
@@ -285,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function addItem() {
             itemCount++;
-            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div></div>`;
+            const itemHtml = `<div class="link-item" id="item-${itemCount}"><button class="remove-item-btn" title="Remover">×</button><div class="form-group"><label>Nome</label><input type="text" class="item-name" placeholder="Ex: Google Drive"></div><div class="form-group"><label>URL</label><input type="url" class="item-url" placeholder="https://drive.google.com"></div><div class="form-group"><label>Ícone</label><select class="item-icon">${createIconOptions()}</select></div><div class="form-group"><label>Ação</label><select class="item-action"><option value="modal" selected>Abrir em Modal</option><option value="new_tab">Abrir em Nova Aba</option></select></div><div class="form-group"><label>Tamanho</label><select class="item-size"><option value="small" selected>Pequeno</option><option value="medium">Médio</option><option value="large">Grande</option></select></div></div>`;
             items.insertAdjacentHTML('beforeend', itemHtml);
             document.getElementById(`item-${itemCount}`).querySelector('.remove-item-btn').addEventListener('click', (e) => e.currentTarget.parentElement.remove());
         }
@@ -293,10 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
         function generateCode() {
             let buttonsHTML = '';
             items.querySelectorAll('.link-item').forEach(item => {
-                const name=item.querySelector('.item-name').value||'Link', url=item.querySelector('.item-url').value, iconKey=item.querySelector('.item-icon').value, action=item.querySelector('.item-action').value;
+                const name=item.querySelector('.item-name').value||'Link', url=item.querySelector('.item-url').value, iconKey=item.querySelector('.item-icon').value, action=item.querySelector('.item-action').value, size=item.querySelector('.item-size').value;
                 if (!url) return;
                 const iconSVG = mosaicIcons[iconKey] || mosaicIcons.link;
-                const commonAttrs = `class="mosaic-button"`;
+                const commonAttrs = `class="mosaic-button mosaic-button--${size}"`;
                 if (action === 'new_tab') {
                     buttonsHTML += `<a href="${url}" target="_blank" rel="noopener noreferrer" ${commonAttrs}><div class="mosaic-icon">${iconSVG}</div><span class="mosaic-label">${name}</span></a>`;
                 } else {
@@ -309,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const headerHTML = (titleHTML || descHTML) ? `<header class="header">${titleHTML}${descHTML}</header>` : '';
 
 
-            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titleInput.value}</title><meta name="description" content="${descInput.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 0;font-size:1.1rem;opacity:.9}#mosaic-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:25px;padding:40px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;flex-basis:220px;flex-grow:1;max-width:300px;color:inherit;text-decoration:none}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-label{font-weight:600;font-size:1rem;color:#343a40}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>
+            codeOut.textContent = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${titleInput.value}</title><meta name="description" content="${descInput.value}"><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');body{font-family:'Poppins',sans-serif;margin:0;background-color:#f4f7fc;color:#333}.header{background:linear-gradient(45deg,#6a11cb,#2575fc);color:white;padding:40px 20px;text-align:center;margin-bottom:20px;}.header h1{margin:0;font-size:2.5rem}.header p{margin:10px 0 0;font-size:1.1rem;opacity:.9}#mosaic-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));grid-auto-rows:140px;grid-auto-flow:dense;gap:20px;padding:20px;max-width:1400px;margin:0 auto}.mosaic-button{background:white;border:1px solid #e0e6ed;border-radius:12px;padding:20px;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;color:inherit;text-decoration:none;width:auto;height:auto;}.mosaic-button:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1);border-color:#2575fc}.mosaic-button--medium{grid-column:span 2}.mosaic-button--large{grid-column:span 2;grid-row:span 2}.mosaic-icon{color:#6a11cb;margin-bottom:15px}.mosaic-icon svg{width:36px;height:36px}.mosaic-label{font-weight:600;font-size:1rem;color:#343a40;word-break:break-word}#page-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}#page-modal.show{opacity:1;visibility:visible}.modal-content{background:#fff;width:90%;height:90%;border-radius:15px;box-shadow:0 5px 25px rgba(0,0,0,.3);overflow:hidden;transform:scale(.9);transition:transform .3s ease-out;display:flex;flex-direction:column}#page-modal.show .modal-content{transform:scale(1)}.modal-header{display:flex;justify-content:flex-end;padding:10px 15px;background-color:#f1f1f1;border-bottom:1px solid #ddd}.close-modal{background:#e74c3c;color:white;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer}.modal-body{flex-grow:1}.modal-body iframe{width:100%;height:100%;border:none}</style></head><body>
 ${headerHTML}<main id="mosaic-grid">${buttonsHTML}</main>
 <div id="page-modal"><div class="modal-content"><div class="modal-header"><button class="close-modal" title="Fechar">×</button></div><div class="modal-body"><iframe src="" title="Conteúdo"></iframe></div></div></div>
 <script>document.addEventListener('DOMContentLoaded',()=>{const modal=document.getElementById('page-modal'),iframe=modal.querySelector('iframe'),closeModalBtn=modal.querySelector('.close-modal');document.querySelectorAll('button.mosaic-button').forEach(button=>{button.addEventListener('click',()=>{const url=button.dataset.url;if(url){iframe.src=url;modal.classList.add('show')}})});function closeModal(){modal.classList.remove('show');iframe.src='about:blank'}closeModalBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()})})<\/script></body></html>`.trim();
